@@ -149,6 +149,23 @@ pre.code{
   background:var(--surface-2); overflow:auto; white-space:pre-wrap;
   font:13px/1.65 Consolas,"Courier New",monospace;
 }
+.voicebar{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px}
+.voicebar .vhint{color:var(--muted); font-size:12px}
+.mic .dot{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--brand); margin-right:8px; vertical-align:1px}
+.mic.rec{border-color:var(--danger); color:var(--danger)}
+.mic.rec .dot{background:var(--danger); animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.match{margin-top:12px; border:1px solid var(--border); border-radius:10px; padding:12px 14px; background:var(--surface-2)}
+.match .mhead{font-size:13px; font-weight:600; margin-bottom:8px}
+.match .mhead.ok{color:var(--brand)}
+.match .mhead.mid{color:var(--warn)}
+.match .mhead.bad{color:var(--danger)}
+.mpoint{font-size:13px; line-height:1.6; margin:6px 0; display:flex; gap:8px}
+.mpoint .mk{flex:0 0 auto; font-weight:700}
+.mpoint.ok .mk{color:var(--brand)}
+.mpoint.miss .mk{color:var(--danger)}
+.mpoint.miss .mt{color:var(--muted)}
+.mhint{font-size:12px; color:var(--muted); margin-top:8px}
 .toast{
   position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(10px);
   background:var(--text); color:var(--surface); padding:8px 16px; border-radius:999px;
@@ -1022,6 +1039,8 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
   var done = load(KEY_DONE, {});
   var picks = load(KEY_PICK, {});
   var state = { cat: -1, filter: 'all', type: 'all', q: '', idx: 0 };
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+  var listening = false, rec = null, recBase = '', autoMatchOnEnd = false;
 
   function load(k, d){ try{ return JSON.parse(localStorage.getItem(k)) || d; }catch(e){ return d; } }
   function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
@@ -1069,6 +1088,7 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
   }
 
   function render(){
+    if(listening){ autoMatchOnEnd = false; try{ rec.abort(); }catch(e){} listening = false; }
     var c = current();
     renderCats(); renderProgress(); renderGrid(c.list);
     var body = document.getElementById('stageBody');
@@ -1112,7 +1132,13 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
   function renderQA(x, isDone){
     var ans = answers[x.id] || '';
     return '<div class="self-label"><span>先自己答一遍（自动保存在本机）</span><span id="saveHint">' + (ans ? '已保存草稿' : '') + '</span></div>' +
-      '<textarea id="selfAns" placeholder="按 背景 → 做法 → 结果 组织语言，写完再对照参考答案…">' + esc(ans) + '</textarea>' +
+      '<textarea id="selfAns" placeholder="按 背景 → 做法 → 结果 组织语言，也可以点下面的语音按钮直接口述…">' + esc(ans) + '</textarea>' +
+      '<div class="voicebar">' +
+        '<button class="btn mic" id="micBtn" type="button"><span class="dot"></span><span id="micText">语音回答</span></button>' +
+        '<button class="btn ghost" id="matchBtn" type="button">对照参考答案判分</button>' +
+        '<span class="vhint" id="micHint">点一下开始说，说完再点结束</span>' +
+      '</div>' +
+      '<div class="match" id="matchBox" hidden></div>' +
       '<div class="actions">' + masterHtml(isDone) + '<button class="btn primary" id="reveal" data-label="显示参考答案">显示参考答案</button>' + navHtml() + '</div>' +
       answerPanel(x.a, false, '', false);
   }
@@ -1164,6 +1190,156 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
       .replace(/。/g, '.');
   }
 
+  var KEY_TERMS = [
+    '等价类','边界值','判定表','因果图','正交','场景法','错误推测','冒烟','回归','覆盖率','用例','需求','缺陷',
+    '优先级','严重程度','复现','定位','日志','环境','版本','上线','回滚','灰度','监控','告警','风险',
+    '接口','参数','断言','响应','状态码','鉴权','授权','token','cookie','session','幂等','重试','超时',
+    '并发','限流','熔断','依赖','mock','契约','分页','排序','导出','上传','下载','加密','签名','时间戳',
+    '回调','异步','队列','轮询','webhook','吞吐','tps','qps','线程','连接池','内存','cpu','磁盘','带宽',
+    '瓶颈','压测','负载','稳定性','抖动','泄漏','索引','事务','隔离级别','死锁','慢查询','主键','外键',
+    '唯一','锁','mvcc','explain','执行计划','进程','端口','权限','定时任务','定位','等待','显式等待','隐式等待',
+    'iframe','弹窗','数据驱动','参数化','分层','复用','截图','报告','流水线','构建','部署','触发器','凭据',
+    '制品','分支','提交','合并','冲突','标签','镜像','容器','dockerfile','数据卷','网络','编排','compose',
+    '弱网','兼容','机型','系统','安装','升级','卸载','崩溃','电量','流量','埋点','h5','webview','隐私','合规',
+    'tcp','udp','握手','挥手','http','https','证书','tls','dns','抓包','代理','防火墙','延迟','丢包',
+    '大模型','幻觉','prompt','注入','评测','数据集','准确率','召回','温度','上下文','流式',
+    '沟通','推动','协作','复盘','学习','主动','责任','结果'
+  ];
+
+  function canon(s){
+    return String(s || '').toLowerCase()
+      .replace(/bug/g, '缺陷')
+      .replace(/api/g, '接口')
+      .replace(/验证/g, '校验')
+      .replace(/db/g, '数据库');
+  }
+  function normText(s){
+    return canon(s).replace(/\s+/g, '')
+      .replace(/[，。？！、；：""''（）()《》\-_,.;:?!【】\[\]]/g, '');
+  }
+  function bigrams(s){
+    var set = Object.create(null);
+    for(var i = 0; i < s.length - 1; i++) set[s.substr(i, 2)] = 1;
+    return set;
+  }
+  function pointScore(point, userNorm, userBi){
+    var pn = normText(point);
+    if(pn.length < 2) return 0;
+    var pb = bigrams(pn), total = 0, hit = 0;
+    for(var k in pb){ total++; if(userBi[k]) hit++; }
+    var cov = total ? hit / total : 0;
+    var terms = KEY_TERMS.filter(function(t){ return pn.indexOf(t) >= 0; });
+    if(!terms.length) return cov;
+    var th = terms.filter(function(t){ return userNorm.indexOf(t) >= 0; }).length;
+    return 0.85 * cov + 0.15 * (th / terms.length);
+  }
+  function splitPoints(a){
+    var raw = String(a || '').split(/[\n。；;]/), pts = [];
+    raw.forEach(function(s){
+      s = s.trim();
+      if(!s || s.length < 8) return;
+      if(/^【(追问|易错)】/.test(s)) return;
+      if(/^参考/.test(s)) return;
+      pts.push(s);
+    });
+    return pts.slice(0, 8);
+  }
+  function evaluateAnswer(user, ref){
+    var pts = splitPoints(ref), un = normText(user), ub = bigrams(un);
+    var rows = pts.map(function(p){
+      var sc = pointScore(p, un, ub);
+      return { text: p, score: sc, covered: sc >= 0.4 };
+    });
+    var covered = rows.filter(function(r){ return r.covered; }).length;
+    var score = rows.length ? rows.reduce(function(s, r){ return s + r.score; }, 0) / rows.length : 0;
+    return { rows: rows, covered: covered, total: rows.length, score: score };
+  }
+  function setMicUI(on){
+    var b = document.getElementById('micBtn'), t = document.getElementById('micText'), h = document.getElementById('micHint');
+    if(b) b.classList.toggle('rec', on);
+    if(t) t.textContent = on ? '结束录音' : '语音回答';
+    if(h) h.textContent = on ? '正在听…说完点结束' : '点一下开始说，说完再点结束';
+  }
+  function startMic(){
+    if(!SR){ toast('当前浏览器不支持语音识别，可用输入法听写或手动输入'); return; }
+    var ta = document.getElementById('selfAns');
+    if(!ta) return;
+    recBase = ta.value ? ta.value.replace(/\s+$/, '') + ' ' : '';
+    if(!rec){
+      rec = new SR();
+      rec.lang = 'zh-CN';
+      rec.continuous = true;
+      rec.interimResults = true;
+      rec.onresult = function(e){
+        var fin = '', itm = '';
+        for(var i = e.resultIndex; i < e.results.length; i++){
+          if(e.results[i].isFinal) fin += e.results[i][0].transcript;
+          else itm += e.results[i][0].transcript;
+        }
+        if(fin) recBase += fin;
+        var cur = current().item, ta2 = document.getElementById('selfAns');
+        if(!cur || !ta2) return;
+        ta2.value = recBase + itm;
+        answers[cur.id] = ta2.value;
+        save(KEY_ANS, answers);
+        var sh = document.getElementById('saveHint');
+        if(sh) sh.textContent = '已自动保存';
+      };
+      rec.onerror = function(e){
+        var m = {
+          'not-allowed': '麦克风权限被拒绝，请在浏览器设置里允许后重试',
+          'no-speech': '没有听到声音，靠近麦克风再说一次',
+          'network': '语音服务连接失败，可改用输入法听写',
+          'audio-capture': '没有检测到麦克风'
+        }[e.error] || ('语音识别出错：' + e.error);
+        toast(m);
+      };
+      rec.onend = function(){
+        listening = false;
+        setMicUI(false);
+        if(autoMatchOnEnd){ autoMatchOnEnd = false; runMatch(); }
+      };
+    }
+    try{
+      autoMatchOnEnd = false;
+      rec.start();
+      listening = true;
+      setMicUI(true);
+      toast('开始录音，说完再点一次结束');
+    }catch(e){ toast('无法启动语音识别：' + e.message); }
+  }
+  function stopMic(){
+    autoMatchOnEnd = true;
+    if(rec){ try{ rec.stop(); }catch(e){} }
+    listening = false;
+    setMicUI(false);
+  }
+  function runMatch(){
+    var cur = current().item;
+    var ta = document.getElementById('selfAns'), box = document.getElementById('matchBox');
+    if(!cur || !ta || !box) return;
+    var text = ta.value.trim();
+    box.hidden = false;
+    if(text.length < 8){
+      box.innerHTML = '<div class="mhint">内容太短，先把回答说完再判分。</div>';
+      return;
+    }
+    if(!cur.a || !splitPoints(cur.a).length){
+      box.innerHTML = '<div class="mhint">这道题暂时没有可对照的要点。</div>';
+      return;
+    }
+    var r = evaluateAnswer(text, cur.a);
+    var cls = r.score >= 0.62 ? 'ok' : (r.score >= 0.4 ? 'mid' : 'bad');
+    var title = r.score >= 0.62 ? '意思基本到位' : (r.score >= 0.4 ? '答到了一部分' : '和参考答案偏差较大');
+    var rows = r.rows.map(function(row){
+      return '<div class="mpoint ' + (row.covered ? 'ok' : 'miss') + '">' +
+        '<span class="mk">' + (row.covered ? '✓' : '✗') + '</span><span class="mt">' + esc(row.text) + '</span></div>';
+    }).join('');
+    box.innerHTML = '<div class="mhead ' + cls + '">' + title + ' · 要点覆盖 ' + r.covered + ' / ' + r.total +
+      ' · 匹配度 ' + Math.round(r.score * 100) + '%</div>' + rows +
+      '<div class="mhint">按要点覆盖近似判断，表述不必和答案一致；标 ✗ 的是参考答案里有、你还没提到的关键点。</div>';
+  }
+
   function bindCommon(x){
     document.getElementById('master').addEventListener('click', function(){
       if(done[x.id]) delete done[x.id]; else done[x.id] = 1;
@@ -1181,6 +1357,13 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
     });
     var rt = document.getElementById('retry');
     if(rt) rt.addEventListener('click', function(){ delete picks[x.id]; save(KEY_PICK, picks); render(); });
+    var mic = document.getElementById('micBtn');
+    if(mic){
+      mic.addEventListener('click', function(){ if(listening) stopMic(); else startMic(); });
+      if(!SR){ var mh = document.getElementById('micHint'); if(mh) mh.textContent = '当前浏览器不支持语音，可用输入法听写或手动输入'; }
+    }
+    var mb = document.getElementById('matchBtn');
+    if(mb) mb.addEventListener('click', runMatch);
     var ta = document.getElementById('selfAns') || document.getElementById('codeAns');
     if(ta){
       var timer = null;
