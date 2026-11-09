@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>软件测试面试题库 · 刷题台</title>
+<style>
+:root{
+  --bg:#f4f6f4; --surface:#ffffff; --surface-2:#f7f9f7; --border:#e2e6e2;
+  --text:#1f2328; --muted:#6b7280; --brand:#16a34a; --brand-soft:#e8f5ec;
+  --warn:#d97706; --danger:#dc2626; --radius:10px;
+  --shadow:0 1px 2px rgba(16,24,20,.05),0 8px 24px rgba(16,24,20,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#111413; --surface:#191d1b; --surface-2:#1f2422; --border:#303632;
+    --text:#e6eae8; --muted:#9aa4a0; --brand:#22c55e; --brand-soft:#1b2a21;
+    --warn:#f59e0b; --danger:#f87171; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--text);
+  font:14px/1.7 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+button{font:inherit;cursor:pointer}
+a{color:var(--brand)}
+.top{
+  position:sticky; top:0; z-index:10; background:var(--surface);
+  border-bottom:1px solid var(--border);
+}
+.top-inner{
+  max-width:1180px; margin:0 auto; padding:14px 20px;
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:16px}
+.logo{
+  width:30px; height:30px; border-radius:8px; background:var(--brand); color:#fff;
+  display:grid; place-items:center; font-size:15px; font-weight:700;
+}
+.grow{flex:1}
+.search{
+  flex:1 1 260px; max-width:420px; display:flex; align-items:center; gap:8px;
+  background:var(--surface-2); border:1px solid var(--border); border-radius:999px; padding:6px 12px;
+}
+.search input{
+  flex:1; border:0; outline:0; background:transparent; color:var(--text); font:inherit;
+}
+.progress-mini{display:flex; align-items:center; gap:8px; color:var(--muted); font-size:12px; white-space:nowrap}
+.bar{width:110px; height:6px; border-radius:999px; background:var(--border); overflow:hidden}
+.bar > i{display:block; height:100%; width:0; background:var(--brand); transition:width .25s}
+main{
+  max-width:1180px; margin:0 auto; padding:20px;
+  display:grid; grid-template-columns:250px minmax(0,1fr); gap:20px;
+}
+@media (max-width:860px){
+  main{grid-template-columns:1fr}
+  aside{order:2}
+}
+aside{position:sticky; top:82px; align-self:start; max-height:calc(100vh - 100px); overflow:auto}
+.panel{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow)}
+.panel-h{padding:12px 14px; border-bottom:1px solid var(--border); font-weight:600; font-size:13px; color:var(--muted)}
+.cat{
+  width:100%; text-align:left; border:0; background:transparent; color:var(--text);
+  padding:9px 14px; display:flex; gap:8px; align-items:center; border-bottom:1px solid var(--border);
+}
+.cat:hover{background:var(--surface-2)}
+.cat.on{background:var(--brand-soft); color:var(--brand); font-weight:600}
+.cat .n{flex:1; font-size:13px; line-height:1.35}
+.cat .c{font-size:11px; color:var(--muted); white-space:nowrap}
+.stage{min-width:0}
+.filters{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px}
+.chip{
+  border:1px solid var(--border); background:var(--surface); color:var(--muted);
+  padding:6px 14px; border-radius:999px; font-size:13px;
+}
+.chip.on{background:var(--brand); border-color:var(--brand); color:#fff}
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  box-shadow:var(--shadow); padding:22px;
+}
+.qtop{display:flex; align-items:center; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:12px; margin-bottom:10px}
+.badge{background:var(--brand-soft); color:var(--brand); border-radius:999px; padding:2px 10px; font-weight:600}
+.badge.warn{background:rgba(217,119,6,.12); color:var(--warn)}
+.qtext{font-size:19px; line-height:1.55; margin:0 0 18px; font-weight:700}
+.self-label{display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:12px; margin-bottom:6px}
+textarea{
+  width:100%; min-height:130px; resize:vertical; padding:12px 14px; font:inherit; line-height:1.7;
+  color:var(--text); background:var(--surface-2); border:1px solid var(--border); border-radius:10px; outline:0;
+}
+textarea:focus{border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-soft)}
+.actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+.btn{
+  border:1px solid var(--border); background:var(--surface); color:var(--text);
+  padding:8px 16px; border-radius:8px; font-size:13px;
+}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--brand); border-color:var(--brand); color:#fff}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.ghost{color:var(--muted)}
+.btn.done{border-color:var(--brand); color:var(--brand); background:var(--brand-soft)}
+.answer{
+  margin-top:18px; border-top:1px dashed var(--border); padding-top:16px;
+}
+.answer h3{font-size:13px; color:var(--muted); margin:0 0 8px; font-weight:600}
+.answer ul{margin:0; padding-left:20px}
+.answer li{margin:5px 0}
+.navbar{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:16px; flex-wrap:wrap}
+.count{color:var(--muted); font-size:12px}
+.empty{padding:40px; text-align:center; color:var(--muted)}
+details{margin-top:16px}
+summary{cursor:pointer; color:var(--muted); font-size:13px}
+.grid{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(52px,1fr)); gap:8px; margin-top:12px;
+}
+.gbtn{
+  border:1px solid var(--border); background:var(--surface-2); color:var(--text);
+  border-radius:8px; padding:8px 4px; font-size:12px; position:relative;
+}
+.gbtn:hover{border-color:var(--brand)}
+.gbtn.on{background:var(--brand); border-color:var(--brand); color:#fff}
+.gbtn.star::after{content:"★"; position:absolute; top:-1px; right:3px; font-size:9px; color:var(--warn)}
+.gbtn.done{border-color:var(--brand)}
+.gbtn.done::before{content:""; position:absolute; left:4px; top:4px; width:5px; height:5px; border-radius:50%; background:var(--brand)}
+footer{max-width:1180px; margin:0 auto; padding:8px 20px 40px; color:var(--muted); font-size:12px}
+.type-filters{margin-top:-6px}
+.type-filters .flabel{color:var(--muted); font-size:12px; align-self:center; margin-right:2px}
+.opt{
+  display:block; width:100%; text-align:left; margin:8px 0; padding:10px 14px;
+  border:1px solid var(--border); border-radius:8px; background:var(--surface-2); color:var(--text);
+}
+.opt:hover{border-color:var(--brand)}
+.opt:disabled{opacity:1; cursor:default}
+.opt.correct{background:var(--brand-soft); border-color:var(--brand); color:var(--brand); font-weight:600}
+.opt.wrong{background:rgba(220,38,38,.08); border-color:var(--danger); color:var(--danger)}
+.fillrow{display:flex; gap:10px; flex-wrap:wrap}
+.fillrow input{
+  flex:1 1 260px; padding:10px 14px; border-radius:8px; border:1px solid var(--border);
+  background:var(--surface-2); color:var(--text); font:inherit; outline:0;
+}
+.fillrow input:focus{border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-soft)}
+.verdict{margin-top:10px; font-weight:600}
+.verdict.ok{color:var(--brand)}
+.verdict.bad{color:var(--danger)}
+.code-input{font-family:Consolas,"Courier New",monospace; min-height:190px; line-height:1.6}
+pre.code{
+  margin:0; padding:14px; border:1px solid var(--border); border-radius:10px;
+  background:var(--surface-2); overflow:auto; white-space:pre-wrap;
+  font:13px/1.65 Consolas,"Courier New",monospace;
+}
+.toast{
+  position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(10px);
+  background:var(--text); color:var(--surface); padding:8px 16px; border-radius:999px;
+  font-size:13px; opacity:0; pointer-events:none; transition:.2s; z-index:20;
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+.b-short{display:none}
+
+/* ---------- 手机端适配 ---------- */
+@media (max-width:700px){
+  html{-webkit-text-size-adjust:100%}
+  body{font-size:15px}
+  .top-inner{
+    display:grid; grid-template-columns:auto 1fr auto; align-items:center;
+    gap:8px 10px; padding:9px 12px;
+  }
+  .brand{grid-row:1; grid-column:1; min-width:0}
+  .brand .b-full{display:none}
+  .brand .b-short{display:inline}
+  .logo{width:26px; height:26px; border-radius:7px; font-size:13px}
+  .grow{display:none}
+  .search{grid-row:2; grid-column:1 / -1; max-width:none; padding:5px 12px}
+  .search input{font-size:16px} /* 小于16px iOS 会自动放大 */
+  .progress-mini{grid-row:1; grid-column:2; justify-self:end; font-size:11px; gap:6px}
+  .bar{width:64px}
+  #reset{grid-row:1; grid-column:3; padding:6px 10px; font-size:12px}
+
+  main{grid-template-columns:1fr; padding:12px; gap:14px}
+  /* 分类改为题目上方的横向滑动条，先选分类再看题 */
+  aside{position:static; order:-1; max-height:none; overflow:visible; min-width:0}
+  aside .panel{box-shadow:none; border-radius:10px; overflow:hidden}
+  .panel-h{padding:9px 12px; font-size:12px}
+  #cats{
+    display:flex; gap:8px; overflow-x:auto; padding:9px 12px;
+    max-width:100%;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  #cats::-webkit-scrollbar{display:none}
+  .cat{
+    width:auto; flex:0 0 auto; border:1px solid var(--border); border-radius:999px;
+    padding:7px 12px; border-bottom:0; gap:6px; white-space:nowrap;
+  }
+  .cat .n{font-size:13px; flex:none}
+  .cat .c{display:none} /* 小屏隐藏题量，避免横向占位过长 */
+
+  .filters{gap:6px; margin-bottom:10px}
+  .chip{padding:7px 12px; font-size:13px}
+  #random{display:none} /* 小屏用底部“下一题”即可，避免挤占 */
+  .type-filters{margin-top:-2px; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none}
+  .type-filters::-webkit-scrollbar{display:none}
+  .type-filters .chip{flex:0 0 auto; padding:7px 9px; font-size:12px}
+  .flabel{display:none}
+
+  .card{padding:16px; border-radius:12px}
+  .qtop{gap:6px; font-size:11px; margin-bottom:8px}
+  .qtext{font-size:17px; line-height:1.5; margin-bottom:14px}
+  .opt{padding:12px 14px; margin:8px 0}
+  .fillrow{flex-direction:column; gap:8px}
+  .fillrow input{flex:none; width:100%; font-size:16px; padding:11px 12px}
+  .fillrow .btn{width:100%; min-height:42px}
+  textarea{font-size:16px; padding:11px 12px} /* 防止 iOS 聚焦缩放 */
+  .code-input{min-height:150px; font-size:14px}
+  pre.code{font-size:12px; padding:12px}
+  .actions{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .actions .btn{width:100%; min-height:42px}
+  .actions .btn:last-child:nth-child(odd){grid-column:1/-1}
+  .navbar{gap:8px}
+  .navbar .btn{flex:1 1 auto; min-height:40px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(46px,1fr)); gap:6px}
+  .gbtn{padding:9px 4px}
+  footer{padding:8px 12px 72px}
+  .toast{bottom:calc(20px + env(safe-area-inset-bottom))}
+  .answer{margin-top:14px; padding-top:12px}
+  .answer ul{padding-left:18px}
+}
+
+@media (max-width:380px){
+  .qtext{font-size:16px}
+  .card{padding:13px}
+  .brand .b-short{font-size:14px}
+  .progress-mini span{display:none} /* 极窄屏只留进度条 */
+}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand"><span class="logo">测</span><span class="b-full">软件测试面试题库 · 刷题台</span><span class="b-short">面试刷题</span></div>
+    <div class="search">
+      <span style="color:var(--muted)">⌕</span>
+      <input id="search" type="search" placeholder="搜索题目关键词，如：状态机、幂等、P95">
+    </div>
+    <div class="grow"></div>
+    <div class="progress-mini">
+      <span id="progText">已掌握 0 / 0</span>
+      <div class="bar"><i id="progBar"></i></div>
+    </div>
+    <button class="btn ghost" id="reset">清空进度</button>
+  </div>
+</header>
+
+<main>
+  <aside>
+    <div class="panel">
+      <div class="panel-h">题目分类</div>
+      <div id="cats"></div>
+    </div>
+  </aside>
+
+  <section class="stage">
+    <div class="filters">
+      <button class="chip on" data-f="all">全部</button>
+      <button class="chip" data-f="star">★ 高频</button>
+      <button class="chip" data-f="todo">未掌握</button>
+      <button class="chip" data-f="done">已掌握</button>
+      <button class="btn" id="random" style="margin-left:auto">随机一题</button>
+    </div>
+    <div class="filters type-filters">
+      <span class="flabel">题型</span>
+      <button class="chip on" data-t="all">全部题型</button>
+      <button class="chip" data-t="qa">简答口述</button>
+      <button class="chip" data-t="choice">选择题</button>
+      <button class="chip" data-t="fill">填空题</button>
+      <button class="chip" data-t="code">代码题</button>
+    </div>
+
+    <div id="stageBody"></div>
+
+    <details>
+      <summary>展开本题库题目清单（当前筛选）</summary>
+      <div class="grid" id="grid"></div>
+    </details>
+  </section>
+</main>
+
+<footer>数据来源：你上传的《分类面试题.txt》，另补充选择题、填空题、代码题专项。作答与掌握状态保存在本机浏览器，不会上传。</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+window.QB_PARTS = window.QB_PARTS || [];
+window.QB_PARTS.push({name:"一、测试基础与流程",items:[
+{q:"完整的软件测试流程是什么？每个阶段的产出物分别是什么？",s:true,a:"需求评审 → 测试计划 → 用例设计与评审 → 环境与数据准备 → 提测冒烟 → 功能/接口/回归执行 → 缺陷跟踪 → 测试报告 → 上线验证与复盘。\n产出物：需求评审记录、测试计划、测试用例、测试数据、缺陷单、测试报告、上线checklist与复盘纪要。\n一句话：每个阶段都要有可交付、可评审、可追溯的文档，而不是只有执行。"},
+{q:"测试人员在整个研发周期里，每个环节应该起什么作用？",s:true,a:"需求阶段：识别歧义、遗漏、可测性与风险，提前问清异常分支和权限规则。\n设计阶段：评审技术方案的可测性，参与接口契约定义。\n开发阶段：接口联调、左移测试、准备用例与环境。\n提测阶段：冒烟把关，不合格直接打回。\n测试阶段：执行、定位、推动缺陷闭环、评估风险。\n上线阶段：验证核心链路、监控、复盘并补回归用例。"},
+{q:"测试计划 / 测试方案包含哪些内容？你怎么制定？",a:"范围与目标、测试策略（分层与优先级）、资源与环境、进度与里程碑、准入准出标准、风险与应对、交付物。\n制定方法：先对齐版本目标与变更范围，再按风险排优先级，最后倒排时间并预留 buffer。"},
+{q:"测试报告包含哪些内容？你独立输出过完整测试报告吗？",s:true,a:"版本与范围、测试环境与配置、用例执行统计（计划/执行/通过/失败/阻塞）、缺陷统计（等级、模块、趋势、修复率）、遗留问题与风险评估、性能与安全结论、上线建议。\n独立输出过：按模板填写并附缺陷清单、用例执行明细和风险结论，评审后归档。"},
+{q:"测试用例包含哪些字段？禅道里的用例有哪些字段？",s:true,a:"通用字段：用例编号、所属模块、标题、前置条件、操作步骤、预期结果、优先级、用例类型、关联需求、执行结果、备注。\n禅道：产品/项目、模块、用例类型（功能/性能/接口等）、阶段、相关需求、优先级、关键词、适用版本、创建人、最后执行人等。"},
+{q:"设计一条测试用例需要注意什么？",a:"一条用例只验证一个明确的点；步骤可执行、数据可构造；预期结果可判定；独立可重复，不依赖其他用例的执行顺序。"},
+{q:"缺陷单 / bug 包含哪些内容和关键要素？",s:true,a:"标题（现象+模块）、复现步骤、实际结果、预期结果、环境与版本、严重等级与优先级、附件（截图/录屏/日志/请求响应）、指派人、状态、关联需求。\n关键：别人能照着步骤稳定复现。"},
+{q:"缺陷管理流程是什么？用什么工具管理缺陷？",s:true,a:"新建 → 确认/指派 → 修复 → 验证 → 关闭；不认可时走沟通或评审，结论可为延期、非缺陷、需求变更。\n工具：禅道、Jira、TAPD、Bugzilla；配合截图、日志与用例编号留痕。"},
+{q:"需求评审的意义是什么？评审会上你关注什么、提过哪些问题？",a:"意义：尽早发现歧义和遗漏，统一产品、开发、测试的理解，降低返工。\n关注：业务规则与边界、异常分支、权限与数据范围、数据来源与口径、兼容性、上线与回滚。\n常问：超时怎么办、失败是否可重试、谁能看谁能改、历史数据怎么处理。"},
+{q:"需求评审和用例评审分别有哪些人参加？",a:"需求评审：产品、开发、测试、UI/交互，必要时运营与架构。\n用例评审：测试主导，开发与产品参加，确认覆盖与预期是否一致。"},
+{q:"用例评审时发现你的用例覆盖不全，后续怎么补？",a:"先补缺口用例并标注来源，再评估影响面和优先级；把新增场景纳入回归集，必要时同步更新测试计划与风险说明。"},
+{q:"需求上线标准 / 测试准出标准是什么？",a:"用例执行率 100%、P0/P1 清零、遗留缺陷有明确结论和规避方案、冒烟通过、性能与安全达标、文档与上线步骤齐全、回滚方案可用。"},
+{q:"冒烟用例怎么定义？冒烟测试怎么做？",a:"从核心主流程中抽取最小集合（登录、主业务闭环、关键接口），提测后第一时间执行；不通过直接打回，不进入正式测试。"},
+{q:"什么是回归测试？在什么节点做？回归完还要做什么？",s:true,a:"回归是验证修改没有破坏原有功能，覆盖缺陷修复点和关联模块。\n节点：开发修复后、版本上线前、线上热修后。\n回归完：更新用例与缺陷状态、输出回归结论与风险、准备上线验证和复盘。"},
+{q:"新版本来了，用例执行策略是什么？继承性用例每版都要跑吗？",a:"按变更影响面选测：改动模块全测，关联模块重点测，核心继承用例每版必跑；非核心按风险抽测，自动化兜底。"},
+{q:"怎么评估测试用例覆盖是否完整？",a:"需求追踪矩阵（需求→用例→缺陷）、用例评审、接口覆盖率、代码覆盖率参考、线上缺陷反推补用例。"},
+{q:"什么是测试左移、什么是测试右移？",a:"左移：测试提前到需求、设计、编码阶段，做评审、接口测试、单元测试，越早发现成本越低。\n右移：测试延伸到线上，做灰度、监控、告警、用户反馈与线上巡检。"},
+{q:"黑盒测试和白盒测试的区别和优缺点？白盒测试的用例设计方法有哪些？",a:"黑盒不看内部实现，从输入输出验证，贴近用户、易执行，但难以覆盖内部路径。\n白盒看代码逻辑，覆盖更彻底、能发现隐藏分支，但成本高、依赖代码能力。\n白盒方法：语句覆盖、判定覆盖、条件覆盖、判定/条件覆盖、条件组合覆盖、路径覆盖。"},
+{q:"国标里的测试级别分为哪几级？",a:"单元测试、集成测试、系统测试、验收测试（确认测试），部分标准还包含回归测试与安装测试。"},
+{q:"测试用例设计方法有哪些？等价类、边界值具体怎么用？",s:true,a:"方法：等价类、边界值、判定表、因果图、正交实验、场景法、状态迁移、错误推测。\n等价类：把输入划分为有效/无效类，每类取代表值。\n边界值：取上点、下点、离点，如 1–100 取 0、1、2、99、100、101。"},
+{q:"判定表怎么用？结合你的项目举一个例子。",a:"列出条件桩与动作桩，枚举条件组合形成规则，再合并简化。\n例：领用审批——金额>5000、是否外部人员、是否有库存，三个条件组合决定走哪级审批或直接拒绝。"},
+{q:"状态迁移法怎么设计用例？怎么保证状态机覆盖完整、能识别非法跳变？",a:"先画状态图，列出「当前状态 × 事件 → 目标状态」矩阵；覆盖全部合法迁移、每个状态的进入/退出、重复触发、非法跳转和超时/撤销分支。"},
+{q:"正交实验法、错误推测法、因果图分别在什么场景用？",a:"正交：多因素多水平组合，用少量用例覆盖组合空间。\n错误推测：凭经验针对易错点设计异常场景。\n因果图：输入之间存在约束/依赖关系，需要分析输入组合对输出的影响。"},
+{q:"测试数据一般从哪里来？",a:"生产脱敏数据、造数脚本/Faker、边界与异常构造、上游同步、数据库备份恢复。"},
+{q:"测试环境怎么搭建？环境不一致导致的问题怎么处理？",a:"按部署文档准备依赖版本、配置、数据库与中间件，初始化数据和账号权限；用 Docker/Compose 固化环境。\n不一致时：列出差异清单，优先容器化对齐，无法对齐的在上线前用预发/生产同构环境复验。"},
+{q:"需求文档写得不全、和开发理解不一致，怎么推进？",a:"拉产品和开发三方对齐，输出会议纪要和问题清单；以原型和接口契约作为补充依据，逐条确认并跟踪闭环。"},
+{q:"测试时间被压缩、需求倒排，你怎么排测试优先级？",a:"按业务价值与风险排序：P0 主流程与资损/权限必测，自动化兜底回归；无法覆盖的部分显式上报风险，争取资源或缩小范围。"},
+{q:"测试过程中主要有哪些风险？印象最深的一次风险是什么？",a:"需求频繁变更、提测质量差、环境不稳定、数据缺失、时间不足、依赖服务不可用。\n讲一次真实风险：如流程引擎未启动导致审批链路整体不可用，及时升级并补启动检查。"},
+{q:"怎么区分一个 bug 是前端问题还是后端问题？",s:true,a:"F12 看请求：请求未发出或参数错 → 前端；请求已发但响应错误/数据错 → 后端；响应正确但页面展示错 → 前端渲染或缓存。\n再用接口直调复验，能绕开前端复现的多为后端或数据问题。"},
+{q:"什么是接口联调？",a:"前后端按接口契约联调，验证参数、返回结构、鉴权、异常码与业务状态是否一致，测试参与确认联调结果。"},
+{q:"你理解的软件测试是什么？",a:"以最小成本发现并传递质量风险，验证系统在正确性、稳定性、性能、安全等方面满足业务预期，而不是单纯找 bug。"},
+{q:"好的测试设计标准是什么？最重要的是哪一点？",a:"覆盖需求与风险、用例可执行可判定、可维护、成本合理。\n最重要的是覆盖关键风险：主流程、资损、权限、数据一致性。"},
+{q:"一个从 0 到 1 的新项目，除了用例执行正确，还要关注哪些内容？",a:"需求可测性、架构与依赖风险、环境与数据准备、权限体系、性能与安全、监控告警、发布与回滚方案。"},
+{q:"怎么快速上手一个完全陌生的业务？有没有自己的方法论？",a:"看文档与原型 → 画业务流程图和状态机 → 跟一遍真实操作 → 找产品/老员工问关键规则 → 整理术语表 → 先写冒烟用例验证理解。"},
+{q:"用例怎么管理？用例库怎么维护？",a:"按产品/模块/版本分层，需求关联与标签管理；核心回归集单独维护，定期评审、去重、更新失效用例。"},
+{q:"测试环境和生产环境的差异，你怎么考虑？",a:"关注配置、数据量、依赖服务、网络与权限差异；差异可能导致性能与边界问题，上线前在预发或生产同构环境复验关键链路。"},
+{q:"测试中漏测了怎么解决？印象最深的一次漏测是什么？",s:true,a:"先止损（回滚/热修/开关），再复盘根因：是需求遗漏、用例缺口还是执行遗漏；补用例进回归集，评估同类影响面，输出改进项。\n讲漏测时重点讲「怎么发现、怎么补救、怎么防止再犯」。"},
+{q:"线上出现问题了怎么处理？",a:"确认影响范围 → 止损（回滚/降级/限流）→ 拉日志与链路定位 → 修复并验证 → 通知相关方 → 复盘与补监控/用例。"},
+{q:"有做过自由测试 / 探索式测试吗？用例没覆盖到的部分怎么想思路？",a:"按业务分区做探索：围绕用户目标、异常路径、状态组合、权限边界、并发与中断设计探索章程，边学边测并记录发现。"},
+{q:"了解第三方测试吗？了解军软测试文档的编写要求吗？",a:"第三方测试强调独立性与可追溯，按委托方标准和模板输出测试计划、用例、记录、报告；军软通常要求更严格的文档标识、评审与配置管理。"},
+{q:"一个测试周期一般多久？版本多久迭代一次？",a:"按实际回答：如双周迭代、测试 5–7 个工作日；大版本含回归与性能则 2–3 周。"},
+{q:"你们测试团队几个人？人员配比是怎样的？谁主导测试规划？",a:"按实际回答：如 1 名测试对 3–5 名开发；测试负责人主导计划与排期，组员分工执行与自动化。"}
+]});
+
+window.QB_PARTS.push({name:"二、测试用例设计实战题（场景题）",items:[
+{q:"登录界面（用户名 + 密码 + 登录按钮）有哪些测试点？",s:true,a:"功能：正确/错误账号密码、空值、长度边界、特殊字符、大小写、前后空格、重复点击、回车登录。\n安全：SQL 注入、XSS、暴力破解与锁定、验证码、密码是否明文、会话与登出。\n界面与兼容：布局、提示文案、多浏览器/分辨率。\n异常：网络中断、超时、服务不可用、并发登录。"},
+{q:"登录功能涉及安全，密码是否明文传输怎么验证？",a:"抓包看是否为 HTTPS；查看请求体密码是否明文或可逆加密；检查前端加密逻辑与后端校验；确认日志不打印密码。"},
+{q:"手机号注册 / 登录的测试点有哪些？",a:"号段与长度校验、格式与空格、重复注册、验证码有效期/错误/复用/频控、换绑、国际号码、并发注册、异常网络。"},
+{q:"动态验证码怎么测试？",a:"正确、错误、过期、重复使用、大小写、刷新后旧码失效、发送频控、绕过（直接调接口）、多端同步。"},
+{q:"微信发红包怎么设计测试用例？",s:true,a:"金额：0、负数、小数位、超余额、超单笔上限、拼手气/普通红包。\n个数与领取：1 个/多个、抢完、重复抢、并发抢、超时未领退回。\n流程：支付、失败重试、退款、账单一致性、通知、弱网、防刷与风控。"},
+{q:"微信发送语音的功能怎么测？",a:"权限、录制时长上下限、取消发送、松手发送、静音、后台/来电中断、音质与格式、发送失败重试、播放与转文字、删除、弱网。"},
+{q:"微信朋友圈评论功能有哪些测试点？",a:"文字/表情/图片、字数上限、敏感词、删除与回复、可见范围、刷新与分页、并发评论、通知、权限与屏蔽。"},
+{q:"微信扫一扫识别二维码怎么测？",a:"相机权限、对焦、距离/角度/光线、模糊/破损/反光码、非二维码、多码同框、识别结果正确性、连续扫描、弱网与暗光。"},
+{q:"微信视频通话怎么测？",a:"呼叫/接听/拒接/挂断、静音与摄像头切换、前后台切换、弱网与断网重连、多人通话、权限、并发与兼容。"},
+{q:"微信上传图片怎么测？换头像后不生效怎么排查？",a:"格式/大小/尺寸/数量、压缩与裁剪、失败重试、删除、并发上传。\n不生效：查接口是否返回新地址、CDN/浏览器缓存、前端是否刷新、后端是否落库。"},
+{q:"微信通知怎么测试？",a:"开关与免打扰、系统权限、到达率与延迟、重复/合并、点击跳转、多端同步、杀进程后接收。"},
+{q:"淘宝购物车怎么设计测试用例？",a:"增删改查、数量边界与库存、选中/全选、价格与优惠计算、跨端同步、登录合并、失效商品、并发修改。"},
+{q:"双 11 晚 8 点秒杀开启，用户点秒杀按钮失效，你怎么排查和测试这个场景？",s:true,a:"先分前端/后端：看按钮是否置灰、时间是否本地时间、请求是否发出、接口返回码。\n排查：客户端时间与服务端时间差、活动配置是否生效、库存/限流、网关与缓存、灰度环境。\n测试：时间边界（提前/准点/延后）、库存、并发、重复点击、降级与监控。"},
+{q:"秒杀场景怎么设计用例？怎么做压测？",a:"用例：时间点、限购、库存扣减与超卖、重复下单、支付超时、失败降级、防刷。\n压测：JMeter 梯度加压，监控 TPS、P95、错误率、CPU/连接数，确认拐点与限流策略。"},
+{q:"商城礼包 / 道具置顶怎么测？",a:"排序规则、并发置顶、重复领取、库存、上下架与生效时间、权限、多端展示一致性。"},
+{q:"游戏礼包怎么测？黑神话悟空 boss 关卡场景怎么测？",a:"礼包：领取条件、重复领取、库存、到账与日志。\nBoss 关卡：数值与技能判定、碰撞、帧率与卡顿、网络延迟/丢包、复活与存档、不同难度与设备。"},
+{q:"停车场分段计费（白天 15 分钟内免费、半小时 1.5 元、1 小时 3 元、夜间 1 小时 2 元、上限 24 元）怎么设计场景？",a:"用判定表覆盖时段×时长：0–15 分钟、15–30、30–60、跨时段、跨天、24 小时封顶。\n再补异常：无入场记录、重复出场、免费时段跨段、月卡/优惠、支付失败。"},
+{q:"电梯控制系统怎么设计测试？",a:"楼层与方向、开关门、超载、急停、断电恢复、多人同时呼叫、故障告警、消防模式、响应时间与安全。"},
+{q:"风扇的测试用例怎么设计？",a:"档位切换、摇头、定时、模式（自然/睡眠）、断电恢复、按键与遥控、噪音、安全与清洗。"},
+{q:"手机相机怎么设计测试用例？",a:"拍照/录像、对焦与变焦、闪光、模式切换、存储与权限、来电中断、前后台、兼容性、成像质量与弱光。"},
+{q:"手机外设：普通开关机、充电类型、红外传感器、指纹人脸、OTA 升级分别有哪些测试点？",a:"开关机：正常/长按/异常断电/低电。充电：协议、快充、边充边用、异常温度。红外：距离与角度、遮挡。指纹人脸：录入、失败、湿手/暗光。OTA：下载、校验、升级、失败回滚、数据保留。"},
+{q:"OTA 大版本升级和小版本升级有什么区别？",a:"大版本涉及功能与架构变更，重点测兼容、数据迁移、回滚；小版本多为修复，重点验证修复点与增量包升级。"},
+{q:"列表页支持跨页勾选，最多 500 条，每页只显示 100 条，批量修改送货日期怎么设计用例？",a:"跨页保持勾选、全选/取消、500 上限、翻页后状态、批量提交、部分失败与回滚、并发修改、超时。"},
+{q:"勾选的数据里有一部分允许调整、一部分不允许调整，异常场景怎么设计？",a:"可调/不可调混选、全不可调、提示与禁用、后端二次校验、绕过前端直接调接口修改不可调数据。"},
+{q:"库存 100 件、其中 60 件已被订单占用，运营要直接改成 50，系统会怎么处理、你怎么测？",a:"预期应拒绝或提示可售仅 40；测试边界、并发下单、提示文案、审计日志、强制调整权限。"},
+{q:"上游一次性同步 100 个订单、每个订单 50 个字段，怎么保证 5000 个字段完全一致？",s:true,a:"建立字段映射表，写脚本全量比对源与目标；覆盖类型、精度、空值、默认值、枚举转换。\n再验幂等、失败重试、部分失败、乱序与重复同步；抽样人工复核关键字段。"},
+{q:"租户 A 和租户 B 可以互相登录，但登录后不能操作对方数据，怎么设计用例？",a:"A 登录查 B 的数据 ID、列表、详情、导出、附件；直接调接口改 tenantId；缓存与日志是否串租户。"},
+{q:"支付异常场景有哪些？支付冻结怎么测？",a:"余额不足、超时、重复支付、回调丢失、退款失败、风控拦截、对账不平。\n冻结：冻结/解冻、冻结中支付、并发、定时解冻、日志与通知。"},
+{q:"页面上的柱状图 / 报表怎么测？从第三方接口取数再生成报表怎么测？",a:"核对统计口径与数据源、空数据、极值、时间范围、刷新与导出；第三方异常/超时/字段变更时是否有兜底与提示。"},
+{q:"只有一个输入框，怎么设计测试用例？",a:"等价类与边界：空、最短/最长、超长；类型：数字/字母/中文/表情；特殊字符与注入；粘贴、回车、空格；前后端校验一致。"},
+{q:"批量导入接口，除了响应时间还要验证哪些结果？",a:"成功/失败条数、错误行定位与原因、部分成功策略、重复数据、事务与回滚、幂等、文件格式与编码。"},
+{q:"告警系统怎么设计测试用例？",a:"触发条件与阈值边界、去重/抑制、恢复通知、通知渠道、延迟、误报漏报、告警风暴与降级。"},
+{q:"设备每分钟上报一次数据，可能出现重复、乱序、延迟、缺失、异常值，分别怎么设计用例？主要关注哪些指标？",a:"重复：幂等去重；乱序：按时间戳排序；延迟：补传与超时；缺失：断点续传/补采；异常值：阈值过滤与标记。\n指标：到达率、延迟、完整率、准确率、重复率。"},
+{q:"A 软件每 100ms 发一次自检命令，B 软件自检后上传数据，A 连续 2 秒收不到就判通信异常，请写测试方法、测试充分性和通过标准。",a:"方法：正常链路、丢包、延迟、重复、乱序、连续 2 秒无响应、恢复后重连。\n充分性：正常+异常+边界+长时间稳定性。\n通过标准：判定准确、误报/漏报为 0、恢复后自动重连、日志可追溯。"},
+{q:"上传图片功能怎么设计测试用例？",a:"格式、大小、尺寸、数量、压缩、裁剪、删除、失败重试、并发、安全（改名/木马/越权访问）。"},
+{q:"一个完整的下单支付主流程，你会设计哪些测试点？",a:"商品与库存、价格与优惠、地址、支付方式、回调与超时、重复支付、退款、对账、并发与弱网。"}
+]});
+
+window.QB_PARTS.push({name:"三、缺陷管理与沟通推动",items:[
+{q:"缺陷等级怎么划分（P0-P3 或 70/71）？判定的依据是什么？",s:true,a:"P0：阻断/资损/数据错误/安全漏洞；P1：主流程严重受损但有绕过；P2：一般功能异常；P3：体验/文案/建议。\n依据：影响面、发生频率、是否有绕过、是否涉及资金与数据。"},
+{q:"抖音搜索词条和搜索结果完全没关系，定几级？",a:"搜索是核心功能，结果完全不相关会直接影响用户获取内容，通常 P1；若大面积不可用或资损则 P0。"},
+{q:"视频清晰度按钮切换成功但画面没变化，定几级？",a:"功能可见但无效，通常 P2；若默认清晰度错误影响大量用户可升 P1。"},
+{q:"怎么判断一个缺陷是否需要修复？",a:"看是否偏离需求、影响用户与业务、是否有绕过、修复成本与版本计划；体验类可作为改进项排期。"},
+{q:"提交的 bug 开发不认可，怎么处理？",s:true,a:"先补证据：需求条款、复现步骤、日志/请求响应、数据库结果。\n再拉产品三方确认预期；仍不一致则记录结论（非缺陷/需求变更/延期），必要时升级负责人。"},
+{q:"开发说「这不是 bug，是设计如此、需求就是这样」，怎么礼貌回应？",a:"先确认需求原文与设计稿，说明用户实际感受与风险；若确实如此，记录为改进建议并推动产品评估，不在情绪上争论。"},
+{q:"开发和产品都不在你所在的城市，只能线上沟通，怎么推进问题？",a:"用录屏+截图+日志把问题说清，建群同步，明确责任人和时间点，定期更新状态，风险及时升级。"},
+{q:"开发很忙、不配合定位，你怎么办？",a:"先自行缩小范围（前端/后端/数据/环境），提供最小复现包和日志，约定固定时间同步；仍不推进则升级测试负责人。"},
+{q:"偶现的 bug 怎么跟进？一直复现不出来怎么办？这种 bug 要不要提？",s:true,a:"要提。记录环境、账号、时间、traceId、日志与截图，标注偶现和复现概率。\n持续跟进：加日志/监控、提高复现频率、灰度观察；不能因为难复现就不提。"},
+{q:"测试环境复现不了，上线后用户量上来概率变高，怎么规避？",a:"分析是否与并发、数据量、缓存、网络有关；补监控与日志、灰度发布、压测、开关降级，并准备回滚方案。"},
+{q:"提了 bug 开发改了，回归发现没修好怎么办？如果还是没修好呢？",a:"重开 bug 并附回归证据和版本号，说明未修复的具体表现；多次不修则升级负责人并评估上线风险。"},
+{q:"开发自己都没跑通就把版本转测给你，你怎么做？",a:"按准入标准打回，要求提供自测清单和冒烟通过记录；先跑冒烟，不通过不进入正式测试。"},
+{q:"怎么推动一个缺陷闭环？有没有推动过产品改进？",a:"明确责任人、截止时间、验证标准，定期同步；用数据说明影响，推动产品排期并记录结果。"},
+{q:"印象最深的 / 最严重的一个 bug 是什么？怎么发现的？",s:true,a:"按「背景—发现—定位—修复—复盘」讲：如未登录可直接调接口取数据、重复提交生成两条单据、审批通过但库存未扣减。\n重点讲证据链和影响面，不要只说现象。"},
+{q:"你认为怎么才算一个 bug？用户体验类问题算不算 bug？",a:"与需求/设计/用户预期不一致且影响使用即为 bug；体验问题可分级为改进建议，但影响转化或理解时应作为缺陷跟踪。"},
+{q:"线上偶现失败、线下怎么都复现不了，怎么排查失败原因？",a:"查链路日志与 traceId、监控指标、用户环境与数据差异、并发与缓存、依赖服务超时；必要时加埋点复现。"},
+{q:"怎么捞日志？捞的是前端日志还是后端日志？服务端日志怎么捞？",a:"前端看 console 与 Network；后端按时间、关键字、traceId 在日志文件/日志平台检索；服务端常用 tail/grep/awk 或 ELK。"},
+{q:"traceId / logId 在排查中怎么用？",a:"从请求入口透传到各服务，按 traceId 串起整条调用链，快速定位失败发生在哪一跳。"},
+{q:"业务需求、用户体验、设计美感冲突了怎么办？",a:"以业务目标和用户价值为准，列出各方诉求与代价，拉产品做决策并记录取舍，测试给出风险提示。"},
+{q:"开发反馈技术实现有限制，功能做不到，你怎么处理？",a:"确认限制边界与替代方案，评估对需求的影响，推动产品调整范围；无法满足的部分明确记录为已知限制与风险。"}
+]});
+
+window.QB_PARTS.push({name:"四、界面自动化（Selenium / UI）",items:[
+{q:"UI 自动化整体流程是怎么做的？",s:true,a:"选型与范围 → 搭框架分层 → 挑选稳定主流程 → 编写与调试 → 接入 CI → 生成报告 → 持续维护。\n优先覆盖回归频繁、数据可造、界面稳定的主流程。"},
+{q:"元素定位方式有哪些？八大定位分别是什么？",s:true,a:"id、name、class name、tag name、link text、partial link text、xpath、css selector。\n优先 id/name/css，xpath 作为兜底；避免依赖绝对路径和易变文本。"},
+{q:"为什么用 xpath？xpath 的原理是什么？",a:"xpath 通过路径、属性、文本在 DOM 树中定位，灵活但性能较低、易受结构变化影响；适合复杂层级和无稳定属性的场景。"},
+{q:"id 定位怎么用？有什么限制？",a:"driver.find_element(By.ID, 'xxx')；id 唯一时最快最稳。限制：动态 id、无 id、重复 id 时不适用。"},
+{q:"隐式等待、显式等待、强制等待有什么区别？一直定位不到元素会怎样？",s:true,a:"隐式等待：全局轮询查找元素，找不到继续等。\n显式等待：等待某个条件成立（可见/可点击/存在）。\n强制等待：sleep，固定时间。\n一直定位不到：抛 NoSuchElementException / TimeoutException，用例失败。"},
+{q:"元素定位不到怎么排查？",s:true,a:"查等待是否足够、是否在 iframe/新窗口、选择器是否唯一、元素是否被遮挡、是否动态渲染、页面是否报错、浏览器缩放与驱动版本。"},
+{q:"页面元素加载慢怎么处理？",a:"用显式等待等目标元素或接口返回，避免 sleep；必要时等列表有数据行、等 loading 消失。"},
+{q:"怎么保证 UI 自动化脚本的稳定性？难点在哪、怎么改进？",s:true,a:"稳定选择器、显式等待、PO 分层、数据隔离、独立用例、失败重试与截图、环境固定。\n难点：异步渲染、弹窗/iframe、数据污染、环境差异；用统一基类封装等待与点击。"},
+{q:"自动化脚本怎么维护？怎么分层？",a:"base（浏览器与公共操作）、pages（页面对象）、cases（业务用例）、data（测试数据）、config（环境配置）；公共逻辑下沉，页面变更只改 pages。"},
+{q:"自动化框架怎么搭建？包含哪些目录、每个目录放什么？",a:"config 环境配置、common 工具与客户端、pages 页面对象、tests 用例、data 数据、logs 日志、reports 报告、conftest/fixture 全局准备。"},
+{q:"UI 自动化怎么做断言？",a:"断言元素文本/属性/数量/URL/弹窗提示，必要时查接口或数据库验证业务结果；断言要具体、可定位。"},
+{q:"新弹出来的页面 / 新窗口怎么定位？",a:"记录 window_handles，switch_to.window 切换后操作，结束再切回原窗口。"},
+{q:"iframe 怎么定位？",a:"switch_to.frame(定位或索引) 进入，操作完 switch_to.default_content() 回到主文档；嵌套 iframe 逐层切换。"},
+{q:"富文本编辑器怎么定位？",a:"多数是 iframe 或 contenteditable；进入 iframe 后 send_keys，或用 JS 直接设置内容并触发 input 事件。"},
+{q:"上传文件时系统弹窗怎么处理？",a:"优先对 input[type=file] 直接 send_keys 路径；系统级弹窗用 pyautogui/AutoIt 或关闭弹窗改用接口上传。"},
+{q:"浏览器版本不同导致元素定位出现偏差怎么办？",a:"固定浏览器与驱动版本，使用相对定位和稳定属性，容器化运行环境；必要时做兼容性分支。"},
+{q:"登录状态怎么保持？cookie 和 token 怎么获取和复用？",a:"登录一次后保存 cookie/localStorage，后续注入复用；或直接调登录接口拿 token 写入 localStorage，避免每次 UI 登录。"},
+{q:"UI 自动化的前置条件和后置清理怎么做？",a:"fixture/setup 造数、teardown 清理；用唯一标识隔离数据，避免残留影响下次执行。"},
+{q:"数据驱动怎么做？YAML 里一般存什么数据？",a:"用例参数化读取 YAML/JSON/Excel；存输入、预期、账号、环境、测试数据标识。"},
+{q:"底层的公共点击、输入方法做了哪些异常处理？",a:"等待可见/可点击、滚动到元素、JS 点击绕过遮挡、失败截图与日志、必要时重试一次。"},
+{q:"单独跑没问题、联跑就报错，是什么原因？",s:true,a:"数据污染、用例顺序依赖、登录态/会话冲突、端口或浏览器实例复用、全局配置被前一条改掉；用独立数据和 fixture 隔离。"},
+{q:"自动化用例一直没发现 bug，这套自动化还有意义吗？",a:"有，回归价值在于防劣化和快速反馈；同时应补充新场景、接口层断言和探索性测试，不能只靠 UI 自动化找新 bug。"},
+{q:"自动化脚本报错怎么定位？失败用例怎么分析？",a:"看堆栈、截图、日志、请求响应；区分环境、数据、脚本、产品问题；本地复跑最小步骤定位。"},
+{q:"自动化里的日志是怎么处理的？",a:"logging 分级输出到文件与控制台，失败自动截图，记录请求 URL/参数/响应摘要，便于回溯。"},
+{q:"UI 自动化的覆盖率怎么统计？UI 和接口自动化怎么分工？",a:"覆盖率按核心流程/需求覆盖统计；接口覆盖业务逻辑与异常，UI 只覆盖关键用户路径。"},
+{q:"哪些场景适合做界面自动化？投入产出怎么判断值不值？",s:true,a:"适合：稳定、回归频繁、跨版本重复执行的主流程。\nROI：执行频次 × 节省时间 > 开发与维护成本；一次性、频繁变更、强探索的场景不做。"},
+{q:"自动化占比多少？脚本多少条？跑一次要多久？",a:"按实际回答，数字要能对应到用例清单和流水线记录，不要编造。"},
+{q:"UI 自动化和手工测试的区别和关系？",a:"手工擅长探索、体验与异常发现；自动化擅长重复回归与快速反馈。两者互补，不是替代关系。"},
+{q:"前端自动化你都了解多少？",a:"Selenium/WebDriver、Playwright、Cypress；了解 PO 模式、显式等待、断言、CI 集成与报告。"},
+{q:"你们跑自动化是在什么阶段？每日执行还是迭代执行？",a:"提测后跑冒烟与主流程，日常每日定时跑接口回归，迭代末跑全量 UI 回归。"}
+]});
+
+</script>
+<script>
+window.QB_PARTS = window.QB_PARTS || [];
+window.QB_PARTS.push({name:"五、接口自动化与接口测试",items:[
+{q:"接口自动化是怎么做的？框架怎么分层？",s:true,a:"分层：config（环境）→ common（HTTP 客户端、登录、DB、日志）→ api（业务接口封装）→ tests（用例）→ data（测试数据）。\n登录态与 token 在 fixture 里统一处理，用例只写业务步骤与断言；最后接 CI 与 Allure 报告。"},
+{q:"接口自动化用例由哪几部分组成？",a:"前置条件（登录、造数）、请求构造（URL/方法/头/参数）、响应断言（状态码/业务码/字段/DB）、后置清理。"},
+{q:"接口测试的数据怎么管理？和代码分离还是写在一起？",a:"推荐分离：YAML/JSON/Excel 或数据库造数，用例通过参数化读取；动态数据用唯一标识生成，避免互相污染。"},
+{q:"新增或变更的接口，脚本怎么维护？",a:"接口地址与业务封装在 api 层，变更只改封装；契约变更走评审并同步更新用例与断言。"},
+{q:"接口之间的动态参数怎么解决？",s:true,a:"上一个接口响应中用 JSONPath/正则提取字段，存入变量或 fixture，再传给下一个接口；必要时做等待与重试。"},
+{q:"接口断言怎么做？",s:true,a:"断言 HTTP 状态码、业务 code/message、关键字段值与类型、列表结构与数量、响应时间；涉及写操作再查数据库核对。"},
+{q:"登录 token 怎么处理？",a:"调登录接口获取 token，缓存到文件/session 级 fixture；失效自动重新登录，请求头统一注入 Bearer。"},
+{q:"接口自动化的前置条件和后置条件怎么设计？",a:"前置：登录、造数、依赖服务可用；后置：删除或标记测试数据、释放资源，保证可重复执行。"},
+{q:"接口的签名、加密、验签怎么测？",a:"按文档实现签名算法，验证正常签名、篡改参数、错误密钥、过期时间、重复请求；确认服务端确实验签而不是只做前端校验。"},
+{q:"接口测试重点关注什么？测哪些维度？",s:true,a:"功能正确性、参数校验、异常与边界、鉴权与越权、幂等与并发、数据一致性、性能与稳定性、兼容性。"},
+{q:"怎么设计接口测试用例？维度有哪些？",a:"正向单参数/组合参数；逆向必填缺失、类型错误、长度越界、非法枚举；权限、幂等、并发、依赖异常。"},
+{q:"校验入参都要校验哪些内容？",a:"必填、类型、长度、格式（手机/邮箱/日期）、枚举范围、数值边界、特殊字符与注入、多余字段。"},
+{q:"给你一个接口，你怎么测试？",s:true,a:"先读文档明确业务与依赖 → 准备账号与数据 → 正常请求验证结构 → 参数异常与边界 → 鉴权/越权 → 幂等与并发 → 查库核对 → 性能与日志。"},
+{q:"GET 请求怎么验证？GET 和 POST 有什么区别？",a:"GET 参数在 URL、幂等可缓存、有长度限制；POST 参数在 body、通常非幂等、可传大数据。验证时关注编码、重复参数、超长 URL。"},
+{q:"常见响应码有哪些？400、401、403、404、500 分别什么意思？",s:true,a:"200 成功、201 创建、204 无内容；400 参数错误、401 未认证、403 无权限、404 资源不存在、405 方法不允许、429 限流、500 服务端异常、502/504 网关问题。"},
+{q:"请求次数过多返回什么码？请求方法错误返回什么码？",a:"次数过多：429 Too Many Requests；方法错误：405 Method Not Allowed。"},
+{q:"幂等性怎么测？数据库重复提交的缺陷怎么测？",a:"同一请求重复发送（含并发），验证只产生一条业务数据、余额/库存只扣一次；用唯一业务号与数据库计数核对。"},
+{q:"接口出问题怎么定位？",a:"看请求是否到达、参数是否正确、响应码与业务码、服务日志与 traceId、依赖服务、数据库结果；逐层排除前端、网关、应用、DB。"},
+{q:"后端接口正常，但前后端交互导致整个功能异常，怎么排查？",a:"抓包比对请求参数与响应结构，检查字段名/类型/序列化、跨域、鉴权头、编码；确认前端是否按契约解析。"},
+{q:"接口测试什么时间介入？什么情况下要做接口测试？",a:"接口开发完成或联调阶段介入；多端共用、核心逻辑、权限与数据一致性场景必做。"},
+{q:"Web 测试和接口测试有什么区别？",a:"Web 测试偏端到端用户路径与界面；接口测试偏服务逻辑、参数、异常、鉴权与数据，执行更快、定位更准。"},
+{q:"用什么工具做接口测试？公司有没有自研平台？",a:"Postman 调试、pytest+requests 自动化、JMeter 压测；有自研平台则支持用例管理、环境切换与报告。"},
+{q:"接口自动化接入 Jenkins 后用例大面积挂掉，可能是什么原因？",a:"环境地址/配置错、token 失效、测试数据被污染、依赖服务未启动、并发冲突、时区/编码差异、网络受限。"},
+{q:"接口自动化覆盖率怎么算？",a:"按接口数量与业务路径覆盖统计，而不是代码行覆盖；核心接口与主流程优先做到全覆盖。"},
+{q:"接口测试做完之后，界面测试算功能测试吗？",a:"算。接口验证服务逻辑，界面验证用户端到端操作与展示，二者都属于功能测试的不同层次。"},
+{q:"返回大批量数据的接口怎么验证？",a:"分页与总数自洽、字段抽样+脚本全量比对、排序稳定、性能与内存、导出结果一致。"}
+]});
+
+window.QB_PARTS.push({name:"六、Postman",items:[
+{q:"用 Postman 怎么做接口测试？具体步骤是什么？",a:"建 Collection → 配 Environment 变量 → 新建请求（方法/URL/Header/Body）→ 写 Tests 断言 → 保存 → Collection Runner 批量执行 → 查看结果。"},
+{q:"用 Postman 怎么做断言？断言怎么设计？",a:"在 Tests 里用 pm.test 断言状态码、响应时间、业务码、字段值与 JSON 结构；断言要覆盖成功与失败两类。"},
+{q:"Postman 里参数关联怎么做？",a:"在第一个请求的 Tests 中用 JSONPath 提取字段并 pm.environment.set，后续请求用 {{变量}} 引用。"},
+{q:"Postman 怎么实现批量执行？",a:"用 Collection Runner 选择集合与环境，设置迭代次数与数据文件；CI 里用 Newman 命令行执行。"},
+{q:"Postman 全局变量怎么加？和环境变量有什么区别？",a:"全局变量对所有集合生效，环境变量按环境切换；优先用环境变量，避免环境污染。"},
+{q:"Postman 里常见响应码的含义？",a:"200 成功、201 创建、400 参数错误、401 未认证、403 无权限、404 不存在、429 限流、500 服务端异常。"},
+{q:"Postman 和 JMeter 做接口测试有什么区别？",a:"Postman 偏调试与功能验证，脚本化弱；JMeter 偏并发与性能，支持线程组、定时器、聚合报告。"}
+]});
+
+window.QB_PARTS.push({name:"七、JMeter 与性能测试",items:[
+{q:"用 JMeter 做性能测试 / 压测的流程是什么？",s:true,a:"明确指标 → 场景建模 → 编写脚本（线程组/取样器/断言/定时器）→ 准备数据 → 梯度加压 → 监控资源与业务 → 分析瓶颈 → 输出报告。"},
+{q:"用 JMeter 做接口测试怎么做？举个例子详细说明。",a:"线程组 + HTTP 请求（方法/路径/参数/头）+ 响应断言 + 查看结果树/聚合报告；登录接口用 JSON 提取 token 供后续请求使用。"},
+{q:"场景：500 并发，包含登录接口和新增接口，新增接口达不到指标就报错，脚本怎么编？登录和新增要放两个线程组吗？",a:"建议两个线程组：登录用 setUp 线程组只跑一次或少量，提取 token 写入属性；新增线程组 500 并发引用 token。\n用断言+If 控制器判断失败，聚合报告看新增接口的 TPS 与 P95。"},
+{q:"JMeter 里的控制器有哪些？",a:"简单控制器、循环控制器、Once Only、If、Switch、Random、Throughput、事务控制器、Include。"},
+{q:"复杂流程控制、多个控制器叠加使用，举个例子说明。",a:"线程组 → 事务控制器包住一次完整下单 → 循环控制器跑 N 次 → If 控制器按库存/条件分支。"},
+{q:"要模拟用户随机行为（50% 看订单、30% 下单、20% 看报表），用哪个控制器？",a:"Random Controller 或 Throughput Controller 按百分比分配。"},
+{q:"JMeter 常用定时器有哪些？",a:"固定、随机、高斯随机、常数吞吐量、同步定时器（集合点）、BeanShell 定时器。"},
+{q:"压测要传数据怎么办？数据量非常大怎么操作？",a:"用 CSV Data Set Config 读取参数文件；超大数据用分片、分布式压测或数据库造数。"},
+{q:"JMeter 里登录获取 token 怎么做？",a:"登录请求后置 JSON Extractor 提取 accessToken，存为变量，后续请求在 Header 引用 ${token}。"},
+{q:"多接口 / 串联接口怎么做批量压测？",a:"多个 HTTP 取样器按顺序放同一事务控制器，用提取变量做关联；必要时用 Once Only 控制登录。"},
+{q:"聚合报告看哪些指标？平均响应时间、P90、P95 拿哪个和需求对比？",s:true,a:"看 Average、Median、90%/95%/99% Line、Min/Max、Error%、Throughput。\n与需求对比优先看 P95，它代表大多数用户的真实体感。"},
+{q:"为什么重点看 P95 而不是平均响应时间？",a:"平均值会被少数极快或极慢请求拉偏，P95 能反映大多数用户的实际体验，也更容易暴露长尾问题。"},
+{q:"TPS、QPS、RPS 有什么区别？",s:true,a:"TPS 是每秒事务数（一个完整业务动作）；QPS 是每秒查询数；RPS 是每秒请求数。一个事务可能包含多个请求。"},
+{q:"TPS 上不去怎么排查？",s:true,a:"看线程与集合点、脚本逻辑、网络带宽、连接池、数据库慢 SQL/锁、CPU/内存/GC、中间件限流、依赖服务瓶颈；逐层压测定位。"},
+{q:"响应时间、并发数、吞吐量之间是什么关系？",a:"利特尔法则：并发数 ≈ 吞吐量 × 响应时间。并发增加初期吞吐上升，到拐点后响应时间陡增、吞吐不再增长。"},
+{q:"性能测试怎么判断到了拐点？",a:"继续加压但 TPS 不再上升、响应时间明显上升、错误率升高、资源接近饱和，即为拐点。"},
+{q:"性能测试的关注点有哪些？指标怎么确定？",s:true,a:"响应时间、TPS、错误率、资源利用率、稳定性。指标来自业务目标、SLA、历史基线和生产日志。"},
+{q:"性能测试用例怎么设计？参数是怎么来的？",a:"按业务比例设计场景（浏览/下单/支付），并发与数据来自生产日志、业务峰值预估和目标 SLA。"},
+{q:"负载测试、压力测试、稳定性测试有什么区别？",s:true,a:"负载测试：在预期峰值下验证指标；压力测试：持续加压找极限与拐点；稳定性测试：中低负载长时间运行，观察内存泄漏与性能衰减。"},
+{q:"稳定性测试怎么做？基于什么维度决定跑多长时间？",a:"固定负载持续 8–12 小时或 7×24 小时，监控错误率、响应时间、内存/句柄；时长按业务周期和发布窗口决定。"},
+{q:"压测时出现瓶颈 / 性能不达标，怎么定位？",s:true,a:"分层排查：压测机与网络 → 网关/限流 → 应用线程与 GC → 连接池 → 数据库慢 SQL/锁 → 缓存/消息队列；结合 APM、日志、线程 dump。"},
+{q:"你最大并发测到多少？有没有遇到过内存溢出或响应延迟？",a:"按实际回答，讲清场景、指标和定位过程，不要只报数字。"},
+{q:"没有接口怎么做性能测试？",a:"通过 UI 录制/协议录制压测，或找开发提供内部接口；UI 压测成本高，通常只做小规模验证。"},
+{q:"测试环境和生产环境的性能差异怎么考虑？",a:"配置、数据量、网络、依赖服务都可能不同；结论要标注环境，生产压测需审批、限流和回滚预案。"},
+{q:"压测完之后怎么和数据库核对数据准确性？",a:"核对订单数、库存扣减、金额汇总、状态分布与日志，验证无超卖、无重复、无丢失。"},
+{q:"性能测试结论怎么写？",a:"测试场景与指标、实际结果、是否达标、瓶颈与风险、优化建议、环境与数据说明。"},
+{q:"一个接口一般压多长时间？是在测试环境还是生产环境压？",a:"基线压测 10–30 分钟，稳定性数小时；一般在测试环境，生产压测需严格审批与保护措施。"},
+{q:"做压测时主要观测哪些业务上的不准确（比如并发领料）？",a:"超卖/超领、库存负数、重复单据、状态错乱、金额不平、消息重复消费。"}
+]});
+
+window.QB_PARTS.push({name:"八、Linux",items:[
+{q:"常用的 Linux 命令有哪些？",s:true,a:"ls/cd/pwd/cp/mv/rm/mkdir、tail/head/less/grep/awk/sed、ps/top/free/df/du、netstat/ss、chmod/chown、tar、systemctl、find。"},
+{q:"怎么查看日志？怎么抓日志、过滤 error？",s:true,a:"tail -f app.log 实时看，less 翻页；grep -i error app.log 过滤错误；结合 grep -C 看上下文，awk 按时间段筛选。"},
+{q:"怎么查 a.log 里昨天 10 点到 11 点的 500 错误？",a:"按日志时间格式用 awk/sed 截取 10:00–11:00 区间，再 grep ' 500 '；或 grep 时间前缀 + grep 状态码。"},
+{q:"怎么查日志里的最后 30 行 / 文件末尾 100 行？",a:"tail -n 30 a.log；tail -n 100 a.log。"},
+{q:"grep、awk、sed 分别用在什么场景？sed 除了替换还有什么用法？",a:"grep 查找匹配行；awk 按列统计与格式化输出；sed 流编辑。sed 还可删除行、插入、按行号打印、批量替换。"},
+{q:"怎么查看磁盘空间、内存、CPU 占用？",a:"df -h 磁盘、du -sh 目录、free -m 内存、top/htop CPU 与进程。"},
+{q:"怎么查看占用内存最多的进程？怎么看进程？",a:"ps aux --sort=-%mem | head；ps -ef 看进程，top 按 M 排序。"},
+{q:"怎么查网络端口？怎么查防火墙是否关闭？",a:"ss -lntp 或 netstat -tlnp；防火墙 systemctl status firewalld / iptables -L。"},
+{q:"修改文件权限用什么命令？可读可写、可读可写可执行分别怎么给？",a:"chmod；读写 6（r+w），读写执行 7（rwx），如 chmod 644 file、chmod 755 dir。"},
+{q:"权限的读写执行用数字怎么表示？给文件夹加权限怎么写？",a:"r=4、w=2、x=1；文件夹常用 chmod 755 或 chmod -R 755 dir。"},
+{q:"文件查找用什么命令？修改文件名用什么命令？",a:"find /path -name '*.log'；改名用 mv old new。"},
+{q:"移动文件、复制文件、两台服务器之间复制文件分别用什么命令？",a:"mv、cp、scp（或 rsync）。"},
+{q:"打包压缩文件用什么命令？解压呢？",a:"tar -zcvf x.tar.gz dir；解压 tar -zxvf x.tar.gz。"},
+{q:"软链接怎么建？",a:"ln -s /target /link。"},
+{q:"怎么确认一个文件是否存在？",a:"test -f file && echo yes；或 [ -f file ]；脚本里用 -e 判断存在。"},
+{q:"怎么查 IP、改 IP？",a:"ip addr / ifconfig 查看；修改 /etc/sysconfig/network-scripts 下网卡配置或 nmcli。"},
+{q:"Shell 脚本怎么用？你写过什么脚本？",a:"用于启停服务、日志清理、备份、环境巡检、批量执行；讲一个真实脚本的目的与关键步骤。"},
+{q:"Shell 里 #、$?、$#、$*、$2 分别代表什么？",a:"# 注释；$? 上一条命令退出码；$# 参数个数；$* 全部参数；$2 第二个参数。"},
+{q:"自动化里怎么登录 Linux 服务器执行命令？（Python 连 Linux）",a:"paramiko 建立 SSH 连接执行命令并读取输出；或用 pexpect 处理交互。"},
+{q:"怎么查看服务占用了哪些端口？怎么部署服务？",a:"ss -lntp | grep 端口 或 lsof -i:端口；部署 jar 用 nohup java -jar，前端用 nginx。"},
+{q:"Linux 怎么排查系统异常？",a:"top/free/df 看资源，dmesg 看内核，journalctl/systemctl 看服务日志，再结合应用日志定位。"},
+{q:"CentOS 装包用什么命令？",a:"yum 或 dnf，如 yum install -y 包名。"},
+{q:"除了 CentOS，还了解哪些 Linux 系统？",a:"Ubuntu/Debian、CentOS/RHEL、Alma/Rocky、麒麟/统信等国产系统。"}
+]});
+
+window.QB_PARTS.push({name:"九、MySQL 与数据库",items:[
+{q:"MySQL 增删改查语句分别怎么写？",s:true,a:"insert into t(a,b) values(1,2)；select * from t where id=1；update t set a=2 where id=1；delete from t where id=1。"},
+{q:"多表联查怎么写？内连接和外连接的区别和使用场景？",s:true,a:"内连接只返回两表都匹配的行；左/右外连接保留一侧全部行。\n场景：主表+明细用内连接；需要保留主表全部记录（如无明细也要展示）用左连接。"},
+{q:"学生表有学号、姓名、性别，怎么查男女各有多少人？",a:"select gender, count(*) from student group by gender;"},
+{q:"怎么查单表的第 5 到 8 条数据？怎么确定是第 5 到 8 条？",s:true,a:"select * from t order by id limit 4,4;（limit 偏移, 条数）\n必须先有稳定排序字段，否则分页结果不确定。"},
+{q:"索引是什么？你了解哪些索引？怎么判断有没有走索引？",s:true,a:"索引是加速查询的数据结构（MySQL 常用 B+ 树）；有主键、唯一、普通、联合、全文索引。\n用 explain 看 key/type/rows，key 有值且 type 不是 ALL 基本说明走了索引。"},
+{q:"了解 SQL 的执行计划吗？怎么看？",a:"explain 加在 SQL 前，关注 type（访问方式）、key（实际索引）、rows（扫描行数）、Extra（是否 filesort/临时表）。"},
+{q:"有 10 张表 user1 到 user10，结构一样，给你一个 uid 怎么查它在哪张表？",a:"用 union all 把 10 张表一起查，或用脚本循环查询并在命中时返回表名；数据量大时优先按分表规则直接定位。"},
+{q:"写一个你做过的比较复杂的核对 SQL，是为了验证什么？",a:"例如订单金额与明细求和、库存扣减与领用记录、状态分布与业务流水；目的是验证多表数据一致，发现漏记/重复/金额不平。"},
+{q:"测试过程中数据库主要用来做什么？",a:"校验落库结果与状态、核对数据一致性、构造与清理测试数据、定位前后端问题。"},
+{q:"怎么用数据库验证数据一致性（前端、库、上游三方）？",a:"以业务唯一键关联，比对各方的数量、金额、状态与时间戳；用汇总 SQL 和对账脚本做全量比对。"},
+{q:"删除数据、修改数据要注意什么？",a:"先备份或事务，where 条件精确并先 select 确认，避免全表更新；生产环境需审批与权限控制。"},
+{q:"Redis 了解多少？在项目里怎么用？",a:"缓存热点数据、分布式锁、会话/验证码；关注缓存穿透/击穿/雪崩、过期策略与一致性。"},
+{q:"Kafka 了解吗？",a:"分布式消息队列，用于异步解耦、削峰、日志/事件流；关注分区、消费组、重复消费与积压。"},
+{q:"存储单位有哪些？换算关系是什么？",a:"bit → byte(8bit) → KB(1024B) → MB → GB → TB → PB。"}
+]});
+
+</script>
+<script>
+window.QB_PARTS = window.QB_PARTS || [];
+window.QB_PARTS.push({name:"十、Python",items:[
+{q:"Python 常见数据类型有哪些？哪些可变、哪些不可变？",s:true,a:"数字 int/float/complex、布尔 bool、字符串 str、元组 tuple 不可变；列表 list、字典 dict、集合 set 可变。\n不可变对象可作字典键，可变对象不行。"},
+{q:"列表和元组的区别？",s:true,a:"列表可变、可增删改，用 []；元组不可变、更轻量、可作字典键，用 ()。\n元组适合固定结构的数据，列表适合需要频繁修改的集合。"},
+{q:"列表和字典分别在什么场景用？字典和集合有什么区别？",s:true,a:"列表：有序、可重复、按下标访问，适合队列/结果集。\n字典：键值映射，按 key 快速查找。\n集合：只存唯一元素，用于去重与集合运算；字典存键值对且键唯一。"},
+{q:"集合里的元素可以重复吗？",a:"不可以。集合自动去重，且元素必须可哈希；重复加入不会报错但不会增加元素。"},
+{q:"is 和 == 的区别？= 和 == 的区别？",s:true,a:"is 比较对象身份（内存地址），== 比较值是否相等；= 是赋值，== 是比较。\n小整数和字符串有驻留机制，is 偶尔为 True 不代表应这样用。"},
+{q:"深拷贝和浅拷贝的区别？",s:true,a:"浅拷贝只复制最外层，内层对象仍共享引用（copy.copy、切片、dict.copy）。\n深拷贝递归复制所有层级（copy.deepcopy）；嵌套可变对象改动会互相影响时要深拷贝。"},
+{q:"*args 和 **kwargs 的区别？",a:"*args 接收任意位置参数，打包成元组；**kwargs 接收任意关键字参数，打包成字典。\n常用于封装通用函数和装饰器。"},
+{q:"装饰器是什么？怎么实现？你用过哪些装饰器？",s:true,a:"装饰器是接收函数并返回新函数的高阶函数，用于在不改原函数的情况下增加日志、计时、重试、权限等能力。\n实现：外层接收 func，内层 wrapper 执行前后逻辑并调用 func，返回 wrapper，用 @decorator 语法。\n用过：日志、耗时统计、失败重试、pytest fixture、allure 步骤。"},
+{q:"try / except / else / finally 的执行顺序和执行内容？",s:true,a:"先执行 try；异常则进对应 except；无异常执行 else；finally 无论是否异常都执行，常用于释放资源。"},
+{q:"常用的异常类型有哪些？异常处理平时怎么做？",a:"ValueError、TypeError、KeyError、IndexError、AttributeError、FileNotFoundError、TimeoutError。\n处理原则：捕获具体异常、记录日志、必要时重试或抛出，不用裸 except 吞掉所有错误。"},
+{q:"生成器是什么？和迭代器有什么区别？可迭代对象有哪些？",a:"生成器用 yield 逐个产出值，惰性计算、省内存；生成器一定是迭代器，迭代器不一定生成器。\n可迭代对象：list、tuple、str、dict、set、range、文件对象。"},
+{q:"进程、线程、协程的区别？哪个占资源大？GIL 是什么？",s:true,a:"进程独立内存、资源开销最大；线程共享进程内存、开销较小；协程在单线程内协作式切换、最轻量。\nGIL 是 CPython 全局解释器锁，同一时刻只允许一个线程执行字节码，所以 CPU 密集用多进程，IO 密集用线程/协程。"},
+{q:"同步和异步的区别？",a:"同步按顺序等待上一步完成；异步发起后不阻塞，通过回调/await 获取结果，适合 IO 密集场景。"},
+{q:"实例方法、类方法、静态方法有什么区别？分别怎么用？",s:true,a:"实例方法第一参数 self，访问实例属性；类方法用 @classmethod，第一参数 cls，可访问类属性、常用于工厂方法；静态方法用 @staticmethod，无 self/cls，相当于放在类里的普通函数。\n工具类方法、无需访问实例时用静态方法。"},
+{q:"继承是什么？子类怎么调用父类的方法？super 怎么用？",a:"继承让子类复用父类属性与方法并扩展。\n子类中用 super().方法() 调用父类实现，常见于 __init__ 中初始化父类。"},
+{q:"self 的作用是什么？",a:"self 指向当前实例，用于访问实例属性和方法；Python 显式传递 self，名字可改但不建议。"},
+{q:"闭包是什么？",a:"内层函数引用外层函数的变量，外层返回内层函数；即使外层执行结束，变量仍被保留。常用于装饰器、工厂函数。"},
+{q:"正则表达式里数字怎么表示？你一般在哪些地方用正则？",a:"数字用 \\d 或 [0-9]，多位用 \\d+。\n用于提取响应中的 ID/token、校验手机号/邮箱/日期、日志过滤、字符串替换。"},
+{q:"常用的字符串方法有哪些？非空字符和数字怎么表示？",a:"strip、split、join、replace、find、startswith/endswith、upper/lower、format、isdigit。\n正则中非空字符 \\S，数字 \\d。"},
+{q:"两个列表合并有哪些方法？",s:true,a:"a + b 生成新列表；a.extend(b) 原地扩展；[*a, *b] 解包；itertools.chain 惰性合并；pandas.concat 处理大数据。"},
+{q:"列表去重有哪些方法？去重后再从大到小排序怎么写？",s:true,a:"list(set(lst)) 最简单但会丢顺序；dict.fromkeys(lst) 保序去重；循环判断保序。\n去重后降序：sorted(set(lst), reverse=True)。"},
+{q:"sort 和 sorted 有什么区别？升序降序怎么写？",a:"list.sort() 原地修改、返回 None；sorted() 返回新列表、可用于任意可迭代对象。\n升序默认，降序 reverse=True，或 key 自定义排序。"},
+{q:"把列表中最后一个元素移到最前面，用什么方法？",a:"lst = lst[-1:] + lst[:-1]；或 lst.insert(0, lst.pop())。"},
+{q:"字典怎么合并？怎么加一个键值对？怎么遍历输出键和值？",a:"合并：d1.update(d2) 或 {**d1, **d2} 或 d1 | d2。\n新增：d[key] = value。\n遍历：for k, v in d.items(): print(k, v)。"},
+{q:"字典怎么转 JSON？JSON 字符串怎么转字典？有几种方式？",a:"json.dumps(d, ensure_ascii=False) 转字符串；json.loads(s) 转字典。\n也可用 eval（不安全，不推荐）；文件读写用 json.dump/json.load。"},
+{q:"怎么获取字典的所有键和值？",a:"d.keys()、d.values()、d.items()；需要列表时用 list(d.keys())。"},
+{q:"一行代码写出 1 加到 100 的结果。",a:"sum(range(1, 101))；或 100 * 101 // 2。"},
+{q:"用 Python 判断一个数字是奇数还是偶数。",a:"n = int(input())\nprint('偶数' if n % 2 == 0 else '奇数')"},
+{q:"输入年月日，输出这一天是当年的第几天。",a:"import datetime\ns = input('YYYY-MM-DD')\nd = datetime.datetime.strptime(s, '%Y-%m-%d')\nprint(d.timetuple().tm_yday)"},
+{q:"写一个循环 100 次，第一条命令的结果作为第二条命令的参数，统计正确和错误的次数。",a:"import subprocess\nok = fail = 0\nfor _ in range(100):\n    r = subprocess.run(['cmd1'], capture_output=True, text=True)\n    if r.returncode != 0:\n        fail += 1; continue\n    r2 = subprocess.run(['cmd2', r.stdout.strip()], capture_output=True, text=True)\n    ok += 1 if r2.returncode == 0 else 0\n    fail += 0 if r2.returncode == 0 else 1\nprint(ok, fail)"},
+{q:"字符串处理返回一大堆数据，怎么按行输出？读大文件怎么按行读？",a:"按行输出用 splitlines() 或按 \\n 切分后逐行 print。\n大文件不要 read() 全读，用 for line in f 逐行迭代，内存占用稳定。"},
+{q:"Python 里怎么定义全局变量？怎么创建文件、修改权限？",a:"模块顶层变量即全局；函数内修改需 global 声明。\n创建：open(path, 'w') 或 pathlib.Path.touch()。\n改权限：os.chmod(path, 0o644)。"},
+{q:"三元表达式怎么写？",a:"值1 if 条件 else 值2，例如 '通过' if ok else '失败'。"},
+{q:"Python 的内存管理是怎么实现的？",a:"引用计数为主，分代垃圾回收处理循环引用；小整数/字符串有驻留与内存池，对象释放由解释器自动管理。"},
+{q:"你常用哪些标准库和第三方库？",a:"标准库：os、sys、json、re、time、datetime、random、subprocess、pathlib、logging。\n第三方：requests、pytest、selenium、allure-pytest、pymysql、paramiko、faker、ddddocr。"},
+{q:"造测试数据用什么库？",a:"Faker 生成姓名/手机号/地址；random 生成随机值与边界；pandas 批量构造；结合数据库脚本批量插入。"},
+{q:"怎么获取时间戳？时间怎么格式化？",a:"time.time() 秒级时间戳，time.time_ns() 纳秒；datetime.now().strftime('%Y-%m-%d %H:%M:%S') 格式化。"},
+{q:"你 Python 用了多久？一个周期能写多少代码？代码量怎么样？",a:"按实际答，强调能独立写自动化框架、接口用例和数据处理脚本，不虚报行数。"},
+{q:"你用 Python 具体做过什么？",a:"接口自动化框架、UI 自动化、测试数据生成、日志与数据库校验、报表比对脚本、CI 集成。"},
+{q:"Python 的序列有哪些？",a:"list、tuple、str、bytes、range，以及自定义实现 __getitem__ 的对象。"}
+]});
+
+window.QB_PARTS.push({name:"十一、AI 与大模型测试",items:[
+{q:"RAG 是什么？完整链路是怎样的？每一步可能出现什么问题？",s:true,a:"链路：文档采集 → 解析 → 切分 → 向量化 → 入库 → 检索 → 重排 → 拼 Prompt → LLM 生成 → 引用返回。\n问题：解析丢表格/图片、切分断章、embedding 模型不匹配、检索召回低、rerank 误排、上下文超长、生成幻觉、引用错位。"},
+{q:"RAG 的全链路测试流程怎么做？",s:true,a:"数据层：文档完整性、切分质量、向量入库数量与维度。\n检索层：Recall@K、MRR、上下文精确率。\n生成层：忠实度、答案相关性、引用正确性。\n端到端：60–100 条标注集跑通过率；再做性能、并发、安全与回归。"},
+{q:"RAG 的底层流程是什么？原始文档在 RAG 里怎么处理？",a:"原始文档先解析为文本（PDF/Word/HTML），清洗去噪，按语义或固定长度切块并保留元数据，再 embedding 入向量库；查询时同样向量化并检索。"},
+{q:"文档分页了怎么办？表格、图文混排文档入库怎么测？",a:"分页要保留页码与章节元数据，切分时避免跨页断句；表格按行列结构化或转 Markdown，图片走 OCR/多模态描述。\n测试：跨页问题能否召回、表格数值是否错位、图片描述是否准确。"},
+{q:"文档切分怎么影响召回？",s:true,a:"切得太碎会丢上下文，答案不完整；切得太大会混入噪声、浪费上下文窗口。\n常用按段落/标题切分并设置 overlap；测试用同一批问题对比不同 chunk_size 的 Recall 与答案完整度。"},
+{q:"向量库的原理是什么？向量召回怎么做的？",a:"文本经 embedding 变成高维向量，向量库用余弦/内积计算相似度，并用 HNSW/IVF 等近似最近邻索引加速。\n查询时把问题向量化，取 Top-K 最相似片段。"},
+{q:"召回率和精确率怎么理解？阈值怎么设定、多少算达标？",s:true,a:"召回率：相关片段中被找回的比例；精确率：找回结果中真正相关的比例。\n阈值按业务：知识问答通常 Recall@5 ≥ 0.8、精确率 ≥ 0.7；最终以标注集上的 F1 和端到端通过率为准。"},
+{q:"上下文召回率是什么？怎么计算？",a:"衡量标准答案所需的信息有多少被检索上下文覆盖。\n计算：标注每个问题所需证据片段，统计被召回的比例 = 命中证据数 / 应召回证据总数。"},
+{q:"RAGAS 是什么？RAG 测试有哪些指标？",a:"RAGAS 是 RAG 评估框架，常用指标：Faithfulness（忠实度）、Answer Relevancy（答案相关性）、Context Precision、Context Recall。\n还可加引用准确率、答案完整度、延迟与成本。"},
+{q:"忠实度（忠诚度）是什么？和正确率差在哪？百分比怎么算？",a:"忠实度：回答中的每个结论是否能被检索上下文支持，衡量有没有编造；正确率：回答是否与标准答案一致。\n计算：被上下文支持的陈述数 / 总陈述数 × 100%。"},
+{q:"大模型有幻觉，怎么测？怎么用脚本判断一条回答是幻觉？",s:true,a:"构造无答案、诱导性、时效性问题；检查回答是否有上下文/知识库依据。\n脚本判断：抽取回答中的事实陈述 → 在检索片段中做证据匹配（字符串/语义相似/NLI）→ 无证据支持的判为疑似幻觉，再用 LLM Judge 复核。"},
+{q:"评判大模型用的什么模型？为什么不用同一家的模型？",a:"常用 GPT-4o、Claude、Qwen 等作为 Judge；避免与被测模型同源，减少自偏好和同风格偏差，必要时多模型投票。"},
+{q:"大模型输出的评估标准是什么？具体流程和量化指标是怎样的（100 条里多少条通过算过）？",s:true,a:"标准：事实正确、忠实于上下文、切题、完整、格式合规、无安全问题。\n流程：建 100 条标注集 → 人工定义 rubric → 自动指标 + LLM/人工评分 → 统计通过率。\n通常核心场景 ≥ 90% 通过，一般场景 ≥ 80%，安全类必须 100%。"},
+{q:"怎么评估一个大模型应用的好坏？指标有哪些？",a:"效果：准确率、忠实度、相关性、完整性、引用正确率；体验：首字延迟、端到端耗时；工程：并发、成本、稳定性；安全：拒答、越权、注入防护。"},
+{q:"知识库里没有答案的场景怎么测？",a:"应明确说不知道或建议转人工，不能编造；用无答案集测拒答率与误拒率，并检查是否给出错误引用。"},
+{q:"多轮对话怎么判断记忆算通过？短期和长期记忆怎么实现、怎么验证？",a:"短期靠上下文窗口/会话缓存，长期靠摘要或向量库。\n验证：后续轮次追问前文实体、约束与指代，回答保持一致；跨会话验证用户偏好是否被正确记住且不越权。"},
+{q:"同一问题多次提问，第一次和第二次回答不一致，怎么处理？",a:"先看 temperature/top_p 与是否命中不同检索片段；用多次采样统计语义一致性。\n产品上可固定低温度、缓存稳定答案；测试上允许表述差异但关键事实必须一致。"},
+{q:"大模型输出和问题完全不相关，但把问题复述了一遍、关键词也包进去了，怎么判断？",a:"不能只看关键词重合。用答案相关性评分：是否直接回答了问题、是否提供新信息；可用 LLM Judge + 人工 rubric，检测复述套话。"},
+{q:"AI 同一个输入输出时好时坏，怎么处理？",a:"固定随机性（temperature=0、固定 seed）、固定检索结果；用多次采样看分布，按业务设通过阈值，不因单次波动判失败。"},
+{q:"AI 功能没有固定回复，断言怎么设计？",a:"用 rubric 断言：必须包含的事实点、禁止出现的内容、引用来源、格式；结合语义相似度与 LLM Judge，避免字符串精确匹配。"},
+{q:"提示词和约束条件是测试维护还是开发维护？",a:"通常算法/开发维护，测试评审并版本化；测试负责验证约束是否生效、回归提示词变更影响。"},
+{q:"Agent 是什么？完整链路是怎样的？了解哪些框架？",a:"Agent 能感知任务、规划步骤、调用工具、观察结果并迭代。\n链路：理解目标 → 计划 → 工具调用 → 结果观察 → 反思/重试 → 输出。\n框架：LangChain/LangGraph、Dify、AutoGen、CrewAI。"},
+{q:"Skill 是什么？对模型输出起什么作用？Skill 和 RAG 是什么关系？",a:"Skill 是可复用的能力封装（工具/流程/提示模板），让模型按固定方法完成任务；RAG 提供外部知识，Skill 提供做事方法，二者互补。"},
+{q:"MCP 了解吗？",a:"Model Context Protocol，统一模型与外部工具/数据源的接入协议，让 Agent 以标准方式发现和调用工具。"},
+{q:"LangChain、FastAPI、Vite 在项目里各自起什么作用？",a:"LangChain 编排模型、检索与工具链；FastAPI 提供后端 API 与流式输出；Vite 构建前端页面。"},
+{q:"训练、微调、RAG、Agent 分别是什么？适用场景有什么区别？",a:"训练从零学参数，成本最高；微调在基座模型上适配领域风格/任务；RAG 外挂知识、更新快、可溯源；Agent 让模型规划并调用工具完成多步任务。\n知识频繁更新用 RAG，固定任务风格用微调，多步操作外部系统用 Agent。"},
+{q:"温度系数（temperature）的作用和影响？",a:"控制采样随机性：越低越确定、适合事实问答；越高越发散、适合创意生成。测试需固定温度保证可复现。"},
+{q:"模型参数规模（比如 72B、32B）是什么意思？本地部署怎么选型？",a:"B 指十亿参数，规模越大能力通常越强但显存与延迟越高。\n选型看显存、并发、延迟和效果评测，不只看参数量。"},
+{q:"量化原理是什么？",a:"把权重从 FP16/FP32 压缩到 INT8/INT4 等低精度，减少显存和带宽、提升推理速度，代价是轻微精度损失。"},
+{q:"用 Ollama 部署大模型有哪些参数规模？怎么选型？",a:"常见 1B/3B/7B/8B/14B/32B/70B 等量化版本；按显存、并发与效果评测选，先用小模型验证链路再上大模型。"},
+{q:"本地部署的大模型怎么对外提供服务？",a:"ollama serve 暴露 API，前面加 FastAPI/Nginx 网关做鉴权、限流、日志与流式转发。"},
+{q:"大模型响应慢怎么优化？线上大模型服务怎么做监控？",a:"优化：流式输出、缩短上下文、缓存、并发批处理、量化、GPU 扩容、检索裁剪。\n监控：首字延迟、端到端耗时、TPS、错误率、token 消耗、GPU 利用率、队列长度。"},
+{q:"SSE 流式协议是什么？解析器怎么写的？",a:"SSE 基于 HTTP 长连接，服务端持续推送 data: 事件。\n解析：按行读取，遇到空行分帧，提取 data: 后拼接，处理 [DONE] 结束；注意超时、断线重连与增量渲染。"},
+{q:"大模型用什么方式接入？智能体会不会访问外部信息？",a:"通过 HTTP/OpenAI 兼容 API 或 SDK 接入，配鉴权、超时、重试与流式。\n智能体是否访问外部信息取决于是否配置工具/检索权限，需要验证越权与数据边界。"},
+{q:"传统测试和 AI 测试有什么区别？Web 测试和智能体测试有什么区别？",s:true,a:"传统测试结果确定、断言精确；AI 输出概率性、需评测集与 rubric。\nWeb 测试关注页面与接口；智能体测试关注规划是否正确、工具调用参数与顺序、状态保持、安全与成本。"},
+{q:"智能体的测试重点是什么？",a:"任务完成率、规划合理性、工具选择与参数正确性、多轮状态、异常恢复、越权与注入、调用成本与延迟。"},
+{q:"AI 生成的用例怎么判断业务上正确？需求文档写得不好、缺少上下文怎么办？",a:"用需求条款、业务规则和已有用例作为校验集，人工评审关键路径；文档不全时拉产品对齐并补术语表，AI 只做初稿。"},
+{q:"你用过哪些 AI 工具？具体怎么提效（造数据、写用例、写脚本）？token 用了多少？",s:true,a:"用途：生成用例初稿、造测试数据、写 pytest/SQL 脚本、总结日志、辅助定位。\n流程：给需求+约束+输出格式 → 人工评审修订。token 用量按实际平台账单回答。"},
+{q:"用 AI 生成测试用例需要提供什么数据？用例里 AI 占比多少？",a:"提供需求/原型、业务规则、接口文档、历史用例与缺陷、输出模板。\nAI 适合生成初稿与补充边界，核心场景人工设计；占比按实际，通常初稿 50%–70%，需人工评审。"},
+{q:"AI 的优势和劣势是什么？",a:"优势：快、覆盖广、能补边界与文案；劣势：会编造、缺业务上下文、质量不稳定，必须人工校验。"},
+{q:"你觉得怎么构建 AI 能力才有竞争力？",a:"把 AI 嵌入真实业务闭环：高质量数据与评测集、可观测与反馈机制、成本与延迟优化、安全合规，而不是只接一个模型。"}
+]});
+
+window.QB_PARTS.push({name:"十二、持续集成、Jenkins 与 Git",items:[
+{q:"你对持续集成怎么理解？",s:true,a:"开发频繁提交到主干，自动触发构建、静态检查、单元/接口测试与部署，快速发现集成问题，保证随时可发布。"},
+{q:"你用 Jenkins 做了什么？大概讲一下你们的 Jenkins 流程。",a:"拉代码 → 装依赖 → 构建镜像/启动环境 → 跑接口与 UI 用例 → 生成 Allure 报告 → 归档并通知。"},
+{q:"Jenkins 流水线里 JMeter 相关的配置项有哪些？Jenkins 加 JMeter 的完整流程怎么做？",a:"配置 JMeter 路径、jmx 脚本、CSV 数据、线程数与持续时间、报告输出；流程：构建 → 执行 jmeter -n -t x.jmx -l result.jtl → 生成 HTML 报告 → 归档。"},
+{q:"接口自动化接 Jenkins 后用例大面积挂掉，原因是什么？",a:"环境地址/配置错、token 失效、数据污染、依赖服务未启动、并发冲突、网络与编码差异、时区问题。"},
+{q:"用 Jenkins 一般怎么管控版本、怎么跟包？",a:"按分支/标签触发构建，构建号关联 commit；产物归档并记录版本号，测试按构建号取包验证。"},
+{q:"了解 Git 吗？切换分支用什么命令？",a:"git checkout 分支 / git switch 分支；查看分支 git branch -a。"},
+{q:"提交代码和主分支有冲突怎么解决？",a:"先 git fetch 拉最新，切到分支 rebase 或 merge 主干，解决冲突后测试再提交；避免直接强推主干。"},
+{q:"自动化代码上库冲突怎么处理？",a:"小步提交、按模块分工，冲突时沟通后合并；公共文件改动先同步，合并后本地跑一遍再推。"},
+{q:"测试报告保存在本地还是集成工具里？对集成工具有了解吗？",a:"CI 中归档到 Jenkins，或用 Allure/TestNG 报告、钉钉/飞书通知；也可接测试平台统一管理。"},
+{q:"版本发布流程是怎样的？灰度环境怎么用？",a:"开发自测 → 提测 → 测试环境验证 → 预发/灰度 → 小流量验证 → 全量发布 → 监控与回滚预案。灰度用于验证真实流量下的稳定性。"}
+]});
+
+window.QB_PARTS.push({name:"十三、Docker",items:[
+{q:"Docker 常用命令有哪些？",s:true,a:"docker ps、images、pull、run、stop、start、restart、rm、rmi、logs、exec、build、tag、push、inspect、stats。"},
+{q:"加载镜像、启动容器分别用什么命令？",a:"加载：docker load -i x.tar 或 docker pull；启动：docker run -d --name x -p 8080:80 image。"},
+{q:"启动容器要挂载目录进去用什么参数？",a:"-v 宿主机目录:容器目录，如 -v /data/logs:/app/logs；也可用 --mount。"},
+{q:"怎么查看指定端口的日志？怎么查看容器日志？",a:"docker logs -f 容器名；按端口先 docker ps 找到容器，再 logs；可用 --since/--tail 过滤。"},
+{q:"怎么做容器化部署？Dockerfile 怎么写？",a:"FROM 基础镜像 → WORKDIR → COPY 依赖 → RUN 安装 → COPY 代码 → EXPOSE → CMD/ENTRYPOINT；分层利用缓存，减小镜像体积。"},
+{q:"Docker Compose 是什么？编排命令有哪些？",a:"用 YAML 定义多容器服务与网络、卷。命令：docker compose up -d、down、ps、logs、build、restart。"},
+{q:"Compose 的 YAML 里有几个服务？怎么分层和拆分？",a:"按实际项目回答；一般拆成应用、数据库、缓存、网关等；按环境用 override 文件拆分配置。"},
+{q:"项目里 Linux 和 Docker 主要用在哪里？具体部署过什么软件？",a:"用 Docker 部署被测服务、MySQL、Redis、Jenkins、测试镜像；Linux 上启停服务、看日志、排查端口。"},
+{q:"Docker 最大的优势是什么？",a:"环境一致、隔离、启动快、易交付；一次构建到处运行，减少环境差异问题。"},
+{q:"你自己编写过 Docker 镜像吗？",a:"写过测试镜像：Python 基础镜像 + chromium/chromedriver + allure + 依赖，构建后推仓库供 CI 使用。"},
+{q:"你的服务是用 Docker 部署的吗？部署完怎么看服务端口？",a:"docker ps 看端口映射，docker port 容器，或 ss -lntp 查宿主端口。"},
+{q:"测 App 的时候会用到 Docker 吗？",a:"会用：跑 Appium 服务、设备农场、mock 服务、测试报告与 CI 环境；真机通常外接。"}
+]});
+
+</script>
+<script>
+window.QB_PARTS = window.QB_PARTS || [];
+window.QB_PARTS.push({name:"十四、App 与移动端测试",items:[
+{q:"App 的用例设计流程是什么样的？",s:true,a:"需求与平台差异分析 → 拆功能/兼容/网络/中断/性能/安全 → 设计用例并评审 → 准备机型与账号 → 执行与缺陷跟踪 → 回归。"},
+{q:"常用 adb 命令有哪些？monkey 怎么用？",s:true,a:"adb devices、install/uninstall、shell、logcat、pull/push、am start、input tap/swipe、dumpsys。\nmonkey：adb shell monkey -p 包名 -v 500，配合 --throttle 与 --ignore-crashes 统计稳定性。"},
+{q:"adb 看日志时，什么场景下看前端日志？logcat 怎么用？",a:"排查 UI 渲染、崩溃、JS 报错时看前端日志；adb logcat -v time 按级别过滤，崩溃看 AndroidRuntime/E/ANR。"},
+{q:"抓包一般用什么工具？Charles 还是 Fiddler？",a:"Charles 常用于移动端（证书、弱网、Map Local），Fiddler 偏 Windows；两者都能做代理抓包。"},
+{q:"抓包的主要目的是什么？什么场景下用抓包？",a:"定位前后端问题、验证参数与响应、弱网模拟、Mock 异常返回、安全测试（明文/越权）。"},
+{q:"弱网测试怎么做？",s:true,a:"用 Charles/Fiddler 限速或网络模拟器设置延迟、丢包、带宽；覆盖 2G/3G/4G/弱 WiFi、断网重连、网络切换。"},
+{q:"App 稳定性怎么测？",a:"monkey 长时间随机操作、主流程反复执行、后台/前台切换、低内存与低电量场景，监控崩溃率与 ANR。"},
+{q:"兼容性测试怎么做？",a:"覆盖主流机型、系统版本、分辨率、厂商 ROM；优先真机云测，关注安装、启动、UI 适配与功能差异。"},
+{q:"安卓、iOS、鸿蒙三端测试有什么差异？鸿蒙常用什么命令？",a:"Android 用 adb，iOS 用 Xcode/idevice 工具，鸿蒙用 hdc（如 hdc shell、hdc install）；差异在权限、返回机制、推送与后台策略。"},
+{q:"OTA 升级的测试点有哪些？大版本和小版本升级的区别？",a:"下载、校验、安装、失败回滚、断电、空间不足、数据保留、跨版本升级；大版本重兼容与迁移，小版本重修复验证。"},
+{q:"安装、卸载、覆盖安装、升级、降级怎么测？",a:"首次安装、重复安装、覆盖安装保留数据、卸载残留、跨版本升级、降级兼容与数据兼容。"},
+{q:"App 的权限、中断（来电、切后台、锁屏）怎么测？",a:"首次授权/拒绝/永久拒绝、权限变更；来电、短信、切后台、锁屏、耳机插拔后的状态恢复与数据保存。"},
+{q:"耗电、流量、内存、发热、启动时间怎么测？",a:"用系统工具/Perfdog 采集：启动耗时、CPU/内存/流量/电量/温度，做前后版本对比与长时间监控。"},
+{q:"推送 / 通知收不到怎么排查？",a:"查设备 token、推送权限、厂商通道、服务端日志、网络与免打扰；区分前台/后台/杀进程三种状态。"},
+{q:"App 崩溃、ANR 日志怎么看？",a:"崩溃看 logcat 的 AndroidRuntime 堆栈与 tombstone；ANR 看 traces.txt 主线程阻塞点与 CPU 占用。"},
+{q:"App 测试和 Web 测试的区别？",a:"App 多了安装升级、权限、中断、弱网、兼容性、耗电与推送；Web 关注浏览器兼容、缓存与跨域。"},
+{q:"手机外设主要测哪些模块？",a:"开关机、充电、红外、指纹/人脸、相机、OTA、传感器与按键。"},
+{q:"手机相机、相册相关怎么测？",a:"拍照/录像、对焦变焦、闪光、模式、存储与权限、中断、图片编辑与删除、云同步。"},
+{q:"你们做的都是 Web 端还是有 App 端？App 测得多吗？",a:"按实际回答，说明平台占比与个人负责范围。"},
+{q:"移动端除了功能层面和网络层面，还要考虑哪些层面？",a:"兼容性、性能（启动/内存/耗电/流量）、稳定性、安全与隐私、交互体验、升级与灰度。"},
+{q:"App 的自动化怎么做的？（Appium）",a:"Appium + 设备农场，PO 模式封装页面，capabilities 指定平台/包名/设备，接 CI 跑主流程回归。"},
+{q:"手势、横竖屏、刘海屏适配怎么测？",a:"点击/滑动/长按/双击/缩放；旋转后布局与数据保持；刘海/挖孔/折叠屏安全区不遮挡关键元素。"}
+]});
+
+window.QB_PARTS.push({name:"十五、网络与协议",items:[
+{q:"TCP 三次握手、四次挥手的过程？",s:true,a:"三次握手：SYN → SYN+ACK → ACK，确认双方收发能力并同步序列号。\n四次挥手：FIN → ACK → FIN → ACK，双方各自关闭方向；TIME_WAIT 等待 2MSL 确保最后 ACK 到达。"},
+{q:"TCP 和 UDP 的区别？",s:true,a:"TCP 面向连接、可靠、有序、有流量与拥塞控制，开销大；UDP 无连接、不可靠、低延迟、开销小，适合视频/游戏/DNS。"},
+{q:"HTTP 和 HTTPS 的区别？",a:"HTTPS 在 HTTP 与 TCP 之间加 TLS，加密传输、身份认证、防篡改，默认 443；HTTP 明文、默认 80。"},
+{q:"HTTP 常见状态码及含义？",a:"200 成功、201 创建、204 无内容、301/302 重定向、304 未修改、400 参数错、401 未认证、403 无权限、404 不存在、405 方法不允许、429 限流、500 服务端错误、502/504 网关超时。"},
+{q:"OSI 七层模型是哪七层？TCP/IP 四层？",s:true,a:"OSI：物理、数据链路、网络、传输、会话、表示、应用。\nTCP/IP：网络接口层、网际层、传输层、应用层。"},
+{q:"DHCP 是什么？",a:"动态主机配置协议，自动为客户端分配 IP、掩码、网关和 DNS，避免手工配置冲突。"},
+{q:"静态路由和动态路由的区别？有哪些路由协议？",a:"静态路由手工配置、稳定但维护成本高；动态路由自动学习与收敛。\n协议：RIP、OSPF、BGP、IS-IS。"},
+{q:"子网掩码 255.255.255.0 有多少个可用 IP？",a:"/24 共 256 个地址，去掉网络地址和广播地址，可用 254 个。"},
+{q:"255 转成二进制是多少？254 呢？",a:"255 = 11111111；254 = 11111110。"},
+{q:"与、或、非、异或，1 和 0 的结果分别是什么？",a:"与：1&1=1，其余 0；或：0|0=0，其余 1；非：!1=0、!0=1；异或：相同为 0、不同为 1。"},
+{q:"计算机网络你都了解哪些内容？",a:"分层模型、TCP/UDP、HTTP/HTTPS、DNS、路由与交换、NAT、抓包与常见网络故障排查。"},
+{q:"5G 基站了解吗？蜂窝通信、WiFi 了解吗？",a:"5G 由基站、核心网组成，特点是高速率、低时延、大连接；蜂窝用授权频谱广覆盖，WiFi 用非授权频谱局域覆盖。"},
+{q:"通信协议里 TCP 之外还了解什么？",a:"UDP、QUIC、HTTP/1.1/2/3、WebSocket、MQTT、SSE。"},
+{q:"SSE、WebSocket 这类长连接协议了解吗？",a:"SSE 是服务端单向推送、基于 HTTP；WebSocket 全双工、需握手升级。SSE 适合流式输出，WebSocket 适合实时双向通信。"}
+]});
+
+window.QB_PARTS.push({name:"十六、业务与行业场景题",items:[
+{q:"一个生产工单完工要经过哪些状态？",a:"创建/草稿 → 下达 → 开工 → 报工 → 完工 → 入库 → 关闭；异常时有暂停、返工、作废。"},
+{q:"委外工单从下发到完成，哪些节点会影响库存？",a:"下发发料扣减原料库存，委外入库增加成品/半成品库存，退料回补，损耗与差异调整库存。"},
+{q:"一批来料从到货到检验判定的流程是什么？检验不合格后续怎么处理，对库存有什么影响？",a:"到货收货 → 待检入库 → 抽样检验 → 合格入库/不合格隔离。\n不合格：退货、让步接收、返工、报废；库存从待检转合格或隔离/扣减。"},
+{q:"不合格的库存怎么处理？",a:"隔离、退货、让步接收、返工返修、报废；每种处理都要有审批、状态流转和库存台账记录。"},
+{q:"审批流里有哪些状态？有几级审批？驳回是等级驳回还是分别驳回？",a:"草稿、审批中、通过、驳回、撤销、终止。\n级数按金额/类型配置；驳回可回到发起人或上一节点，需按产品规则验证。"},
+{q:"法务系统审批流转有哪些状态？",a:"起草、审批中、审批通过、驳回、撤回、归档；可能含会签、或签、转办、加签。"},
+{q:"怎么保证单据状态机覆盖完整、识别非法跳变？状态流转时还要注意什么？",a:"画状态图并列出状态×事件矩阵，覆盖合法迁移、非法跳转、重复触发、撤销/超时；注意并发、幂等、权限与库存联动。"},
+{q:"权限架构怎么设计测试？角色数据权限隔离怎么测？",a:"功能权限（菜单/按钮/接口）+ 数据权限（本人/部门/全部）。\n用不同角色交叉验证：看不到、点不了、直接调接口被拒、导出不越权。"},
+{q:"单据数据一致性怎么验证？",a:"以单据号关联主表与明细、库存、财务流水，核对数量、金额、状态和时间；用 SQL 汇总与对账脚本。"},
+{q:"上游同步类接口的数据一致性怎么测？看不到上游页面怎么保证落库数据一致？",a:"用上游提供的文件/接口报文作为基准，建字段映射表，写脚本逐字段比对；再验重复、乱序、失败重试与幂等。"},
+{q:"报表 / 大屏的数据怎么核对？",a:"先确认统计口径与时间范围，再用明细 SQL 汇总比对；覆盖空数据、边界、跨期与刷新。"},
+{q:"能耗项目都统计了哪些能耗指标？怎么测？",a:"电、水、气、蒸汽等用量与折算能耗、单位产值能耗、峰谷值。\n测试：采集口径、单位换算、缺失/异常值、汇总与报表一致性。"},
+{q:"智能工厂平台微服务多实例部署，可靠性怎么验证？",a:"验证负载均衡、实例宕机自动摘除、会话/任务不丢、消息重复消费、数据库连接与限流熔断。"},
+{q:"RNG 模块具体怎么测？",a:"验证取值范围、分布均匀性、种子可复现、边界与异常输入、并发唯一性；用统计检验与固定种子回归。"},
+{q:"选择器 / 解析器这类模块怎么测？",a:"覆盖正常/异常/边界输入、非法格式、超长与特殊字符、歧义选择、性能与内存；用样例集做回归比对。"},
+{q:"工厂智能运营平台是整个平台你测还是只测部分微服务？",a:"按实际回答，说明负责的微服务范围与跨服务联调方式。"},
+{q:"银行系统了解吗？信贷业务怎么快速了解？",a:"了解存贷汇基本流程；快速了解信贷：看产品要素、申请-审批-放款-还款-逾期链路，画状态机与资金流。"},
+{q:"绩效评价系统怎么理解、怎么测？",a:"目标设定 → 自评/他评 → 校准 → 结果应用；重点测评分规则、权重、权限、周期与数据汇总。"},
+{q:"秒杀、库存扣减这类高并发业务怎么测？",a:"压测并发、验证不超卖、不重复、不少卖；检查锁/队列/缓存、限购、幂等与对账。"},
+{q:"交管 / 物流 / 租车这类调度类系统怎么测？",a:"验证资源分配、时间窗、路径/价格计算、并发抢占、取消改派、状态流转与异常补偿。"}
+]});
+
+window.QB_PARTS.push({name:"十七、算法与手写代码",items:[
+{q:"合并两个有序数组，排除 0 之后原地排序。",a:"思路：过滤 0 后双指针从尾部归并到原数组，避免额外空间。\n代码：i=len(a)-1, j=len(b)-1, k=...，比较 a[i] 与 b[j] 取大放末尾；最后处理剩余元素。"},
+{q:"除自身以外数组的乘积（动态规划）。",a:"思路：先从左到右算前缀积，再从右到左乘后缀积，O(n) 时间、O(1) 额外空间（除结果数组）。\n代码：res=[1]*n; 左遍历 res[i]=res[i-1]*nums[i-1]；右遍历用变量 right 累乘。"},
+{q:"最大容水量，追问允许倾斜容器的情况，并解释原理。",a:"标准题：双指针从两端向中间，每次移动较矮的一侧，面积 = 宽度 × 较矮高度。\n倾斜容器：水量取决于最低的瓶颈点与倾斜后溢出的几何关系，需按最低边和开口位置重新计算，不能直接用原公式。"},
+{q:"最长不重复子串。",a:"滑动窗口 + 哈希记录字符最近位置；右指针扩张，遇到重复则左指针跳到重复位置后一位，O(n)。\n代码：last={}; left=0; for right,c in enumerate(s): if c in last and last[c]>=left: left=last[c]+1; last[c]=right; ans=max(ans,right-left+1)。"},
+{q:"手写二分查找。",a:"def bsearch(a, t):\n    l, r = 0, len(a) - 1\n    while l <= r:\n        m = (l + r) // 2\n        if a[m] == t: return m\n        if a[m] < t: l = m + 1\n        else: r = m - 1\n    return -1"},
+{q:"手写冒泡排序，并说明算法思想。",a:"思想：相邻比较，大的往后换，每轮确定一个最大值。\n代码：for i in range(n): for j in range(n-1-i): if a[j]>a[j+1]: a[j],a[j+1]=a[j+1],a[j]；可加提前退出优化。"},
+{q:"手写一个链表。",a:"class Node:\n    def __init__(self, v): self.val=v; self.next=None\nclass LinkedList:\n    def __init__(self): self.head=None\n    def add(self, v):\n        n=Node(v)\n        if not self.head: self.head=n; return\n        p=self.head\n        while p.next: p=p.next\n        p.next=n"},
+{q:"求一个字符串中最长不重复子串的长度。",a:"同滑动窗口：last 记录字符位置，left 维护窗口起点，ans 取最大窗口长度，时间复杂度 O(n)。"},
+{q:"一行代码实现 1 加到 100。",a:"sum(range(1, 101))"},
+{q:"判断一个数字是奇数还是偶数。",a:"'偶数' if n % 2 == 0 else '奇数'"},
+{q:"输入年月日，输出是当年的第几天。",a:"datetime.datetime.strptime(s,'%Y-%m-%d').timetuple().tm_yday"},
+{q:"列表去重后从大到小排序。",a:"sorted(set(lst), reverse=True)"},
+{q:"循环 100 次执行两条命令，统计成功次数。",a:"用 subprocess.run 执行，判断 returncode==0 计数；第二条命令的参数取第一条 stdout。"},
+{q:"计算树和图的时间复杂度（C 语言）。",a:"树遍历 O(n)，二叉搜索树查找平均 O(log n)、最坏 O(n)；图 BFS/DFS O(V+E)，邻接矩阵 O(V^2)。"},
+{q:"255 转二进制。",a:"11111111。"},
+{q:"手写 SQL：查第 5 到 8 条数据。",a:"select * from t order by id limit 4, 4;"}
+]});
+
+</script>
+<script>
+window.QB_PARTS = window.QB_PARTS || [];
+window.QB_PARTS.push({name:"十八、HR、软素质与个人情况",items:[
+{q:"自我介绍（中文 / 英文都要准备）。",s:true,a:"结构：基本信息 → 测试经验年限与项目 → 核心能力（功能/接口/自动化/性能）→ 一个量化亮点 → 求职动机。\n示例：面试官好，我叫【姓名】，有【X】年软件测试经验，做过 EAM 资产管理和 AI 知识库两个项目，负责功能、接口与 UI 自动化，落地 14 条接口和 21 条 UI 自动化并接入 Jenkins，累计提 100+ 缺陷。我擅长把业务状态机和权限拆成可验证的检查点，希望加入贵司做更深入的质量保障。\n英文版控制在 60–90 秒，突出 project、automation、impact 三个词。"},
+{q:"用英文介绍你的项目。",a:"模板：I worked on an EAM asset management platform. My scope covered asset ledger and approval workflows. I designed 220 test cases, built API and UI automation with pytest and Selenium, and integrated them into Jenkins. I also validated role-based permissions and data consistency across the business service and the BPM engine."},
+{q:"为什么转行做软件测试？专业不对口怎么解释？",s:true,a:"不要贬低原专业。逻辑：原专业培养了逻辑/细致/文档能力 → 接触项目后发现对质量与用户价值更感兴趣 → 系统学习测试并做出成果（项目、自动化、缺陷）→ 明确长期方向。\n示例：我专业是【】，做过【课程/项目】的测试，发现定位问题和推动修复很有成就感，于是系统学了测试理论并完成了两个真实项目。"},
+{q:"为什么从上一家公司离职？每一段离职原因分别是什么？",s:true,a:"原则：正向、简短、不抱怨。\n可用理由：项目结束/业务调整、想专注自动化与质量体系、希望进入更有挑战的行业、通勤或家庭原因。\n每段离职原因保持一致逻辑，不与简历时间冲突。"},
+{q:"空档期这几个月在做什么？",a:"说明在学习与产出：系统补测试理论、做自动化项目、准备面试；最好能拿出可展示的代码或项目，避免只说休息。"},
+{q:"职业规划是什么？未来 3 到 5 年想做什么？",a:"1 年：熟悉业务与流程，独立负责模块；2–3 年：成为业务测试骨干，完善接口/UI 自动化与质量度量；3–5 年：向测试开发/质量负责人方向发展，能搭建质量体系。"},
+{q:"你的优点和缺点分别是什么？个人核心优势是什么？",a:"优点：细致、责任心强、能推动问题闭环、愿意写自动化。\n缺点：早期过于追求完美导致排期紧，后来学会按风险分级。\n核心优势：业务理解 + 测试设计 + 自动化落地的组合。"},
+{q:"工作中最有成就感的事是什么？",a:"选一个可量化、能体现推动力的事：如发现未登录可调接口、搭建自动化把回归从半天缩到 20 分钟、推动权限入口补齐。"},
+{q:"遇到最大的挑战是什么？怎么解决的？",a:"用 STAR：挑战（环境不稳/需求不清/时间紧）→ 你的分析 → 具体动作 → 结果与复盘。"},
+{q:"印象最深的问题 / 故障是什么？怎么处理的？",a:"讲线上或联调故障：现象 → 定位链路 → 止损 → 修复验证 → 复盘与预防。避免只说「重启好了」。"},
+{q:"学习能力怎么证明？平时怎么学习测试知识、怎么保持技术前瞻性？",a:"证据：从零搭自动化、快速接手陌生业务、输出文档；渠道：官方文档、项目实践、技术社区、跟进 AI 测试与工具。"},
+{q:"能接受加班吗？能接受 996 吗？抗压能力怎么样？",s:true,a:"表达：能接受项目需要的阶段性加班，也理解紧急发布；同时说明自己会通过计划、优先级和自动化减少无效加班。不要硬刚也不要空承诺。"},
+{q:"能接受出差、外派吗？",a:"按真实意愿回答；可接受则说明频率范围，不接受则给合理边界，避免入职后冲突。"},
+{q:"期望薪资是多少？上一家薪资多少？",a:"先给区间并说明依据（年限、技能、城市）；上一家如实说结构（base+奖金），期望涨幅按市场与岗位价值谈。"},
+{q:"在职还是离职？什么时候能到岗？",a:"如实回答；离职状态可说 1 周内到岗，在职按交接周期（通常 2–4 周）。"},
+{q:"现在人在哪个城市？为什么想来这个城市？家是哪里的？",a:"简短真实，强调稳定性与长期发展，不用过度解释。"},
+{q:"父母是做什么的？是独生子女吗？",a:"简短回答即可，重点回到稳定性与家庭支持，不必展开隐私。"},
+{q:"你怎么看待外包？",a:"客观：外包能快速接触多行业项目、锻炼适应力，但更希望长期在一个业务里深耕；如果岗位是外包，表达接受并说明看重项目与成长。"},
+{q:"你怎么看待自动化测试岗位？手工和自动化你更想做哪个？",a:"两者不是对立：手工做探索与业务理解，自动化做回归与效率；我更倾向自动化+业务结合的岗位，但不会排斥手工。"},
+{q:"实际工作里自动化没那么多，你怎么应对？",a:"先把手功能测扎实，识别可自动化的高频回归点，用最小成本做接口自动化；用数据说明收益，逐步推动而不是抱怨。"},
+{q:"沟通中对方不配合 / 有冲突怎么处理？",a:"先对齐目标与事实，用数据和证据沟通；找共同利益点，必要时拉负责人决策；对事不对人，留记录。"},
+{q:"今天交给你的任务完不成怎么办？",a:"尽早暴露风险而不是截止日才说；拆解剩余工作、排优先级、申请资源或缩小范围，给出可选方案。"},
+{q:"需求紧急要求今晚加班支持，你怎么看？",a:"紧急发布可以支持，但先确认范围与验证重点，保证核心链路；事后补回归与复盘，避免长期靠加班兜底。"},
+{q:"关键节点开发定位困难，需要你复现支撑，你怎么看？",a:"配合是应该的：提供稳定复现步骤、日志、请求响应和环境信息，帮开发缩小范围；同时记录时间成本，推动根因修复。"},
+{q:"之前公司工作压力大吗？团队氛围怎么样？",a:"客观描述：有发布压力但团队协作好；不吐槽前公司，重点说你如何适应与协作。"},
+{q:"英语工作环境能适应吗？有没有在英文环境工作过？",a:"如实说读写/口语水平，能读英文文档与 API；如有英文项目经验就举例子。"},
+{q:"你为什么选择我们公司？对我们产品了解吗？",a:"提前查产品与业务，讲三点：业务方向认同、岗位匹配、个人能贡献什么；避免只说「公司大/稳定」。"},
+{q:"你还有什么想问我的？（务必准备 2-3 个问题）",a:"问业务与团队：这个岗位当前最大的质量挑战是什么？团队测试与开发的配比、自动化现状？入职后 3 个月的期望？\n避免第一轮就问薪资福利。"},
+{q:"最近最开心的事是什么？",a:"轻松真实，简短即可，体现积极状态。"},
+{q:"有没有获得过公司表彰？有没有独立输出过流程文档并分享？",a:"有就具体说奖项/文档/分享场景；没有就说输出过测试计划、用例规范或复盘文档。"},
+{q:"你觉得自己在团队里是什么角色？",a:"质量守门人 + 协作者：既能把关风险，也能补自动化、写文档、带动流程改进。"},
+{q:"能不能接受只负责自动化 / 只做功能测试？",a:"表达开放：可以接受阶段性分工，但希望能业务+自动化结合；不要直接拒绝岗位核心职责。"}
+]});
+
+window.QB_PARTS.push({name:"十九、Java、C 与其他语言",items:[
+{q:"了解 Java 吗？掌握到什么程度？",a:"如实回答：能读代码、写简单接口/单元测试，了解面向对象、集合、异常；不夸大独立开发能力。"},
+{q:"这个岗位可能涉及一些后端开发，能接受吗？",a:"可以接受：有 Python/Java 基础，愿意在测试开发方向补后端能力；说明学习计划和已有实践。"},
+{q:"C 语言熟悉吗？",a:"如实说：了解指针、数组、结构体与基本语法，能读懂嵌入式/底层代码；有相关项目就举例。"},
+{q:"面向对象的三大特性是什么？继承有什么特点？",a:"封装、继承、多态。\n继承：子类复用父类属性和方法，可扩展/重写；单继承（Java 类）、支持多层继承，注意耦合。"},
+{q:"重载和重写的区别？",a:"重载：同一类中方法名相同、参数列表不同，编译期决定。\n重写：子类覆盖父类同名同参方法，运行期多态，访问权限不能更严格。"},
+{q:"时间复杂度怎么算？常见排序的复杂度是多少？",a:"看基本操作随输入规模的增长阶。\n冒泡/插入/选择 O(n²)，归并/快排平均 O(n log n)，快排最坏 O(n²)，堆排序 O(n log n)，二分 O(log n)。"}
+]});
+
+window.QB_PARTS.push({name:"二十、工具与其他零散问题",items:[
+{q:"抓包工具（Fiddler / Charles）什么时候用？怎么用抓包定位前后端问题？",s:true,a:"用于定位请求与响应、弱网、Mock、安全验证。\n步骤：设代理与证书 → 过滤域名 → 复现操作 → 看请求参数/响应码/耗时 → 对比预期，判断前端未发、参数错、后端返回错还是渲染错。"},
+{q:"缺陷管理工具用的什么？禅道缺陷单里有哪些字段？",a:"禅道/Jira；字段：标题、所属产品/项目、模块、版本、严重程度、优先级、重现步骤、预期/实际、附件、指派人、状态、创建人。"},
+{q:"用例管理工具用的什么？",a:"禅道、TestLink、Xray/Zephyr、飞书多维表格或自研平台；支持用例分层、需求关联、执行记录与回归集。"},
+{q:"Excel 会操作吗？数据驱动怎么用 Excel？",a:"会：筛选、透视表、VLOOKUP、公式。\n数据驱动：pytest 读取 Excel（pandas/openpyxl）参数化，每行一组输入/预期。"},
+{q:"会基本的 CAD 命令吗？给一张图纸怎么画出来？三维建模怎么做？",a:"如实回答；会则说图层、直线/圆/偏移/修剪/标注，按尺寸先画基准线再细化；三维用拉伸/旋转/布尔运算。"},
+{q:"做过智能化 / 自动化相关的创新吗？优化过流程吗？",a:"讲一个真实改进：如把手工回归改成接口自动化、用脚本生成数据、用 AI 辅助用例初稿，并说明节省的时间。"},
+{q:"你修改的代码量大概多少？AI 用了多少 token？",a:"按实际情况说：自动化代码规模、脚本数量、常用 AI 工具与大致用量，不要虚报。"},
+{q:"生产环境的单据数据量大概多少？",a:"按实际回答量级（如日增几千、总量百万），说明这对分页、查询性能与测试数据设计的影响。"},
+{q:"你有什么好的工作习惯，能让和主管、同事配合更高效？",a:"每日同步进展与风险、问题带方案、文档留痕、按优先级交付、复盘沉淀。"},
+{q:"每天怎么反馈测试进展？",a:"固定模板：今日完成、发现问题（等级/影响）、阻塞与风险、明日计划；用群消息或看板同步。"}
+]});
+
+</script>
+<script>
+window.QB_PARTS = window.QB_PARTS || [];
+window.QB_PARTS.push({name:"二十一、选择题专项（单选）",items:[
+{q:"一条完整的测试用例，最少必须包含下列哪组要素？",t:"choice",o:["用例编号、前置条件、步骤、预期结果","开发人员、代码行号、修复时间","需求文档、接口文档、数据库设计","执行人、执行环境、截图"],k:0,a:"用例的核心是可执行与可判定：编号、前置条件、步骤、预期结果；其余为辅助信息。"},
+{q:"某功能在弱网下 10 次有 3 次失败，主流程可用且有绕过方案，通常应定为？",t:"choice",o:["P0","P1","P2","P3"],k:1,a:"影响主流程、有一定复现概率、存在绕过，通常 P1；P0 是阻断、资损或数据错误。"},
+{q:"边界值分析中，对于范围 1 ≤ x ≤ 100，下列哪组取值最典型？",t:"choice",o:["0、1、2、99、100、101","1、50、100","-1、0、101","1、100"],k:0,a:"边界值取上点、下点、离点：1、100 为上/下点，0、101 为离点，再取内部代表值 2、99。"},
+{q:"把输入划分为有效等价类和无效等价类，每类取代表值，属于哪种方法？",t:"choice",o:["边界值","等价类划分","正交实验","错误推测"],k:1,a:"等价类划分的核心是「同类输入对结果等价」，每类取代表值以减少用例。"},
+{q:"验证订单状态不能从「待支付」直接跳到「已完成」，最适合用哪种方法设计用例？",t:"choice",o:["等价类","边界值","状态迁移","正交实验"],k:2,a:"状态迁移法列出状态×事件矩阵，覆盖合法迁移、非法跳转、重复触发。"},
+{q:"关于黑盒测试与白盒测试，下列说法正确的是？",t:"choice",o:["黑盒关注代码分支覆盖","白盒完全不看代码","黑盒从输入输出验证，白盒关注内部逻辑","白盒只能做单元测试"],k:2,a:"黑盒不看内部实现、从输入输出验证；白盒看代码逻辑与覆盖，可用于单元/集成阶段。"},
+{q:"开发修复缺陷后，验证修复点并确认没有影响其他功能，属于？",t:"choice",o:["冒烟测试","回归测试","验收测试","探索式测试"],k:1,a:"回归测试验证修改未破坏原有功能，覆盖修复点与关联模块。"},
+{q:"提测后只跑核心主流程的最小用例集，不通过就打回，这属于？",t:"choice",o:["冒烟测试","压力测试","兼容性测试","验收测试"],k:0,a:"冒烟测试用于快速判断版本是否具备可测性。"},
+{q:"下列哪项通常不属于测试准出标准？",t:"choice",o:["P0/P1 缺陷清零","用例执行率达到要求","开发完成代码提交","遗留缺陷有明确结论"],k:2,a:"「开发完成代码提交」是提测准入条件，不是测试准出标准。"},
+{q:"页面点击按钮后没有任何请求发出，问题最可能在哪一层？",t:"choice",o:["后端接口","数据库","前端逻辑","网关"],k:2,a:"请求未发出通常是前端事件绑定、校验或按钮状态问题；再看是否被前端拦截。"},
+{q:"接口返回 401，最可能的原因是？",t:"choice",o:["参数错误","未认证或 token 失效","无权限","资源不存在"],k:1,a:"401 是未认证；403 才是已认证但无权限。"},
+{q:"接口返回 429，表示？",t:"choice",o:["请求方法不允许","请求次数过多被限流","服务端异常","网关超时"],k:1,a:"429 Too Many Requests，常见于限流与频控。"},
+{q:"关于 GET 和 POST，下列说法正确的是？",t:"choice",o:["GET 参数在 URL，通常幂等","POST 一定幂等","GET 可以传任意大文件","POST 参数只能放在 URL"],k:0,a:"GET 参数在 URL、幂等可缓存；POST 参数在 body，通常非幂等。"},
+{q:"同一笔支付请求重复提交两次，系统只扣一次款，这体现了？",t:"choice",o:["并发性","幂等性","事务隔离","负载均衡"],k:1,a:"幂等性指同一请求重复执行结果一致，不产生重复业务数据。"},
+{q:"接口自动化中，下列哪项不属于合理的断言？",t:"choice",o:["HTTP 状态码","业务 code 与关键字段","响应时间","开发人员姓名"],k:3,a:"断言应验证接口行为与数据，开发人员姓名与结果无关。"},
+{q:"上一个接口返回的 orderId 要传给下一个接口，正确做法是？",t:"choice",o:["写死在脚本里","用 JSONPath 提取后存变量","每次手工复制","忽略该字段"],k:1,a:"接口关联：提取响应字段存为变量，后续请求引用。"},
+{q:"性能指标中，P95 响应时间表示？",t:"choice",o:["最快 5% 请求的耗时","95% 请求不超过该耗时","平均耗时的 95%","错误率 95%"],k:1,a:"P95 是分位值，95% 的请求响应时间不超过该值，能反映大多数用户体感。"},
+{q:"压测时并发继续增加，但 TPS 不再上升、响应时间陡增，说明？",t:"choice",o:["系统还有很大余量","到达性能拐点","网络带宽不足","数据量太小"],k:1,a:"这就是拐点：吞吐不再增长而延迟与错误率上升，需定位瓶颈。"},
+{q:"持续加压直到系统出现瓶颈或崩溃，这种测试是？",t:"choice",o:["负载测试","压力测试","稳定性测试","冒烟测试"],k:1,a:"压力测试用于找极限与拐点；负载测试是在预期峰值下验证指标。"},
+{q:"中低负载持续运行 8–12 小时，主要观察内存泄漏与性能衰减，属于？",t:"choice",o:["压力测试","稳定性测试","兼容性测试","回归测试"],k:1,a:"稳定性测试关注长时间运行下的资源泄漏与性能衰减。"},
+{q:"实时查看日志文件新增内容，应使用？",t:"choice",o:["cat app.log","tail -f app.log","head app.log","less app.log"],k:1,a:"tail -f 持续输出新增行，适合实时排查。"},
+{q:"查看本机监听端口及对应进程，应使用？",t:"choice",o:["df -h","free -m","ss -lntp","du -sh"],k:2,a:"ss -lntp（或 netstat -tlnp）列出监听端口与进程。"},
+{q:"给目录设置「所有者读写执行、其他用户读执行」，权限数字是？",t:"choice",o:["644","755","777","600"],k:1,a:"7=rwx、5=r-x，目录常用 755。"},
+{q:"查看磁盘空间使用率，应使用？",t:"choice",o:["df -h","free -m","top","ps -ef"],k:0,a:"df -h 看文件系统空间；du 看目录占用。"},
+{q:"查询表中第 5 到第 8 条记录（每页 4 条），正确写法是？",t:"choice",o:["limit 5,8","limit 4,4","limit 8,4","limit 4 offset 8"],k:1,a:"limit offset, rows：从第 5 条开始取 4 条，即 limit 4,4。"},
+{q:"判断一条 SQL 是否走了索引，最直接的方式是？",t:"choice",o:["explain 看 key","show tables","select count(*)","show index"],k:0,a:"explain 的 key 字段显示实际使用的索引，type 可看出访问方式。"},
+{q:"统计学生表中男女人数，正确写法是？",t:"choice",o:["select gender, count(*) from student group by gender","select count(gender) from student","select distinct gender from student","select gender from student order by gender"],k:0,a:"按性别分组后计数，才能得到每类人数。"},
+{q:"下列哪种 Python 类型是不可变的？",t:"choice",o:["list","dict","set","tuple"],k:3,a:"tuple 不可变；list、dict、set 可变。"},
+{q:"想完整复制一个嵌套列表，修改副本不影响原数据，应使用？",t:"choice",o:["b = a","b = a[:]","b = copy.deepcopy(a)","b = list(a)"],k:2,a:"切片和 list() 都是浅拷贝，内层对象仍共享；嵌套结构需 deepcopy。"},
+{q:"Python 中 is 与 == 的区别是？",t:"choice",o:["is 比较值，== 比较地址","is 比较对象身份，== 比较值","两者完全等价","is 只能用于数字"],k:1,a:"is 比较是否为同一对象（id），== 比较值是否相等。"},
+{q:"给函数增加耗时统计但不修改原函数逻辑，应使用？",t:"choice",o:["继承","装饰器","多线程","lambda"],k:1,a:"装饰器通过包装函数在不改动原函数的情况下增加横切逻辑。"},
+{q:"列表去重并保持原有顺序，较稳妥的写法是？",t:"choice",o:["list(set(lst))","list(dict.fromkeys(lst))","sorted(lst)","lst.reverse()"],k:1,a:"dict.fromkeys 保序去重；set 会打乱顺序。"},
+{q:"try/except/else/finally 中，finally 的执行特点是？",t:"choice",o:["只有异常时执行","只有无异常时执行","无论是否异常都执行","永不执行"],k:2,a:"finally 用于释放资源，无论是否发生异常都会执行。"},
+{q:"IO 密集型任务，在 Python 中通常优先选择？",t:"choice",o:["多进程","多线程或协程","GPU","汇编"],k:1,a:"IO 密集可用线程/协程；CPU 密集受 GIL 限制更适合多进程。"},
+{q:"Selenium 中等待某个元素可点击，最推荐的方式是？",t:"choice",o:["time.sleep(5)","隐式等待","显式等待 element_to_be_clickable","刷新页面"],k:2,a:"显式等待针对具体条件轮询，比固定 sleep 更快更稳。"},
+{q:"UI 自动化用例单独跑通过、联跑失败，最常见原因是？",t:"choice",o:["浏览器版本过低","测试数据污染或顺序依赖","显示器分辨率","网络带宽"],k:1,a:"联跑失败多因数据未隔离、登录态/会话冲突或用例顺序依赖。"},
+{q:"Docker 启动容器时把宿主机目录挂载进容器，应使用？",t:"choice",o:["-p","-e","-v","--name"],k:2,a:"-v 宿主机目录:容器目录；-p 端口映射，-e 环境变量。"},
+{q:"持续集成的核心目的是？",t:"choice",o:["减少开发人员数量","频繁集成并尽早发现集成问题","完全替代手工测试","降低服务器成本"],k:1,a:"CI 通过自动构建与测试，让集成问题尽早暴露，保持随时可发布。"},
+{q:"判断大模型回答是否为幻觉，最可靠的依据是？",t:"choice",o:["回答是否流畅","回答是否被检索上下文或事实证据支持","回答长度","回答是否用了专业术语"],k:1,a:"幻觉是看似合理但无依据的编造，需做事实与上下文一致性核验。"},
+{q:"RAG 中「忠实度（Faithfulness）」衡量的是？",t:"choice",o:["检索速度","回答中的陈述有多少能被上下文支持","文档数量","向量维度"],k:1,a:"忠实度用于判断回答是否基于检索内容，防止脱离上下文编造。"},
+{q:"MCP 的主要作用是？",t:"choice",o:["提升模型参数量","统一模型与外部工具/数据源的接入方式","压缩模型","替代数据库"],k:1,a:"Model Context Protocol 让 Agent 以标准协议发现和调用外部工具与数据。"},
+{q:"把大模型 temperature 调低，通常会？",t:"choice",o:["输出更随机","输出更确定、适合事实问答","提高并发","减少显存"],k:1,a:"温度越低采样越确定；测试中常固定低温度以保证可复现。"},
+{q:"同一问题需要验证回答稳定性时，以下做法最合理的是？",t:"choice",o:["只跑一次看结果","固定温度与检索结果，多次采样统计一致性","每次换模型","关闭日志"],k:1,a:"先控制随机来源，再用多次采样评估语义一致性，而不是用单次结果下结论。"},
+{q:"测试环境与生产环境差异可能导致下列哪种问题？",t:"choice",o:["功能测试结果完全不可信","性能与边界问题在测试环境无法暴露","自动化无法编写","缺陷无法提交"],k:1,a:"数据量、配置、网络差异会让性能与边界问题在测试环境隐藏，需预发或同构环境复验。"}
+]});
+
+window.QB_PARTS.push({name:"二十二、填空题专项",items:[
+{q:"测试用例的核心要素包括用例编号、前置条件、操作步骤和______。",t:"fill",k:["预期结果","期望结果"],a:"没有预期结果就无法判定通过与否，这是用例成立的前提。"},
+{q:"缺陷单中用于描述问题严重程度的字段通常叫______，用于描述修复先后顺序的字段叫______。",t:"fill",k:["严重程度,优先级","严重等级,优先级","严重程度、优先级"],a:"严重程度看影响，优先级看排期，两者不能混为一谈。"},
+{q:"等价类划分把输入分为______等价类和______等价类。",t:"fill",k:["有效,无效","有效、无效"],a:"有效类验证正常路径，无效类验证异常与校验。"},
+{q:"边界值分析通常取______、______和离点。",t:"fill",k:["上点,下点","上点、下点"],a:"上点/下点是边界本身，离点是边界外最近的值。"},
+{q:"状态迁移测试要覆盖全部______迁移，同时验证______跳转会被拦截。",t:"fill",k:["合法,非法","合法、非法"],a:"除了正向流转，更要验证绕过状态机的非法操作。"},
+{q:"HTTP 状态码 ______ 表示已认证但无权限，______ 表示未认证或凭证失效。",t:"fill",k:["403,401","403、401"],a:"401 是「你是谁」未确认，403 是「你是谁我知道，但不许你访问」。"},
+{q:"幂等性是指同一请求重复执行，对系统产生的______保持一致。",t:"fill",k:["结果","影响","业务结果"],a:"典型场景：重复提交订单只生成一条单据、只扣一次库存。"},
+{q:"TCP 三次握手的报文顺序是 SYN、______、ACK。",t:"fill",k:["SYN+ACK","SYNACK","SYN ACK"],a:"第二次握手服务端同时确认并同步自己的序列号。"},
+{q:"Linux 查看监听端口与进程，常用命令是______ 或 netstat。",t:"fill",k:["ss -lntp","ss","ss -lntp"],a:"ss 比 netstat 更轻量，-l 监听、-n 数字、-t TCP、-p 进程。"},
+{q:"MySQL 中查看 SQL 执行计划的关键字是______。",t:"fill",k:["explain","EXPLAIN"],a:"关注 type、key、rows、Extra，判断是否走索引、是否排序或临时表。"},
+{q:"Python 中实现深拷贝需要导入 copy 模块并调用______。",t:"fill",k:["copy.deepcopy","deepcopy","copy.deepcopy()"],a:"浅拷贝只复制最外层，嵌套可变对象仍共享引用。"},
+{q:"Python 中定义函数使用的关键字是______。",t:"fill",k:["def"],a:"def 函数名(参数): 函数体。"},
+{q:"pytest 中实现数据驱动参数化的装饰器是______。",t:"fill",k:["@pytest.mark.parametrize","pytest.mark.parametrize","parametrize"],a:"多组参数会生成多条独立用例，失败可精确定位到某一组。"},
+{q:"Selenium 切入 iframe 使用______方法，切回主文档使用 default_content。",t:"fill",k:["switch_to.frame","switch_to.frame()","driver.switch_to.frame"],a:"嵌套 iframe 需逐层切换，操作完记得切回。"},
+{q:"JMeter 聚合报告中表示 95% 请求响应时间不超过该值的指标是______。",t:"fill",k:["95% Line","90% Line (95%)","95%Line","P95"],a:"比平均值更能反映大多数用户体感，适合与 SLA 对比。"},
+{q:"构建 Docker 镜像的命令是______。",t:"fill",k:["docker build","docker build -t","docker build ."],a:"通常 docker build -t 名称:标签 .，利用分层缓存加速。"},
+{q:"Jenkins 声明式流水线的根节点是______。",t:"fill",k:["pipeline","pipeline {}","Pipeline"],a:"pipeline 下包含 agent、stages、post 等段落。"},
+{q:"RAG 的三个核心阶段是检索、______和生成。",t:"fill",k:["增强","Augmented","增强生成"],a:"Retrieval-Augmented Generation：先检索相关资料，再拼上下文生成。"},
+{q:"大模型「幻觉」是指模型生成看似合理但______的内容。",t:"fill",k:["没有事实依据","无依据","缺乏依据","不真实"],a:"幻觉需要通过上下文支持度与事实核验来检测。"},
+{q:"提示词注入是指攻击者在______中植入指令，诱导模型偏离原有约束。",t:"fill",k:["输入","用户输入","提示词","输入内容"],a:"常见于把恶意指令藏在文档、网页或用户问题中，需验证拒答与隔离。"}
+]});
+
+window.QB_PARTS.push({name:"二十三、代码题专项",items:[
+{q:"用 Python 判断一个字符串是否为回文（忽略大小写与空格）。",t:"code",a:"def is_palindrome(s):\n    t = ''.join(ch.lower() for ch in s if ch.isalnum())\n    return t == t[::-1]\n\nprint(is_palindrome('A man a plan a canal Panama'))  # True"},
+{q:"给定整数数组和目标值 target，返回两个数的下标，使其和为 target（假设只有一组答案）。",t:"code",a:"def two_sum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        if target - n in seen:\n            return [seen[target - n], i]\n        seen[n] = i\n    return []\n\nprint(two_sum([2, 7, 11, 15], 9))  # [0, 1]"},
+{q:"手写二分查找，在有序数组中查找目标值，返回下标，找不到返回 -1。",t:"code",a:"def bsearch(a, t):\n    l, r = 0, len(a) - 1\n    while l <= r:\n        m = (l + r) // 2\n        if a[m] == t:\n            return m\n        if a[m] < t:\n            l = m + 1\n        else:\n            r = m - 1\n    return -1\n\nprint(bsearch([1, 3, 5, 7, 9], 7))  # 3"},
+{q:"写一个函数，对列表去重并保持原顺序。",t:"code",a:"def dedupe(lst):\n    return list(dict.fromkeys(lst))\n\nprint(dedupe([3, 1, 3, 2, 1]))  # [3, 1, 2]"},
+{q:"求字符串中最长不重复子串的长度。",t:"code",a:"def longest_unique(s):\n    last, left, ans = {}, 0, 0\n    for right, ch in enumerate(s):\n        if ch in last and last[ch] >= left:\n            left = last[ch] + 1\n        last[ch] = right\n        ans = max(ans, right - left + 1)\n    return ans\n\nprint(longest_unique('abcabcbb'))  # 3"},
+{q:"合并两个有序数组，要求原地合并到第一个数组中（第一个数组尾部预留空间）。",t:"code",a:"def merge(a, m, b, n):\n    i, j, k = m - 1, n - 1, m + n - 1\n    while i >= 0 and j >= 0:\n        if a[i] > b[j]:\n            a[k] = a[i]; i -= 1\n        else:\n            a[k] = b[j]; j -= 1\n        k -= 1\n    a[:k + 1] = b[:j + 1]\n\nnums1 = [1, 2, 3, 0, 0, 0]\nmerge(nums1, 3, [2, 5, 6], 3)\nprint(nums1)  # [1, 2, 2, 3, 5, 6]"},
+{q:"给定日志文件，每行形如 `2026-11-07 10:00:01 GET /api 500`，统计各状态码出现的次数。",t:"code",a:"from collections import Counter\n\ndef count_status(path):\n    c = Counter()\n    with open(path, encoding='utf-8') as f:\n        for line in f:\n            parts = line.split()\n            if parts and parts[-1].isdigit():\n                c[parts[-1]] += 1\n    return c\n\nprint(count_status('access.log'))"},
+{q:"读取 JSON 响应，提取 data.list 中每个元素的 id 和 name。",t:"code",a:"import json\n\nraw = '{\"data\":{\"list\":[{\"id\":1,\"name\":\"A\"},{\"id\":2,\"name\":\"B\"}]}}'\nobj = json.loads(raw)\nrows = [(x['id'], x['name']) for x in obj['data']['list']]\nprint(rows)  # [(1, 'A'), (2, 'B')]"},
+{q:"写一条 SQL：查询订单表中第 5 到第 8 条记录（按 id 升序）。",t:"code",a:"SELECT *\nFROM orders\nORDER BY id\nLIMIT 4, 4;\n\n-- limit offset, rows：跳过 4 条，取 4 条\n-- 必须有稳定排序字段，否则分页结果不确定"},
+{q:"写一条 SQL：统计学生表中男、女各有多少人。",t:"code",a:"SELECT gender, COUNT(*) AS total\nFROM student\nGROUP BY gender;\n\n-- 若需要空值分组，可加 WHERE gender IS NOT NULL"},
+{q:"用 pytest 写一个参数化登录接口用例，覆盖正确账号、错误密码、空账号三种情况。",t:"code",a:"import pytest\n\n@pytest.mark.parametrize('username,password,expected_code', [\n    ('userEam1', 'correct', 200),\n    ('userEam1', 'wrong', 400),\n    ('', 'any', 400),\n])\ndef test_login(api, username, password, expected_code):\n    resp = api.post('/service-auth/login', {'username': username, 'password': password})\n    assert resp.status_code == expected_code\n    if expected_code == 200:\n        assert resp.json().get('accessToken')"},
+{q:"给定数组 nums，返回数组 output，其中 output[i] 等于除 nums[i] 外其余元素的乘积，要求不用除法、O(n) 时间。",t:"code",a:"def product_except_self(nums):\n    n = len(nums)\n    res = [1] * n\n    left = 1\n    for i in range(n):\n        res[i] = left\n        left *= nums[i]\n    right = 1\n    for i in range(n - 1, -1, -1):\n        res[i] *= right\n        right *= nums[i]\n    return res\n\nprint(product_except_self([1, 2, 3, 4]))  # [24, 12, 8, 6]"}
+]});
+
+</script>
+<script>
+(function(){
+  var KEY_ANS = 'stqb_answers_v1';
+  var KEY_DONE = 'stqb_done_v1';
+  var KEY_PICK = 'stqb_picks_v1';
+  var parts = window.QB_PARTS || [];
+  var all = [];
+  parts.forEach(function(cat, ci){
+    (cat.items || []).forEach(function(it, qi){
+      all.push({
+        id: 'c' + ci + 'q' + qi, ci: ci, qi: qi, cat: cat.name,
+        q: it.q, s: !!it.s, a: it.a || '', t: it.t || 'qa',
+        o: it.o || [], k: it.k
+      });
+    });
+  });
+
+  var answers = load(KEY_ANS, {});
+  var done = load(KEY_DONE, {});
+  var picks = load(KEY_PICK, {});
+  var state = { cat: -1, filter: 'all', type: 'all', q: '', idx: 0 };
+
+  function load(k, d){ try{ return JSON.parse(localStorage.getItem(k)) || d; }catch(e){ return d; } }
+  function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+  function filtered(){
+    var out = all.filter(function(x){
+      if(state.cat >= 0 && x.ci !== state.cat) return false;
+      if(state.filter === 'star' && !x.s) return false;
+      if(state.filter === 'todo' && done[x.id]) return false;
+      if(state.filter === 'done' && !done[x.id]) return false;
+      if(state.type !== 'all' && x.t !== state.type) return false;
+      if(state.q){
+        var q = state.q.toLowerCase();
+        if((x.q + ' ' + x.cat).toLowerCase().indexOf(q) < 0) return false;
+      }
+      return true;
+    });
+    return out;
+  }
+
+  function current(){ var f = filtered(); if(state.idx >= f.length) state.idx = Math.max(0, f.length - 1); return { list: f, item: f[state.idx] }; }
+
+  function renderCats(){
+    var html = '<button class="cat ' + (state.cat < 0 ? 'on' : '') + '" data-c="-1"><span class="n">全部分类</span><span class="c">' + all.length + '</span></button>';
+    parts.forEach(function(cat, ci){
+      var total = (cat.items || []).length, ok = 0;
+      (cat.items || []).forEach(function(it, qi){ if(done['c' + ci + 'q' + qi]) ok++; });
+      html += '<button class="cat ' + (state.cat === ci ? 'on' : '') + '" data-c="' + ci + '"><span class="n">' + esc(cat.name) + '</span><span class="c">' + ok + '/' + total + '</span></button>';
+    });
+    document.getElementById('cats').innerHTML = html;
+  }
+
+  function renderProgress(){
+    var total = all.length, ok = Object.keys(done).filter(function(k){ return done[k]; }).length;
+    document.getElementById('progText').textContent = '已掌握 ' + ok + ' / ' + total;
+    document.getElementById('progBar').style.width = (total ? (ok / total * 100) : 0) + '%';
+  }
+
+  function renderGrid(list){
+    var cur = list[state.idx] ? list[state.idx].id : null;
+    var html = list.map(function(x, i){
+      return '<button class="gbtn ' + (x.id === cur ? 'on ' : '') + (x.s ? 'star ' : '') + (done[x.id] ? 'done' : '') + '" data-i="' + i + '" title="' + esc(x.q) + '">' + (i + 1) + '</button>';
+    }).join('');
+    document.getElementById('grid').innerHTML = html || '<div class="empty" style="grid-column:1/-1;padding:16px">没有匹配的题目</div>';
+  }
+
+  function render(){
+    var c = current();
+    renderCats(); renderProgress(); renderGrid(c.list);
+    var body = document.getElementById('stageBody');
+    if(!c.item){
+      body.innerHTML = '<div class="panel empty">没有匹配的题目，换个筛选或搜索词试试。</div>';
+      return;
+    }
+    var x = c.item, isDone = !!done[x.id];
+    var typeName = ({qa:'简答口述', choice:'选择题', fill:'填空题', code:'代码题'})[x.t] || '简答口述';
+    var inner;
+    if(x.t === 'choice') inner = renderChoice(x, isDone);
+    else if(x.t === 'fill') inner = renderFill(x, isDone);
+    else if(x.t === 'code') inner = renderCode(x, isDone);
+    else inner = renderQA(x, isDone);
+    body.innerHTML =
+      '<div class="card">' +
+        '<div class="qtop">' +
+          (x.s ? '<span class="badge">★ 高频题</span>' : '') +
+          '<span class="badge warn">' + typeName + '</span>' +
+          '<span>' + esc(x.cat) + '</span>' +
+          '<span>第 ' + (state.idx + 1) + ' / ' + c.list.length + ' 题</span>' +
+          (isDone ? '<span class="badge">已掌握</span>' : '') +
+        '</div>' +
+        '<h1 class="qtext">' + esc(x.q) + '</h1>' +
+        inner +
+      '</div>';
+    bindCommon(x);
+  }
+
+  function masterHtml(isDone){
+    return '<button class="btn ' + (isDone ? 'done' : '') + '" id="master">' + (isDone ? '取消已掌握' : '标记已掌握') + '</button>';
+  }
+  function navHtml(){
+    return '<button class="btn ghost" id="prev">上一题</button><button class="btn ghost" id="next">下一题</button>';
+  }
+  function answerPanel(a, isCode, prefix, open){
+    var inner = isCode ? '<pre class="code">' + esc(a) + '</pre>' : renderAnswer(a);
+    return '<div class="answer" id="answer"' + (open ? '' : ' hidden') + '><h3>参考解析</h3>' + (prefix || '') + inner + '</div>';
+  }
+
+  function renderQA(x, isDone){
+    var ans = answers[x.id] || '';
+    return '<div class="self-label"><span>先自己答一遍（自动保存在本机）</span><span id="saveHint">' + (ans ? '已保存草稿' : '') + '</span></div>' +
+      '<textarea id="selfAns" placeholder="按 背景 → 做法 → 结果 组织语言，写完再对照参考答案…">' + esc(ans) + '</textarea>' +
+      '<div class="actions">' + masterHtml(isDone) + '<button class="btn primary" id="reveal" data-label="显示参考答案">显示参考答案</button>' + navHtml() + '</div>' +
+      answerPanel(x.a, false, '', false);
+  }
+
+  function renderChoice(x, isDone){
+    var pick = picks[x.id], letters = ['A','B','C','D','E','F'];
+    var opts = (x.o || []).map(function(o, i){
+      var cls = 'opt';
+      if(pick){
+        if(i === x.k) cls += ' correct';
+        else if(pick.v === i) cls += ' wrong';
+      }
+      return '<button class="' + cls + '" data-opt="' + i + '"' + (pick ? ' disabled' : '') + '>' +
+        letters[i] + '. ' + esc(o) + '</button>';
+    }).join('');
+    var verdict = pick ? '<div class="verdict ' + (pick.ok ? 'ok' : 'bad') + '">' +
+      (pick.ok ? '✓ 回答正确' : '✗ 回答错误，正确答案是 ' + letters[x.k]) + '</div>' : '';
+    return '<div class="options">' + opts + '</div>' + verdict +
+      '<div class="actions">' + masterHtml(isDone) +
+        (pick ? '<button class="btn ghost" id="retry">重做</button>' : '') +
+        '<button class="btn primary" id="reveal" data-label="查看解析">' + (pick ? '隐藏答案' : '查看解析') + '</button>' + navHtml() + '</div>' +
+      answerPanel(x.a, false, '', !!pick);
+  }
+
+  function renderFill(x, isDone){
+    var val = answers[x.id] || '', pick = picks[x.id];
+    var verdict = pick ? '<div class="verdict ' + (pick.ok ? 'ok' : 'bad') + '">' + (pick.ok ? '✓ 回答正确' : '✗ 回答错误') + '</div>' : '';
+    var first = (x.k && x.k[0]) || '';
+    return '<div class="fillrow"><input id="fillAns" value="' + esc(val) + '" placeholder="多个空按顺序用逗号分隔，例如：有效,无效"><button class="btn primary" id="fillSubmit">提交作答</button></div>' +
+      verdict +
+      '<div class="actions">' + masterHtml(isDone) +
+        (pick ? '<button class="btn ghost" id="retry">重做</button>' : '') +
+        '<button class="btn primary" id="reveal" data-label="显示答案">' + (pick ? '隐藏答案' : '显示答案') + '</button>' + navHtml() + '</div>' +
+      answerPanel(x.a, false, '<div style="margin-bottom:8px">参考答案：<b>' + esc(first) + '</b></div>', !!pick);
+  }
+
+  function renderCode(x, isDone){
+    var val = answers[x.id] || '';
+    return '<div class="self-label"><span>写下你的实现（自动保存在本机）</span><span>对照参考代码自行判定</span></div>' +
+      '<textarea id="codeAns" class="code-input" spellcheck="false" placeholder="在此写代码，支持 Python / SQL…">' + esc(val) + '</textarea>' +
+      '<div class="actions">' + masterHtml(isDone) + '<button class="btn primary" id="reveal" data-label="显示参考代码">显示参考代码</button>' + navHtml() + '</div>' +
+      answerPanel(x.a, true, '', false);
+  }
+
+  function normalize(s){
+    return String(s == null ? '' : s).toLowerCase()
+      .replace(/\s+/g, '')
+      .replace(/[，、；;]/g, ',')
+      .replace(/。/g, '.');
+  }
+
+  function bindCommon(x){
+    document.getElementById('master').addEventListener('click', function(){
+      if(done[x.id]) delete done[x.id]; else done[x.id] = 1;
+      save(KEY_DONE, done); toast(done[x.id] ? '已标记掌握' : '已取消掌握'); render();
+    });
+    document.getElementById('prev').addEventListener('click', function(){ go(-1); });
+    document.getElementById('next').addEventListener('click', function(){ go(1); });
+    var revealBtn = document.getElementById('reveal');
+    revealBtn.addEventListener('click', function(){
+      var box = document.getElementById('answer');
+      if(box.hidden){
+        box.hidden = false; this.textContent = '隐藏答案';
+        box.scrollIntoView({behavior:'smooth', block:'nearest'});
+      } else { box.hidden = true; this.textContent = this.getAttribute('data-label') || '查看解析'; }
+    });
+    var rt = document.getElementById('retry');
+    if(rt) rt.addEventListener('click', function(){ delete picks[x.id]; save(KEY_PICK, picks); render(); });
+    var ta = document.getElementById('selfAns') || document.getElementById('codeAns');
+    if(ta){
+      var timer = null;
+      ta.addEventListener('input', function(){
+        answers[x.id] = ta.value;
+        clearTimeout(timer);
+        timer = setTimeout(function(){
+          save(KEY_ANS, answers);
+          var h = document.getElementById('saveHint'); if(h) h.textContent = '已自动保存';
+        }, 400);
+      });
+    }
+    document.querySelectorAll('.opt').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var i = parseInt(btn.getAttribute('data-opt'), 10);
+        var ok = i === x.k;
+        picks[x.id] = { v: i, ok: ok };
+        if(ok) done[x.id] = 1;
+        save(KEY_PICK, picks); save(KEY_DONE, done);
+        toast(ok ? '回答正确' : '回答错误'); render();
+      });
+    });
+    var fs = document.getElementById('fillSubmit');
+    if(fs){
+      var submitFill = function(){
+        var input = document.getElementById('fillAns');
+        var val = input.value.trim();
+        answers[x.id] = val;
+        var nv = normalize(val), ok = false;
+        (x.k || []).forEach(function(k){ if(normalize(k) === nv) ok = true; });
+        picks[x.id] = { ok: ok };
+        if(ok) done[x.id] = 1;
+        save(KEY_ANS, answers); save(KEY_PICK, picks); save(KEY_DONE, done);
+        toast(ok ? '回答正确' : '回答错误，看看参考答案'); render();
+      };
+      fs.addEventListener('click', submitFill);
+      document.getElementById('fillAns').addEventListener('keydown', function(e){
+        if(e.key === 'Enter') submitFill();
+      });
+    }
+  }
+
+  function go(step){
+    var f = filtered();
+    if(!f.length) return;
+    state.idx = (state.idx + step + f.length) % f.length;
+    render();
+  }
+
+  function renderAnswer(a){
+    if(!a) return '<div style="color:var(--muted)">本题暂无参考答案。</div>';
+    var lines = String(a).split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+    return '<ul>' + lines.map(function(s){ return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>';
+  }
+
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(ch){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[ch];
+    });
+  }
+
+  function toast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._t); t._t = setTimeout(function(){ t.classList.remove('show'); }, 1600);
+  }
+
+  document.getElementById('cats').addEventListener('click', function(e){
+    var b = e.target.closest('.cat'); if(!b) return;
+    state.cat = parseInt(b.getAttribute('data-c'), 10); state.idx = 0;
+    if(state.type !== 'all'){
+      var has = (state.cat < 0 ? all : (parts[state.cat].items || [])).some(function(it){
+        return (it.t || 'qa') === state.type;
+      });
+      if(!has){ state.type = 'all'; syncTypeChips(); }
+    }
+    render();
+  });
+  function syncTypeChips(){
+    document.querySelectorAll('.type-filters .chip').forEach(function(c){
+      c.classList.toggle('on', c.getAttribute('data-t') === state.type);
+    });
+  }
+  document.querySelector('.filters').addEventListener('click', function(e){
+    var b = e.target.closest('.chip'); if(!b) return;
+    this.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('on'); });
+    b.classList.add('on'); state.filter = b.getAttribute('data-f'); state.idx = 0; render();
+  });
+  document.querySelector('.type-filters').addEventListener('click', function(e){
+    var b = e.target.closest('.chip'); if(!b) return;
+    this.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('on'); });
+    b.classList.add('on'); state.type = b.getAttribute('data-t'); state.idx = 0; render();
+  });
+  document.getElementById('search').addEventListener('input', function(){
+    state.q = this.value.trim(); state.idx = 0; render();
+  });
+  document.getElementById('random').addEventListener('click', function(){
+    var f = filtered(); if(!f.length) return;
+    state.idx = Math.floor(Math.random() * f.length); render();
+    toast('随机抽到第 ' + (state.idx + 1) + ' 题');
+  });
+  document.getElementById('grid').addEventListener('click', function(e){
+    var b = e.target.closest('.gbtn'); if(!b) return;
+    state.idx = parseInt(b.getAttribute('data-i'), 10); render();
+document.getElementById('stageBody').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  document.getElementById('reset').addEventListener('click', function(){
+    if(!confirm('确定清空所有作答草稿和掌握状态吗？')) return;
+    answers = {}; done = {}; picks = {};
+    localStorage.removeItem(KEY_ANS); localStorage.removeItem(KEY_DONE); localStorage.removeItem(KEY_PICK);
+    render(); toast('已清空');
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.ctrlKey && e.key === 'Enter'){
+      e.preventDefault();
+      var btn = document.getElementById('reveal');
+      if(btn) btn.click();
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
