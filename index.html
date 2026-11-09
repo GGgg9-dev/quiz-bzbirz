@@ -1039,15 +1039,24 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
   var done = load(KEY_DONE, {});
   var picks = load(KEY_PICK, {});
   var fillDraft = {};   // 填空题本次作答的临时值，只在内存里，用来给「标记已掌握」保存
+  var draftPick = {};   // 没答对、也没标记已掌握的作答，只放内存，翻页就丢
+  var renderedId = null;   // 当前已渲染的题目，用来判断是否发生了翻页
+  var byId = {};
+  all.forEach(function(x){ byId[x.id] = x; });
   var state = { cat: -1, filter: 'all', type: 'all', q: '', idx: 0 };
 
   // 填空题的输入只有点过「标记已掌握」才保留，这里清掉旧版本遗留的提交记录
   (function(){
-    var changed = false;
+    var changedAns = false, changedPick = false;
     all.forEach(function(x){
-      if(x.t === 'fill' && !done[x.id] && answers[x.id]){ delete answers[x.id]; changed = true; }
+      if(done[x.id]) return;
+      if(x.t === 'fill' && answers[x.id]){ delete answers[x.id]; changedAns = true; }
+      if((x.t === 'fill' || x.t === 'choice') && picks[x.id] && !picks[x.id].ok){
+        delete picks[x.id]; changedPick = true;
+      }
     });
-    if(changed) save(KEY_ANS, answers);
+    if(changedAns) save(KEY_ANS, answers);
+    if(changedPick) save(KEY_PICK, picks);
   })();
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
   var listening = false, rec = null, recBase = '', autoMatchOnEnd = false;
@@ -1072,6 +1081,14 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
   }
 
   function current(){ var f = filtered(); if(state.idx >= f.length) state.idx = Math.max(0, f.length - 1); return { list: f, item: f[state.idx] }; }
+
+  // 没答对也没标记已掌握的作答只留在内存里，翻到别的题就丢掉
+  function resetIfWrong(id){
+    var x = byId[id];
+    if(!x || (x.t !== 'choice' && x.t !== 'fill')) return;
+    if(draftPick[id]) delete draftPick[id];
+    if(!done[id] && picks[id]){ delete picks[id]; save(KEY_PICK, picks); }
+  }
 
   function renderCats(){
     var html = '<button class="cat ' + (state.cat < 0 ? 'on' : '') + '" data-c="-1"><span class="n">全部分类</span><span class="c">' + all.length + '</span></button>';
@@ -1100,6 +1117,9 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
   function render(){
     if(listening){ autoMatchOnEnd = false; try{ rec.abort(); }catch(e){} listening = false; }
     var c = current();
+    var nid = c.item ? c.item.id : null;
+    if(renderedId && renderedId !== nid) resetIfWrong(renderedId);
+    renderedId = nid;
     renderCats(); renderProgress(); renderGrid(c.list);
     var body = document.getElementById('stageBody');
     if(!c.item){
@@ -1154,7 +1174,7 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
   }
 
   function renderChoice(x, isDone){
-    var pick = picks[x.id], letters = ['A','B','C','D','E','F'];
+    var pick = draftPick[x.id] || picks[x.id], letters = ['A','B','C','D','E','F'];
     var opts = (x.o || []).map(function(o, i){
       var cls = 'opt';
       if(pick){
@@ -1174,7 +1194,7 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
   }
 
   function renderFill(x, isDone){
-    var val = answers[x.id] || '', pick = picks[x.id];
+    var val = answers[x.id] || '', pick = draftPick[x.id] || picks[x.id];
     var verdict = pick ? '<div class="verdict ' + (pick.ok ? 'ok' : 'bad') + '">' + (pick.ok ? '✓ 回答正确' : '✗ 回答错误') + '</div>' : '';
     var first = (x.k && x.k[0]) || '';
     return '<div class="fillrow"><input id="fillAns" value="' + esc(val) + '" placeholder="多个空按顺序用逗号分隔，例如：有效,无效"><button class="btn primary" id="fillSubmit">提交作答</button></div>' +
@@ -1355,16 +1375,22 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
       var fillInput = document.getElementById('fillAns');
       var fillVal = fillInput ? fillInput.value.trim() : null;
       if(done[x.id]) delete done[x.id]; else done[x.id] = 1;
-      if(fillInput){   // 填空题：只有已掌握时才把输入框里的内容保存下来
-        if(done[x.id]){
+      if(done[x.id]){
+        // 已掌握：答对的作答正式保存下来；答错的就不留着了，只保留填空题自己写的内容
+        if(draftPick[x.id] && draftPick[x.id].ok){ picks[x.id] = draftPick[x.id]; }
+        delete draftPick[x.id];
+        if(fillInput){
           var keep = fillVal || fillDraft[x.id] || '';
           if(keep) answers[x.id] = keep; else delete answers[x.id];
-        } else {
-          delete answers[x.id];
+          save(KEY_ANS, answers);
         }
-        save(KEY_ANS, answers);
+      } else {
+        // 取消掌握：作答一并清掉
+        delete picks[x.id]; delete draftPick[x.id]; delete fillDraft[x.id];
+        if(fillInput){ delete answers[x.id]; save(KEY_ANS, answers); }
       }
-      save(KEY_DONE, done); toast(done[x.id] ? '已标记掌握' : '已取消掌握'); render();
+      save(KEY_PICK, picks); save(KEY_DONE, done);
+      toast(done[x.id] ? '已标记掌握' : '已取消掌握'); render();
     });
     document.getElementById('prev').addEventListener('click', function(){ go(-1); });
     document.getElementById('next').addEventListener('click', function(){ go(1); });
@@ -1377,7 +1403,9 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
       } else { box.hidden = true; this.textContent = this.getAttribute('data-label') || '查看解析'; }
     });
     var rt = document.getElementById('retry');
-    if(rt) rt.addEventListener('click', function(){ delete picks[x.id]; save(KEY_PICK, picks); render(); });
+    if(rt) rt.addEventListener('click', function(){
+      delete picks[x.id]; delete draftPick[x.id]; save(KEY_PICK, picks); render();
+    });
     var mic = document.getElementById('micBtn');
     if(mic){
       mic.addEventListener('click', function(){ if(listening) stopMic(); else startMic(); });
@@ -1401,9 +1429,14 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
       btn.addEventListener('click', function(){
         var i = parseInt(btn.getAttribute('data-opt'), 10);
         var ok = i === x.k;
-        picks[x.id] = { v: i, ok: ok };
-        if(ok) done[x.id] = 1;
-        save(KEY_PICK, picks); save(KEY_DONE, done);
+        if(ok){
+          delete draftPick[x.id];
+          picks[x.id] = { v: i, ok: true };
+          done[x.id] = 1;
+          save(KEY_PICK, picks); save(KEY_DONE, done);
+        } else {
+          draftPick[x.id] = { v: i, ok: false };   // 只放内存，翻页就丢
+        }
         toast(ok ? '回答正确' : '回答错误'); render();
       });
     });
@@ -1416,8 +1449,7 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
         fillDraft[x.id] = val;   // 只留在内存里，不写草稿；点「标记已掌握」才会持久保存
         var nv = normalize(val), ok = false;
         (x.k || []).forEach(function(k){ if(normalize(k) === nv) ok = true; });
-        picks[x.id] = { ok: ok };
-        save(KEY_PICK, picks);
+        draftPick[x.id] = { ok: ok };   // 只放内存，点「标记已掌握」才正式保存
         toast(ok ? '回答正确' : '回答错误，看看参考答案'); render();
       };
       fs.addEventListener('click', submitFill);
