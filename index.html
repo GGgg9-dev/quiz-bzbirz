@@ -258,7 +258,7 @@ pre.code{
 .toast{
   position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(10px);
   background:var(--text); color:var(--surface); padding:8px 16px; border-radius:999px;
-  font-size:13px; opacity:0; pointer-events:none; transition:.2s; z-index:20;
+  font-size:13px; opacity:0; pointer-events:none; transition:.2s; z-index:260;
 }
 .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
 
@@ -346,6 +346,96 @@ pre.code{
   .progress-mini span{display:none} /* 极窄屏只留进度条 */
 }
 
+/* ---------- 速记卡 / 模拟面试 覆盖层 ---------- */
+.overlay{
+  position:fixed; inset:0; z-index:180; background:var(--bg); color:var(--text);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.mock-view{z-index:185}
+.ov-head{
+  flex:0 0 auto; display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  padding:10px 16px; border-bottom:1px solid var(--border); background:var(--surface);
+}
+.ov-head .btn,.ov-head .chip{padding:6px 12px; font-size:13px}
+.ov-title{font-weight:700; font-size:14px}
+.ov-prog{color:var(--muted); font-size:12px; white-space:nowrap; font-variant-numeric:tabular-nums}
+.ov-prog b{color:var(--text); font-variant-numeric:tabular-nums}
+.ov-body{flex:1; min-height:0; overflow:auto; padding:16px; -webkit-overflow-scrolling:touch}
+.ov-inner{width:100%; max-width:760px; margin:0 auto}
+.memo-h{font-size:18px; margin:0 0 10px; line-height:1.5}
+/* 翻卡 */
+.flash{perspective:1400px; margin-top:4px}
+.flash-inner{position:relative; display:grid; transform-style:preserve-3d; transition:transform .45s cubic-bezier(.4,.2,.25,1)}
+.flash.flipped .flash-inner{transform:rotateY(180deg)}
+.flash-face{
+  grid-area:1/1; display:flex; flex-direction:column; min-height:min(62vh,440px);
+  background:var(--surface); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow);
+  padding:22px; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+}
+.flash-face.back{transform:rotateY(180deg)}
+.flash.flipped .flash-face.front,
+.flash:not(.flipped) .flash-face.back{pointer-events:none}
+.flip-hint{
+  margin:auto; color:var(--muted); font-size:14px; text-align:center;
+  border:1px dashed var(--border); border-radius:10px; padding:14px 20px; background:var(--surface-2);
+}
+.flip-hint kbd{font:inherit; background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:1px 7px; margin:0 2px}
+.kw{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 4px}
+.kw span{background:var(--brand-soft); color:var(--brand); border-radius:999px; padding:3px 12px; font-size:13px; font-weight:600}
+.memo-one{font-size:16px; line-height:1.7; font-weight:600; margin:10px 0 6px}
+.memo-hook{margin-top:4px; border-top:1px dashed var(--border); padding-top:8px}
+.memo-hook p{margin:6px 0 0; font-size:13.5px; line-height:1.7; color:var(--text)}
+.memo-acts{display:flex; gap:10px; margin-top:auto; padding-top:14px}
+.memo-acts .btn{flex:1; min-height:44px; text-align:center}
+.btn.no{color:var(--muted); background:var(--surface-2)}
+.btn.yes{background:var(--brand); border-color:var(--brand); color:#fff}
+.memo-link{
+  align-self:flex-start; margin-top:12px; padding:0; border:0; background:none;
+  color:var(--muted); font-size:12.5px; text-decoration:underline;
+}
+.memo-full{margin-top:12px; max-height:38vh; overflow:auto; border-top-style:solid}
+.memo-miss{display:flex; flex-direction:column; gap:6px; margin-top:10px; max-height:42vh; overflow:auto}
+.memo-miss .btn{text-align:left; white-space:normal; line-height:1.5}
+/* 模拟面试 */
+.mock-timer{font-weight:700; font-size:16px; font-variant-numeric:tabular-nums}
+.mock-timer.warn{color:var(--warn)}
+.mock-timer.danger{color:var(--danger)}
+.qbar{flex:0 0 auto; height:5px; background:var(--border); overflow:hidden}
+.qbar > i{display:block; height:100%; width:100%; background:var(--brand); transition:width .3s linear}
+.qbar > i.warn{background:var(--warn)}
+.qbar > i.danger{background:var(--danger)}
+.dots{display:flex; gap:7px; flex-wrap:wrap; margin-top:14px; align-items:center}
+.dot-i{width:11px; height:11px; border-radius:50%; background:var(--border); display:inline-block}
+.dot-i.answered{background:var(--brand)}
+.dot-i.skipped{background:var(--warn)}
+.dot-i.cur{box-shadow:0 0 0 2px var(--text)}
+.mock-ans{min-height:120px; background:var(--surface-2)}
+.mock-h{font-size:17px; margin:0 0 6px}
+.mock-sub{color:var(--muted); font-size:13px; margin:0 0 14px; line-height:1.7}
+.stat-row{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0}
+.stat{background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:10px 6px; text-align:center}
+.stat b{display:block; font-size:18px; color:var(--brand); font-variant-numeric:tabular-nums}
+.stat span{font-size:11.5px; color:var(--muted)}
+.res-item{
+  border:1px solid var(--border); border-radius:10px; padding:10px 13px; margin-bottom:10px;
+  background:var(--surface-2); font-size:13.5px;
+}
+.res-item .rq{font-weight:600; margin-bottom:4px; line-height:1.55}
+.res-item .ra{color:var(--muted); white-space:pre-wrap; line-height:1.6; margin-bottom:6px}
+.res-item .rm{font-size:12px; color:var(--brand); font-weight:600}
+.res-item .rm.no{color:var(--muted)}
+@media (max-width:700px){
+  .ov-head{padding:8px 12px; gap:6px}
+  .ov-head .btn,.ov-head .chip{padding:6px 10px; font-size:12.5px}
+  .ov-body{padding:12px}
+  .flash-face{min-height:min(66vh,430px); padding:16px}
+  .flash-face .qtext{font-size:16px; margin-bottom:10px}
+  .memo-one{font-size:15px}
+  .memo-acts{flex-wrap:nowrap}
+  .memo-acts .btn{font-size:15px; padding:8px 10px}
+  .stat-row{grid-template-columns:repeat(2,1fr)}
+  .mock-timer{font-size:15px}
+}
 </style>
 </head>
 <body>
@@ -368,6 +458,8 @@ pre.code{
       <button class="seg-btn" type="button" data-ans="detail">详细</button>
     </div>
     <button class="btn ghost" id="toggleAns" type="button"><span class="dot"></span>隐藏答案</button>
+    <button class="btn ghost" id="memoBtn" type="button">速记卡</button>
+    <button class="btn ghost" id="mockBtn" type="button">模拟面试</button>
     <button class="btn ghost" id="howBtn" type="button">答题方法</button>
     <button class="btn ghost" id="exportBtn" type="button">导出默写</button>
     <a class="btn ghost" id="docBtn" href="https://gggg9-dev.github.io/hb-lsvh5m/" target="_blank" rel="noopener">项目口述稿</a>
@@ -482,6 +574,12 @@ pre.code{
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- 速记卡 -->
+<div class="overlay memo-view" id="memoView" hidden></div>
+
+<!-- 模拟面试 -->
+<div class="overlay mock-view" id="mockView" hidden></div>
 
 <script>
 window.QB_PARTS = window.QB_PARTS || [];
@@ -1228,6 +1326,132 @@ window.QB_PARTS.push({name:"二十四、综合实战题（跨模块）",items:[
 
 </script>
 <script>
+window.QB_MEMO = {
+  "c0q0": {kw:["四段流程","产出物","可追溯"], one:"测试流程分需求评审、用例设计、提测执行、上线复盘四段，每段都要有可交付产出物和准出标准。", hook:"我一般把测试流程拆成四段来讲：需求评审定计划和范围，用例设计评审后准备数据，提测先冒烟把关再执行和跟缺陷，最后出报告、做上线验证和复盘，每段我都留可交付物，保证能评审能追溯。"},
+  "c0q1": {kw:["需求左移","冒烟把关","风险闭环"], one:"测试要左移到需求和设计阶段识别歧义与可测性，提测用冒烟把关，上线后验核心链路并复盘补用例。", hook:"上个项目我就是从需求评审就介入的，先把异常分支和权限规则问清楚，设计阶段盯着接口契约和可测性，提测冒烟不过直接打回，上线后自己再跑一遍核心链路，问题基本不会堆到最后。"},
+  "c0q3": {kw:["范围统计","缺陷风险","上线结论"], one:"报告写清版本范围、用例与缺陷统计、遗留风险和性能安全结论，最后必须给出可上线、有条件上线或不建议上线。", hook:"我独立出过完整测试报告，一般是先按模板把范围和环境写死，用例执行和缺陷分布都用数据说话，遗留问题一定写影响面和规避方案，最后一句话给结论，评审时能直接支撑上线决策。"},
+  "c0q4": {kw:["前置条件","操作步骤","预期结果","关联需求"], one:"用例至少要有模块、前置条件、操作步骤、预期结果、优先级和关联需求，核心是能执行、能判定、能追溯。", hook:"我们用例是在禅道里管的，除了编号标题这些通用字段，我特别看重前置条件和预期结果，预期一定要写到能判定对错，比如具体提示文案和状态变化，不然执行的人只能靠猜。"},
+  "c0q6": {kw:["复现步骤","实际预期","日志附件"], one:"缺陷单要有模块加现象的标题、复现步骤、实际与预期结果、环境和版本、等级优先级，再附截图日志请求响应。", hook:"我提单的习惯是标题直接写模块加现象，步骤里把前置条件和账号都写全，再挂上截图、日志和请求响应，标准就是换个人照着步骤能稳定复现，开发不用来回问我。"},
+  "c0q7": {kw:["新建关闭","重新打开","留痕"], one:"缺陷走新建、确认指派、修复、验证、关闭五步，验证不通过就重新打开，争议结论要记录留痕。", hook:"我们用的是禅道，流程就是新建、指派、修复、验证、关闭，验证不过就重新打开而不是新建一条；开发不认可的时候我会拉产品一起确认，结论是延期还是需求变更都写进备注里。"},
+  "c0q13": {kw:["关联模块","上线前","热修后"], one:"回归不只测缺陷点，还要覆盖关联模块，在开发修复后、上线前和线上热修后各做一次，最后更新用例和状态。", hook:"我在项目里最怕的就是修一个坏三个，所以回归一定按影响面圈关联模块，不只看改的那一处；节点一般是修复后、上线前和线上热修后，回归完还要更新用例、给结论、准备上线验证。"},
+  "c0q19": {kw:["等价类","边界值","判定表"], one:"设计方法有等价类、边界值、判定表、场景法和错误推测；等价类取代表值，边界值取上下点，1 到 100 就测 0、1、2、99、100、101。", hook:"我平时最常用等价类加边界值，先把输入划成有效和无效类，每类挑一个代表值，再把边界上下点单独拎出来，像 1 到 100 的字段我一定测 0、1、2、99、100、101，条件有依赖就上判定表。"},
+  "c0q28": {kw:["请求响应","接口直调","渲染缓存"], one:"先看 Network：请求没发或参数错是前端，响应报错或数据不对是后端，响应对但页面错是渲染或缓存，再用接口直调复验。", hook:"我定位这类问题先开 Network，看请求到底发没发、参数对不对、响应码和响应体是什么；再拿接口工具绕过前端直调一次，还能复现基本就是后端或数据问题，最后把请求响应和 traceId 一起贴给开发。"},
+  "c0q36": {kw:["止损","根因复盘","补回归集"], one:"漏测先止损，用回滚、热修或开关降级控制影响面，再分需求遗漏、用例缺口、执行遗漏做复盘，把用例补进回归集。", hook:"我印象最深的一次漏测是退款金额没核，线上先靠开关把入口关掉止损，然后拉日志确认影响单据量；复盘下来是用例只测了成功路径，后面我把退款场景补进回归集，并加了金额对账的监控。"},
+  "c0q42": {kw:["冒烟通过","自测清单","变更范围"], one:"准入要冒烟用例全过、开发自测有记录、版本包和部署说明齐全、接口文档与变更范围清楚，再据此圈回归范围。", hook:"我们提测卡的是冒烟全通过，另外要开发给自测清单、变更范围和已知问题，接口文档和数据库脚本也得更新；不满足我就直接打回，不然问题全堆到测试中后期，返工更贵。"},
+  "c1q0": {kw:["账号密码","暴力破解","会话失效"], one:"登录要覆盖正确错误账号、空值和长度边界、特殊字符、重复点击，还要测注入、暴力破解锁定、验证码和会话失效。", hook:"我测登录一般先过功能，正确错误密码、空值、超长和特殊字符、回车和重复点击；再往安全和异常走，试注入、连续错误锁定、验证码和登出后会话是否真的失效，这几块最容易漏。"},
+  "c1q4": {kw:["金额边界","并发抢","退回一致"], one:"红包先测金额 0、负数、小数位和超限，再测个数、抢完、重复抢和并发抢，最后核支付失败重试、超时退回和账单一致。", hook:"我设计红包用例是从金额切的，0、负数、两位小数、超余额和单日上限都要有；然后测个数和领取，重点是一堆人并发抢同一份，最后核对支付、退款和账单三处金额能不能对上。"},
+  "c1q12": {kw:["服务端时间","活动配置","时间边界"], one:"先分前后端：按钮置灰看用的是本地还是服务端时间，再看请求是否发出、活动配置、库存限流和网关缓存。", hook:"双 11 那种场景我第一步先确认按钮是不是置灰、客户端取的是本地时间还是服务端时间，因为最终判定一定在服务端；然后按提前、准点、延后三个时间边界加上库存和并发去复现，再看网关和降级。"},
+  "c1q25": {kw:["字段映射表","全量比对","幂等重试"], one:"先建源到目标的字段映射表，再写脚本全量比对类型、精度、空值、枚举和单位，差异定位到具体行和字段。", hook:"5000 个字段我肯定不靠人眼看，先拉一张映射表把类型、精度和转换规则定下来，再写脚本逐条比对，差异直接打到行和字段上；之后补幂等、重试、乱序和部分失败的场景，关键字段再人工抽样。"},
+  "c1q36": {kw:["叠加顺序","判定表","三处一致"], one:"先理清能否叠加、叠加顺序、金额上限和互斥，用判定表覆盖单券多券会员价，再核订单、支付、退款三处金额一致。", hook:"优惠券我第一步先跟产品把叠加规则问死：能不能叠、先算哪个、有没有上限、退款券还不还；然后用判定表把单券、多券、会员价和秒杀价组合起来，重点核对分摊和四舍五入后三处金额是否一致。"},
+  "c2q0": {kw:["影响面","是否绕过","资金数据"], one:"P0 是阻断、资损、数据错误或安全漏洞，P1 主流程严重受损但有绕过，依据看影响面、频率、能否绕过和是否涉及资金数据。", hook:"我们分 P0 到 P3，判级我看四点：影响面多大、发生频率高不高、有没有绕过办法、涉不涉及资金和数据；难修不等于等级高，等级看影响，排期才看优先级，环境不同还可以升级。"},
+  "c2q4": {kw:["补证据","三方确认","留痕升级"], one:"先补需求条款、复现步骤、日志和数据库结果，再拉产品三方确认预期，仍不一致就记录结论并升级负责人。", hook:"遇到开发不认可我一般不争论，先把需求原文、复现步骤、日志和数据库实际结果摆出来，让讨论回到事实；还谈不拢就拉产品一起定预期，结论不管是缺陷还是需求变更都写进单子里留痕。"},
+  "c2q8": {kw:["要提","复现概率","链路日志"], one:"偶现也要提，记录环境、账号、时间、traceId 和日志，标题标偶现并写复现概率，判断标准是影响面不是能否稳定复现。", hook:"偶现的 bug 我一定提，因为不提线上爆了就没有记录可查；我会把环境、账号、时间点和 traceId 全记下来，标题写清偶现和大概概率，然后补日志、按条件压复现率，必要时灰度观察。"},
+  "c2q13": {kw:["证据链","影响面","补用例"], one:"按背景、发现、定位、修复、复盘讲，说清怎么发现、用什么日志确认、影响了多少用户，最后落到补用例和监控。", hook:"我讲一个未登录能直接调接口拿数据的例子：先是抓包发现接口没校验登录态，再用无 token 请求复现并统计影响范围，修复后补了鉴权用例和网关监控，这样听起来才是我自己做的。"},
+  "c2q20": {kw:["结构判断","缺陷收敛","灰度回滚"], one:"先看结构不看总数：P0 和 P1 是否清零、缺陷是否集中在某模块、新增是否收敛，再看核心链路有无灰度回滚方案。", hook:"快上线缺陷还多的时候，我不看总数看结构：P0 和 P1 有没有清零、是不是集中在一个模块、新增缺陷有没有收敛、修复后回归过没过；再看资损和权限能不能用开关灰度兜住，最后给建议不拍板。"},
+  "c3q0": {kw:["稳定主流程","PO分层","接入CI"], one:"UI 自动化按选型定范围、框架分层、挑稳定主流程、编写调试、接 CI、出报告、持续维护七步走，优先主流程不全量覆盖。", hook:"我做 UI 自动化第一步不是写脚本，而是选场景，标准就是回归频繁、数据可造、界面稳定，先把主流程跑通；框架上做 PO 分层、统一等待和失败截图，然后接 Jenkins 定时跑，剩下就是长期维护。"},
+  "c3q1": {kw:["八大定位","css优先","稳定属性"], one:"八大定位里优先 id、name 和 css，稳定又快，xpath 灵活但性能低只作兜底，避免绝对路径和下标。", hook:"定位我优先用 id、name 和 css，稳定又快；xpath 灵活但性能差，我只在没别的手段时兜底用，而且避免绝对路径和下标，尽量让开发加 data 属性，不然一改版就全挂。"},
+  "c3q4": {kw:["隐式等待","显式等待","强制等待"], one:"隐式等待全局轮询元素存在，显式等待针对具体条件最推荐，强制 sleep 只在调试用，定位不到会抛超时或找不到元素异常。", hook:"我基本只用显式等待，针对可见、可点击这种具体条件去轮询；隐式等待是全局的，混用会把总耗时拉长；强制 sleep 只在调试时用，脚本里留 sleep 就是给自己埋雷。"},
+  "c3q5": {kw:["等待","iframe","选择器唯一"], one:"按顺序查等待够不够、是否在 iframe 或新窗口、选择器是否唯一、元素是否被遮挡、是否还没渲染挂载，再核驱动版本。", hook:"定位不到我按顺序排查：先看等待够不够，再确认是不是在 iframe 或新窗口里，然后用 DOM 验证选择器唯不唯一，最后看是不是被弹窗遮挡或者还没渲染出来，绝不第一反应就是加 sleep。"},
+  "c3q7": {kw:["稳定选择器","显式等待","用例独立","数据隔离"], one:"稳定性靠稳定选择器、显式等待、PO 分层、数据隔离和用例独立，失败截图加重试兜底，难点是异步渲染和环境差异。", hook:"UI 脚本稳不稳，八成看基本功：选择器要稳、等待用显式、数据要隔离、用例之间不能有顺序依赖；异步渲染和 iframe 切换是最容易偶发失败的地方，我用重试只是兜底，不能拿来掩盖真问题。"},
+  "c3q20": {kw:["数据污染","顺序依赖","登录态冲突"], one:"多半是数据污染、用例顺序依赖、登录态或会话冲突、浏览器实例复用，解决靠唯一数据和 fixture 做前后置。", hook:"单跑没问题联跑就挂，我第一反应是数据污染或者顺序依赖，比如前一条改了全局配置、共用同一个账号；我会单独跑那条再按执行顺序对日志，最后用唯一标识和 fixture 前后置彻底隔开。"},
+  "c3q25": {kw:["回归频繁","ROI","稳定主流程"], one:"适合稳定、回归频繁、跨版本重复执行的主流程，判断标准是执行频次乘单次节省时间大于开发和维护成本。", hook:"我做不做 UI 自动化就看两个词：稳定和频繁，主流程每次发版都要回归，那就值得；算法是执行频次乘以单次省下的时间，能不能覆盖开发和维护成本，一次性活动和频繁改版的坚决不做。"},
+  "c3q32": {kw:["原生弹窗","非原生div","滑块校验"], one:"原生弹窗用 alert 接口读文案再确认或取消，假弹窗按普通元素定位，滑块优先在测试环境关掉校验。", hook:"原生 alert 我用 switch_to.alert 先读文案再 accept 或 dismiss，处理完才能动页面；页面里那种假弹窗其实是 div，按普通元素找就行；滑块我一般让测试环境关掉校验，生产不建议硬绕。"},
+  "c3q33": {kw:["用例解耦","xdist","数据隔离"], one:"先做用例解耦和数据独立，再用 pytest-xdist 按文件分发，多浏览器上 Selenium Grid，并行度按机器资源定。", hook:"并行之前我一定先解耦，数据独立、没有顺序依赖、登录态能复用，否则并行只会把不稳定放大；然后用 pytest-xdist 分发，多环境上 Grid，并行度按机器资源调，报告里区分真失败和环境失败。"},
+  "c4q0": {kw:["五层分层","接口封装","出报告"], one:"框架分 config、common、api、tests、data 五层，token 在 fixture 统一处理，改接口只动 api 层。", hook:"我的接口框架是五层：配置、公共方法、业务接口封装、用例和数据；token 在 fixture 里统一拿，用例只写步骤和断言，接口一改我只动 api 层，最后接 Jenkins 出 Allure 报告。"},
+  "c4q4": {kw:["提取字段","变量引用","轮询等待"], one:"用 JSONPath 从上个响应提取字段存成全局变量，下个接口用变量占位引用，异步落库要轮询等待不能写死 sleep。", hook:"接口关联我用 JSONPath 从上一响应里提字段，比如订单号，存到全局变量或 fixture 里，下一个接口用占位符引用；如果依赖异步落库，我就加超时轮询，而不是 sleep 几秒碰运气。"},
+  "c4q5": {kw:["状态码","业务字段","查库核对"], one:"断言分三层：协议层看状态码和响应时间，业务层看 code、关键字段值和类型，数据层对写操作查库核对。", hook:"我断言不止看 HTTP 200，业务失败经常是 200 加非 0 的 code；所以协议层看状态码，业务层看 code、message、关键字段和列表长度，写接口再查库核对落库结果，异常场景还要断言回滚。"},
+  "c4q9": {kw:["功能异常","越权","幂等并发"], one:"接口测功能、异常参数、安全权限和数据稳定性四个维度，重点补未登录、水平垂直越权和重复提交幂等。", hook:"我测接口分四块：功能正常和组合参数、异常和边界、安全和权限、数据与稳定性；最容易漏的是越权和幂等，一定要绕过前端直接调接口，用别人的 id 和无权限账号去试。"},
+  "c4q12": {kw:["读契约","正向逆向","越权幂等"], one:"先读文档或抓包明确规则和鉴权，再走正向、逆向参数和边界，最后补未登录越权、重复提交幂等和查库核对。", hook:"拿到一个接口我先读文档或者抓一次包，把业务规则、依赖和鉴权搞清楚；然后跑正向，再打必填、类型、长度、枚举和下游超时，最后专门测未登录、越权和重复提交，这三块是提分点。"},
+  "c4q14": {kw:["401","403","5xx"], one:"400 参数错、401 未认证、403 已登录无权限、404 不存在、429 限流，500 内部异常、502 上游异常、504 网关超时。", hook:"状态码我一定和业务 code 一起看；面试常问 401 和 403 的区别，token 缺失或失效是 401，有身份但没权限访问是 403，这个我实际都用无权限账号直调验证过，不是背的。"},
+  "c4q26": {kw:["分层执行","xdist","数据隔离"], one:"分层执行，提交只跑 smoke，全量放夜间；再用 xdist 并发、token 复用、去掉固定 sleep 改轮询，前提是数据隔离。", hook:"接口用例越跑越慢，我第一步是分层，提交只跑 smoke，全量放夜间；然后上 xdist 并发，把登录 token 做成 session 级复用，去掉固定 sleep 改轮询，但数据必须先隔离，不然并发就是随机失败。"},
+  "c4q28": {kw:["参数化","数据驱动","ids命名"], one:"参数化把入参和预期抽成数据列表，数据放 YAML 用 fixture 读，再给每组加 ids 方便定位失败。", hook:"参数化我用 pytest 的 parametrize，把入参和预期做成列表，数据量大的话放到 YAML 里用 fixture 读进来；每组数据我加 ids，报告里一眼能看出是哪组挂了，前后置和清理放在 yield 里。"},
+  "c5q7": {kw:["断言状态码","json取值","耗时阈值"], one:"Tests 脚本先断状态码，再取 JSON 断字段值和类型，数组断长度，最后设耗时阈值。", hook:"Postman 我一般在 Tests 里写 pm.test，先断状态码，再取 response.json() 断 code 和字段类型，数组就断长度；注意 json 只能取一次，非 JSON 响应会直接报错。"},
+  "c5q9": {kw:["优先级","环境变量","CSV覆盖"], one:"优先级从高到低是 Local、Data、Environment、Collection、Global，同名取最高，CSV 会覆盖环境变量。", hook:"Postman 变量优先级我记的顺序是 Local、Data、Environment、Collection、Global，同名取最高的；踩过的坑是 Runner 传 CSV 时列名会覆盖环境变量。"},
+  "c6q0": {kw:["定目标","梯度加压","非GUI"], one:"先定 TPS、P95 和错误率目标，再按业务比例建场景写脚本，先单接口基线再梯度加压找拐点，正式压测必须非 GUI。", hook:"我压测先跟开发对齐 SLA，把 TPS、P95、错误率和时长定死；然后按业务比例建线程组写脚本，先单接口跑基线，再梯度加压找拐点，同时看应用和数据库资源，正式压测一律非 GUI。"},
+  "c6q10": {kw:["P95","Error%","吞吐量"], one:"看 Average、P90、P95、P99 和错误率，和需求比优先看 P95，错误率高时 TPS 再高也没意义。", hook:"聚合报告我最先看 P95 和错误率，因为平均值会被长尾掩盖；需求写三秒内我一定先确认口径是 P95 还是平均，错误率要跟 TPS 一起看，错误率高的时候吞吐再漂亮也是假的。"},
+  "c6q12": {kw:["事务数","请求数","吞吐量"], one:"TPS 是每秒完成事务数，一个事务可含多个请求；QPS 偏查询，RPS 是 HTTP 请求数，业务达标看 TPS。", hook:"这三个我这么区分：TPS 按业务事务算，一次下单可能含校验、扣库存、写订单三个请求；QPS 偏数据库查询视角；RPS 就是 HTTP 层请求数，最直观，看报告时要确认是按事务还是按请求统计。"},
+  "c6q13": {kw:["压测端","线程池","慢SQL"], one:"先排压测端线程数、带宽和 JMeter 自身资源，再看应用线程池、连接池和 GC，最后查慢 SQL、Redis 和 MQ 积压。", hook:"TPS 上不去我先怀疑压测机自己，线程数够不够、带宽和端口有没有打满；然后看应用线程池和连接池、GC 日志，最后查数据库慢 SQL 和锁等待，方法是固定其他变量逐层替换，对比 TPS 找瓶颈。"},
+  "c6q16": {kw:["TPS","P95","错误率"], one:"业务看 TPS、P95、错误率和并发数，系统看 CPU、内存、GC 和 IO，指标来自 SLA、业务峰值和生产基线，不能拍脑袋。", hook:"性能指标我分业务和系统两层，业务是 TPS、P95、错误率，系统是 CPU、内存、GC 和连接数；来源一定是 SLA 或生产高峰基线，没有 SLA 我就用高峰的一点五到两倍，并跟产品确认口径。"},
+  "c6q18": {kw:["负载","压力","稳定性"], one:"负载是在预期峰值下验指标，压力是阶梯加压找极限拐点，稳定性是 70% 到 80% 负载跑 8 到 12 小时看漂移。", hook:"这三种我分得很清：负载测试是压到预期峰值看达不达标，压力测试是一路加到崩找拐点，稳定性是用七成到八成负载跑八到十二小时看内存和响应时间有没有漂移，报告里我会写清场景类型。"},
+  "c6q20": {kw:["压测端","入口层","慢SQL"], one:"按压测端、网关入口、应用线程池和 GC、数据库慢 SQL 与中间件五层逐段看耗时，用 APM 和线程栈定位。", hook:"定位瓶颈我是分层砍：先排除压测机和网关，再看应用线程池、GC 和线程栈，最后看数据库慢 SQL 和锁等待；证明是 DB 的办法就是单独压库对比 TPS，或者看 DB 的 CPU 和 IO 有没有饱和。"},
+  "c6q28": {kw:["响应断言","JSON断言","持续时间"], one:"常用响应断言查状态码和关键字、JSON 断言用 JSONPath 精确校验、持续时间断言卡响应时间，注意挂载层级会作用范围不同。", hook:"我最常用响应断言和 JSON 断言，响应断言看状态码和文本关键字，JSON 断言用 JSONPath 精确定位字段；持续时间断言可以当性能门槛；坑是断言挂在线程组下会作用到组内所有请求。"},
+  "c6q30": {kw:["-n -t","-e -o","报告目录空"], one:"命令是 jmeter -n -t 脚本 -l 结果 -e -o 报告目录，报告目录必须为空，参数用 -J 传，先在 GUI 调通脚本。", hook:"正式压测我都是命令行跑：jmeter -n -t 脚本 -l 结果文件 -e -o 报告目录，报告目录必须空着不然报错；线程数和时长用 -J 传，脚本里用函数读，GUI 只用来调脚本和断言。"},
+  "c7q0": {kw:["文本三剑客","进程资源","日志跟踪"], one:"文件用 ls、find，文本用 grep、awk、sed，系统看 ps、top、df，网络用 ss 和 curl。", hook:"Linux 我日常就那几类：找文件用 find，看日志用 tail -f 配 grep，统计用 awk，查进程和资源用 ps、top、df；服务用 systemctl，传文件用 scp，基本够覆盖测试排查。"},
+  "c7q1": {kw:["实时跟踪","过滤上下文","时间筛选"], one:"实时跟日志用 tail -F，过滤用 grep，-C 5 带上下文，多关键字用 -E，最后按时间点筛。", hook:"看日志我一般先 tail -f 跟，再 grep 过滤 error 或 exception，用 -C 5 把上下文和堆栈带出来；坑是日志轮转之后 tail -f 会跟丢，要用大写的 -F，时间点也能用正则先筛一遍。"},
+  "c7q23": {kw:["分区占用","du排序","句柄释放"], one:"先 df -h 看哪个分区满、df -i 看 inode，再用 du -sh 排序定位大目录，查 lsof 里 deleted 的占用文件。", hook:"磁盘满我先 df -h 定位分区，还要看 df -i 是不是 inode 被小文件吃光；再用 du 排序一层层找大目录；最坑的是日志删了但进程还持有句柄，df 依然满，要 lsof 找 deleted 再重启或 truncate。"},
+  "c8q0": {kw:["增删改查","条件确认","整表清空"], one:"增 insert、查 select、改 update、删 delete 都要带条件，清空整表用 truncate。", hook:"CRUD 本身简单，我强调两点：生产上 select 一定按需取列，update 和 delete 一定先写 where 用 select 确认行数再执行；清空整表用 truncate 更快，但它不能回滚，得先确认。"},
+  "c8q1": {kw:["内连接","左连接","驱动表"], one:"内连接只返回两表都匹配的行，左连接保留左表全部；left join 的右表过滤条件要写在 on 里，否则退化成内连接。", hook:"联查我按业务定：主表和明细都必须存在就用 inner join，主表要全展示、明细可能为空就用 left join；坑是 left join 之后把右表条件写到 where 里，会直接退化成内连接，这个我踩过。"},
+  "c8q3": {kw:["分页语法","偏移量","稳定排序"], one:"select 加 order by id limit 4,4，偏移从 0 开始跳前 4 取 4，必须有稳定唯一排序字段。", hook:"第 5 到 8 条就是跳过前 4 条再取 4 条，limit 4,4 或者 limit 4 offset 4；关键是必须有唯一且稳定的排序字段，只用 create_time 这种非唯一字段，翻页时会出现重复和漏数据。"},
+  "c8q4": {kw:["B+树","联合索引","执行计划"], one:"索引是加速检索的 B+ 树结构，分主键、唯一、普通、联合和全文，联合索引走最左前缀，用 explain 看 key 和 type。", hook:"InnoDB 的索引是 B+ 树，能减少扫描行数和回表；我判断走没走索引就看 explain 的 key 有没有值、type 是不是 ALL、rows 扫多少行，但 rows 只是估算，最终还要看真实耗时。"},
+  "c8q14": {kw:["ACID","可重复读","MVCC"], one:"ACID 是原子、一致、隔离、持久，靠 undo log、锁与 MVCC、redo log 实现；MySQL 默认可重复读。", hook:"ACID 我会顺带说实现：原子性靠 undo log，持久性靠 redo log，隔离性靠锁和 MVCC；MySQL 默认是可重复读，能避免不可重复读，幻读靠间隙锁兜住，Oracle 默认是读已提交，这点常被问。"},
+  "c8q15": {kw:["前置通配","函数运算","隐式转换"], one:"常见失效是 like 前置百分号、索引列做函数或运算、隐式类型转换、or 两侧没都建索引、不满足最左前缀。", hook:"索引失效我用 explain 验，看 key 是不是 NULL、type 是不是 ALL；常见原因就是 like 前置百分号、字段上做函数或运算、字符串列传数字这种隐式转换，还有联合索引不满足最左前缀。"},
+  "c9q0": {kw:["不可变类型","可变类型","可哈希"], one:"不可变有 int、str、tuple，可变有 list、dict、set；不可变才可哈希，能作字典 key。", hook:"Python 里我按能不能原地改来分：str、tuple、frozenset 不可变，list、dict、set 可变；不可变的才能哈希，所以能当字典的 key，tuple 里塞了 list 也不能当 key，这个追问常考。"},
+  "c9q1": {kw:["可变","不可变","作key"], one:"列表可变，能 append 和排序，用方括号；元组不可变，用圆括号，更省内存、遍历稍快，能作字典 key，适合固定结构。", hook:"列表和元组我一般这么说：列表能增删改，适合频繁变的集合；元组创建后不能改，省内存稍微快一点，能当字典 key，适合坐标和配置这种固定结构；单元素元组记得加逗号。"},
+  "c9q2": {kw:["O(1)查找","唯一","交并差"], one:"列表有序可重复按下标访问，字典按键 O(1) 查找适合配置和计数，集合只存唯一元素支持交并差，适合去重。", hook:"选结构我看三点：要保序和下标就用列表，要按键快速查就用字典 O(1)，只要唯一和交并差就用集合；集合元素必须可哈希，而且用 set 去重会丢原顺序，要保序我用 dict.fromkeys。"},
+  "c9q4": {kw:["对象地址","等值比较","判空用is"], one:"is 比对象身份也就是内存地址，== 调 __eq__ 比值；等号是赋值；判断 None 只用 is None。", hook:"is 比的是 id，也就是是不是同一个对象；== 比的是值；小整数和短字符串有驻留，is 偶尔为 True 只是实现细节，我判空只用 is None，绝不用 == 去比值的相等。"},
+  "c9q5": {kw:["最外层","递归复制","memo"], one:"浅拷贝只复制最外层，内层还是共享引用；深拷贝用 deepcopy 递归复制每层，嵌套可变对象会被改动时必须深拷贝。", hook:"浅拷贝只复制最外层容器，内层对象还是同一个引用，改嵌套结构原对象也会变；深拷贝用 deepcopy 递归复制，遇到循环引用靠 memo 处理，但性能开销大，全不可变时可能直接返回原对象。"},
+  "c9q7": {kw:["高阶函数","包装函数","保留元信息"], one:"装饰器是接收函数再返回新函数的高阶函数，内层 wrapper 加前后逻辑，再用 wraps 保留元信息。", hook:"装饰器本质是 f 等于 decorator(f) 的语法糖，外层收函数，内层 wrapper 用可变参数包住，前后加逻辑再 return；我一定会加 functools.wraps，不然函数名全变成 wrapper，日志和用例名都会乱。"},
+  "c9q8": {kw:["执行顺序","else分支","清理兜底"], one:"顺序是 try、except、else、finally，没异常才走 else，finally 一定执行，里面写 return 会吞异常。", hook:"顺序我记成 try 有异常进 except，没异常才进 else，finally 永远执行，哪怕前面 return 了；坑是 finally 里写 return 会把异常吞掉、返回值被覆盖。"},
+  "c9q11": {kw:["独立内存","GIL","IO密集"], one:"进程有独立内存开销最大，线程共享内存开销小但有锁竞争，协程最轻量；GIL 让 CPU 密集用多进程、IO 密集用线程或协程。", hook:"我一般这么讲：进程有独立内存，最重但最安全；线程共享进程内存，要加锁；协程在单线程里靠事件循环切换，最轻；GIL 决定 CPU 密集用多进程，IO 密集用线程或协程，GIL 不等于线程安全。"},
+  "c9q13": {kw:["实例方法","类方法","静态方法"], one:"实例方法第一参是 self 能访问实例属性，类方法用 classmethod 第一参是 cls 常做工厂，静态方法无 self 和 cls。", hook:"实例方法最常用，第一参数 self，能碰实例属性；类方法加 classmethod，第一参 cls，适合工厂方法和读配置；静态方法就是挂在类里的普通函数，访问不到实例和类属性，别滥用。"},
+  "c9q19": {kw:["加号","extend","chain"], one:"加号生成新列表但内存翻倍，extend 原地扩展效率最高返回 None，星号解包适合少量，chain 惰性适合大数据。", hook:"合并两个列表我优先 extend，原地扩展最快，但它返回 None，写成 a 等于 a.extend(b) 就变 None 了；加号会生成新列表，数据量大内存翻倍；只遍历一次就用 itertools.chain 惰性拼。"},
+  "c9q20": {kw:["set去重","保序去重","降序排序"], one:"最快是 list(set(lst)) 但打乱顺序，要保序用 dict.fromkeys，降序用 sorted 传 reverse=True。", hook:"去重看要不要保序：只要唯一就用 set 最快，但顺序没了；要按首次出现顺序就用 dict.fromkeys，最常用；降序是 sorted 传 reverse 等于 True，不是写 key；元素不可哈希的要去重得先转成元组。"},
+  "c9q40": {kw:["立即生成","惰性求值","只遍历一次"], one:"列表推导式立即生成完整列表占内存，生成器表达式惰性求值适合大数据，字典和集合推导式直接构造对象。", hook:"列表推导式会立刻生成整个列表，适合结果要复用或者要下标的场景；生成器表达式是惰性的，配 sum 和 max 很省内存，但只能遍历一次，耗尽就空了，嵌套超过两层我就改回普通循环。"},
+  "c10q0": {kw:["切分入库","TopK召回","rerank"], one:"RAG 就是文档切分入库、向量召回 Top-K、rerank 后拼 Prompt 生成，问题分数据、检索、生成三层。", hook:"我会按链路讲 RAG：采集解析清洗切分，embedding 入库，检索 Top-K 再 rerank，拼 Prompt 让模型带引用生成；排查时先看召回片段里有没有正确答案，有答案答错是生成问题，没答案才是检索问题。"},
+  "c10q1": {kw:["解析切分","召回指标","标注集"], one:"数据层验解析和切分质量，检索层看 Recall@K、MRR，生成层看忠实度和引用正确率，端到端用 60 到 100 条标注集跑通过率。", hook:"我测 RAG 是分层的：先核文档解析和切分、向量条数和维度；检索层用标注问题集算 Recall@K 和 MRR；生成层看忠实度和引用对不对；最后拿六十到一百条标注集端到端跑通过率。"},
+  "c10q4": {kw:["切太碎","切太大","重叠比例"], one:"切太碎上下文断裂，切太大混入无关内容还超长被截断；常用按标题语义切，留 10% 到 20% overlap，再用 Recall@K 验证。", hook:"切分我踩过切太碎的坑，答案缺前因后果，召回片段撑不住结论；切太大又混入无关内容、挤占上下文；我一般按标题和段落语义切，留一成到两成 overlap，再固定问题集比 Recall@K 和完整度。"},
+  "c10q6": {kw:["召回率","精确率","阈值"], one:"召回是找回的相关片段占全部相关，精确是找回结果里相关的比例；知识问答一般 Recall@5 不低于 0.8、精确率不低于 0.7。", hook:"我的理解是召回管漏没漏，精确管准不准，两者冲突时先保召回再用 rerank 提精确；阈值我按业务定，知识问答一般 Recall@5 零点八、上下文精确率零点七，报指标一定带上样本量。"},
+  "c10q10": {kw:["三类题","证据匹配","幻觉率"], one:"造无答案、诱导和时效三类题，脚本抽事实陈述去召回片段做证据匹配，无证据的算疑似幻觉，再让人工或模型复核。", hook:"测幻觉我造三类题：知识库里没有的、诱导性的、问时效的，看它是不是硬编；脚本先抽回答里的事实陈述，去召回片段里做字符串或语义匹配，找不到证据的标疑似，最后大模型加人工复核，算幻觉率。"},
+  "c10q12": {kw:["六个维度","100条","90%通过"], one:"按事实、忠实、切题、完整、格式和安全六个维度，用 100 条标注集加 rubric 双评，核心场景 90% 通过才算达标。", hook:"我的评估流程是先建一百条标注集，把事实正确、忠实上下文、切题、完整、格式和安全六个维度写成 rubric，再自动指标加大模型和人工双评；门槛是核心九成、一般八成、安全合规必须百分之百。"},
+  "c10q34": {kw:["确定性","概率性","rubric"], one:"传统测试输出确定、断言精确，AI 输出概率性只能靠评测集和 rubric 统计通过率；智能体还要看规划、工具选择和越权。", hook:"最大的差别是确定性：Web 我能断言状态码和字段值，AI 只能建评测集、定 rubric 看通过率分布；智能体再往上加一层，要测规划合不合理、工具和参数选得对不对、多轮状态和异常恢复。"},
+  "c10q37": {kw:["用例初稿","造数据","人工把关"], one:"我用 AI 生成用例初稿、造测试数据、写 pytest 和 SQL 脚本、总结日志，流程是先给约束出初稿，再人工评审沉淀模板。", hook:"我主要用 AI 写用例初稿和脚本骨架，提示词里把需求、业务约束和输出格式给全，出一版我再人工改；重复性文本交给它，核心场景设计和断言必须人来把关，敏感数据我绝不往外部模型贴。"},
+  "c10q41": {kw:["直接注入","间接注入","权限校验"], one:"直接注入让模型忽略系统提示、泄露 Prompt，间接注入藏在文档和工具返回里；防御靠输入过滤、内容分隔、工具白名单和代码层权限。", hook:"注入我分直接和间接，直接就是让它忽略系统提示、吐初始 Prompt，间接是把指令藏在知识库文档或工具返回里，这个最容易漏；防御不能只写一句不要被注入，必须做输入过滤、内容分隔和代码层权限校验。"},
+  "c11q0": {kw:["频繁提交","自动构建","快速反馈"], one:"持续集成是频繁提交主干、每次自动拉代码构建跑测试，失败快速反馈，产物可归档可追溯，随时能拿出可发布版本。", hook:"我理解 CI 不只是定时跑用例，核心是每次提交自动拉代码、构建、静态检查加单测和接口测试，失败立刻阻断和通知；产物要能关联 commit，随时能拿出一个可发布版本，主干长期红就是形同虚设。"},
+  "c11q10": {kw:["声明式","脚本式","Groovy"], one:"声明式用 pipeline 写 agent、stages 和 steps，自带 post；脚本式在 node 里写 stage。", hook:"我们用的是声明式，pipeline 下面写 agent、stages 和 steps，post 做收尾；脚本式更灵活，本质是 Groovy，可以写循环和判断；坑是声明式里循环必须放在 script 块里，不然语法直接报错。"},
+  "c11q11": {kw:["凭据管理","变量绑定","不进代码"], one:"凭据统一放 Jenkins 的 Credentials，声明式用 environment 绑定，脚本式用 withCredentials。", hook:"密码和私钥我都放 Jenkins 的 Credentials，声明式在 environment 里绑凭据 ID 自动生成变量，脚本式用 withCredentials 包住，变量只在块内有效。"},
+  "c12q0": {kw:["镜像命令","容器命令","资源清理"], one:"镜像用 build、tag、push，容器用 run、exec、logs 排查，清理由 prune 完成。", hook:"日常就三组：镜像 build 打 tag 再 push，容器 run -d -p 起、exec -it 进去、logs -f 看日志，出问题用 inspect 和 stats，清理由 prune。"},
+  "c12q12": {kw:["只读层","缓存命中","COPY顺序"], one:"镜像由多层只读层叠加，每条 RUN 和 COPY 一层，容器再加可写层；缓存按层命中，所以先拷依赖再拷代码。", hook:"镜像是一层层只读层叠起来的，每条 RUN 和 COPY 生成一层，容器启动再加一层可写层；缓存按层命中，所以我把依赖安装放前面、拷代码放最后，COPY 点放最前会让所有缓存全失效。"},
+  "c12q14": {kw:["容器卷","宿主挂载","持久化"], one:"volume 由 Docker 管理可跨容器共享，bind mount 直接映射宿主目录，容器删了卷还在。", hook:"volume 是 Docker 自己管的，跨容器共享、好备份，数据库容器我一定挂 volume；bind mount 直接映射宿主目录，开发时看日志方便但依赖权限，目录不存在会自动建空目录，反过来覆盖镜像里的文件。"},
+  "c13q0": {kw:["平台差异","维度拆分","回归集"], one:"先分析 iOS、Android 和鸿蒙的交互权限差异，再按功能、兼容、网络、中断、性能和安全拆维度，评审后执行闭环。", hook:"App 用例我先确认平台差异，iOS 和安卓的权限弹窗、返回逻辑都不一样；然后按功能、兼容、网络、中断、性能和升级拆维度，时间不够就保 P0 主流程和资损权限，其余书面留痕。"},
+  "c13q1": {kw:["设备连接","日志状态","稳定性跑"], one:"adb devices 看连接，logcat 看日志，dumpsys 查状态，monkey 用 -p 包名跑 500 次看崩溃。", hook:"我连设备先 adb devices 确认在线，装应用用 install，看日志用 logcat，还要 dumpsys 查内存和当前页面；稳定性用 monkey 加包名跑五百次，跑完看崩溃和 ANR。"},
+  "c13q5": {kw:["限速","断网重连","重复提交"], one:"用 Charles 或 Fiddler 限带宽、延迟和丢包，覆盖 2G、弱 WiFi、断网和切换，重点看超时重试、重复提交和恢复自愈。", hook:"弱网我用 Charles 做限速、延迟和丢包，覆盖断网、重连和 WiFi 切蜂窝；重点不是慢，是断了以后的数据错乱，比如重复提交订单，我要求前端防抖加服务端幂等键，两边都得验。"},
+  "c13q22": {kw:["隐私合规","内测分发","灰度回滚"], one:"提审前核隐私清单、权限说明和第三方 SDK 合规，TestFlight 分组内测验安装升级，灰度按比例放量看崩溃率并留回滚。", hook:"iOS 上架前我会先对隐私清单和权限用途说明，第三方 SDK 合规和截图规范也过一遍，减少被拒；然后走 TestFlight 内测验安装和覆盖升级，灰度按比例放，盯崩溃率和错误率，异常就暂停回滚。"},
+  "c14q0": {kw:["三次握手","四次挥手","等待回收"], one:"握手三次同步序列号，挥手四次因为对方可能还有数据，主动关闭方要等 2MSL 才释放连接。", hook:"握手三次是确认双方收发能力并同步序列号，挥手四次是因为对方可能还有数据，ACK 和 FIN 不能合并；TIME_WAIT 出现在主动关闭方，等两个 MSL 是为了最后的 ACK 能到，也防止旧报文混进新连接。"},
+  "c14q1": {kw:["面向连接","可靠有序","低延迟"], one:"TCP 面向连接、可靠有序、有重传和流控，UDP 无连接不保证可靠但开销小延迟低；要可靠用 TCP，实时音视频用 UDP。", hook:"TCP 面向连接、保证有序和可靠，带确认重传和拥塞控制，头部开销大；UDP 无连接、不保证到达顺序，但延迟低，视频游戏 DNS 都用它；测试上 TCP 看连接数和重传，UDP 看丢包率、乱序和抖动。"},
+  "c14q4": {kw:["七层","四层","分层定位"], one:"OSI 是物理、链路、网络、传输、会话、表示、应用七层，TCP/IP 四层把上三层合并成应用层，按层定位问题。", hook:"七层我从下往上背：物理、链路、网络、传输、会话、表示、应用；TCP/IP 四层就是网络接口、网际、传输、应用；面试常问 ping 和 telnet，ping 测网络层可达，telnet 端口测传输层。"},
+  "c14q15": {kw:["上游异常","服务不可用","网关超时"], one:"502 是网关收到上游无效响应，503 是服务暂不可用多因过载限流，504 是网关等上游超时，先分层再定责。", hook:"这三个我会先分责任层：502 是网关拿到上游的无效响应，常见于进程挂了；503 是服务过载、限流或发布中；504 是网关等上游超时，慢查询居多；先看网关日志和上游健康，不要一看 5xx 就提给后端。"},
+  "c14q18": {kw:["分层","时序","首字节"], one:"先 ping 和 telnet 确认网络端口，再 curl 直连排除前端，抓包看 DNS、握手、首字节和传输各段耗时，再看状态码定层。", hook:"我先分层：ping 和 telnet 确认网络和端口通不通，curl 直连接口排除前端，再抓包看请求到底发没发；然后用时序区分是 DNS 慢、握手慢、首字节慢还是传输慢，最后结合服务端日志确认耗时落在哪。"},
+  "c15q20": {kw:["越权","共享资源","租户切换"], one:"数据、配置、文件和消息都要按租户隔离，拿 A 的 token 调 B 的资源必须拒绝，列表和导出只能含本租户数据。", hook:"多租户我最看重越权，一定拿 A 租户的 token 直接去调 B 的 id 和 url，接口必须拒绝而不是返回数据；列表接口我会造两个租户同名数据，核对返回条数和导出结果，只测页面看不到很容易漏。"},
+  "c16q16": {kw:["基准分区","递归","随机基准"], one:"选基准把小的放左大的放右再递归，平均 O(n log n)，最坏 O(n²) 出现在已排序且固定取首元素，用随机基准避免。", hook:"快排我先说 partition：拿首元素当基准，遍历时把小的往前换，最后把基准换到分界点，再递归左右；平均 O(n log n)，最坏是已有序还固定取首元素退化成 O(n²)，我一般随机基准或三数取中。"},
+  "c16q17": {kw:["三指针","改指向","递归两行"], one:"迭代用 prev、cur、next 三个指针逐个改指向，时间 O(n) 空间 O(1)；递归先反转后面再把当前节点接到尾部。", hook:"迭代我强调顺序：先存 next，再改 cur.next 指向 prev，然后两个指针一起后移；递归的核心就两行，head.next.next 等于 head，再把 head.next 置空，空间是 O(n) 的栈。"},
+  "c17q0": {kw:["90秒","项目职责","量化亮点"], one:"按基本信息、项目职责、核心能力、量化亮点和求职动机讲，控制在 90 秒，用具体数字说清自动化条数和缺陷量。", hook:"我自我介绍控制在九十秒：先一句话说年限和方向，再讲 EAM 和 AI 知识库两个项目，重点是接口和 UI 自动化落地了多少条、接没接 Jenkins、提了多少缺陷，最后一句说为什么来这家。"},
+  "c17q2": {kw:["不贬低","系统学习","可验证成果"], one:"不贬低原专业，把它讲成逻辑和文档能力的优势，主线是接触项目后更感兴趣，再落到系统学习和两个可验证的项目成果。", hook:"我转行的说法是不贬低原专业，它训练了我的逻辑和文档能力；然后说接触项目后发现定位问题、推动修复很有成就感，于是系统学测试理论，做出两个真实项目和自动化脚本，明确要长期做质量。"},
+  "c17q3": {kw:["正向","不抱怨","口径一致"], one:"离职原因要正向简短不抱怨，归到项目结束、想专注自动化和质量体系，多段经历口径统一，时间和简历不能冲突。", hook:"离职我一般说项目结束或业务调整，加上想更专注自动化和质量体系，绝不吐槽前公司；多段经历的口径我会先对一遍，离职时间和简历不能冲突，被追问细节只讲客观事实。"},
+  "c17q11": {kw:["阶段性加班","排期优先级","调休"], one:"能接受项目需要的阶段性加班和紧急发布，同时说明会用排期和自动化减少无效加班，再问清频率和调休机制。", hook:"我的回答是能接受项目节点和紧急发布的阶段性加班，这是岗位常识；但我会补一句，我靠排期、优先级和把重复回归交给接口脚本去减少无效加班；最后顺带了解加班频率和调休。"},
+  "c17q32": {kw:["如实","优先级","不施压"], one:"如实说有或没有，不透露别家细节也不拿 offer 施压，选择顺序是业务方向、团队和自动化现状、最后薪资通勤。", hook:"有没有 offer 我如实说，但不报别家名字和数字，也不拿来压价；选的时候我的顺序是业务方向和成长、团队和自动化现状、最后才是薪资通勤，如果贵司更匹配我会明确说优先选这里。"},
+  "c17q35": {kw:["跑通环境","独立测模块","可见增量"], one:"第一周读文档跑通环境输出流程图，第二三周独立测一个低风险模块走完整流程，第四周做一个小脚本或文档拿出增量。", hook:"第一个月我分三段：第一周读需求文档、把环境跑通，输出业务流程图和术语表验证自己的理解；第二三周接手一个低风险模块独立走完评审、执行和提缺陷；第四周挑个高频回归点做成小脚本，做出可见增量。"},
+  "c18q9": {kw:["四种创建","七大参数","拒绝策略"], one:"创建线程有继承 Thread、实现 Runnable、Callable 和线程池四种；线程池核心是核心数、队列和拒绝策略。", hook:"创建方式我讲四种，最推荐线程池；线程池的参数要背下来：核心数、最大数、空闲时间、队列、线程工厂、拒绝策略，执行是先核心再进队列、队列满才扩到最大、再满才拒绝，很多人以为先扩容。"},
+  "c19q0": {kw:["代理证书","按域名过滤","四分支判断"], one:"抓包用来定位请求响应、模拟弱网和 Mock，步骤是设代理装证书、按域名过滤、复现、看参数响应和耗时，再对比预期。", hook:"我定位前后端问题基本都靠抓包：先设代理装证书，按域名过滤，再复现一次看参数、响应码、响应体和耗时；没请求是前端没发，参数错是前端传参，响应错是后端，响应对但页面错是渲染或缓存。"},
+  "c19q10": {kw:["改返回值","Mock服务","真接口回归"], one:"接口没就绪时用 Map Local 改返回值，或用 Mock 服务按契约造异常，上线后用真接口回归。", hook:"后端没就绪或者要验前端异常分支，我就用抓包工具的 Map Local 改返回值，成体系的用 Mock 服务按契约定义状态码和响应体；最容易翻车的是 Mock 结构和真实契约不一致，所以上线前一定用真接口再回归一遍。"},
+  "c19q15": {kw:["建版本","需求挂用例","缺陷关联"], one:"先建版本把需求拆成可测条目，用例挂需求并标优先级和回归集，缺陷关联需求、用例和版本，最后用执行率出报告。", hook:"我的做法是先建版本，把需求拆成可测条目作为追溯起点；用例都挂在需求下，标好优先级和是否进回归集；提缺陷时关联需求、用例和版本，修复后回到同一条用例验证，最后用执行率和缺陷分布出报告。"},
+  "c23q0": {kw:["状态角色矩阵","403越权","单据号串联"], one:"先画提交、部门审批、财务审批、归档全链路，列状态乘角色乘事件矩阵，再验 403 越权和单据号串联的日志通知。", hook:"我会先画全链路，列一张状态乘角色乘事件的矩阵，合法流转、驳回、撤回、加签和并发审批都覆盖；权限用每个角色跑通，再拿无权限角色直调接口必须返 403；每次状态变更都对审批日志、待办和通知逐项断言。"},
+  "c23q1": {kw:["库存口径","并发线程","幂等唯一索引"], one:"先定扣减口径造库存 1 并发 2 只能成功 1 笔，再用 50 到 100 线程打同一 SKU 验乐观锁，重复提交靠唯一索引保证只扣一次。", hook:"我先跟开发确认是提交占用还是审批实扣，然后造库存 1、并发 2 的用例，只能成功一笔且库存不为负；并发用五十到一百线程打同一个 SKU，看 version 和行锁；幂等就靠同一单号重复提交，验证只生成一条出库记录。"},
+  "c23q2": {kw:["瀑布图","分段耗时","执行计划"], one:"前端看瀑布图拆 TTFB 和渲染，接口用 curl 取 P95 看分段耗时，数据库用 explain 看索引。", hook:"我先看浏览器 Network 瀑布图，把 DNS、TTFB、下载和渲染拆开，判断是接口慢还是 DOM 太多；再用 curl 直连接口取 P95，看网关和应用的分段耗时；最后开慢查询用 explain 看是不是缺索引或者深分页。"},
+  "c23q4": {kw:["字段映射","全量对账","回滚演练"], one:"先评审源到目标的映射表和脏数据规则，再按主键脚本比对条数、金额和状态分布，最后在预发演练回滚保证两小时内可退。", hook:"两小时窗口我一定先做映射评审，字段类型、枚举、金额精度和空值逐项对；然后写脚本按主键比对条数、金额合计和状态分布，差异落到具体行；回滚必须提前在预演练一遍，确认退回去以后新产生的数据不丢不重。"},
+  "c23q5": {kw:["断网三时机","幂等键","草稿清除"], one:"用 Charles 覆盖提交前断网、提交中断网和服务端成功但响应丢失三种，重复提交以幂等键和库记录为准，成功后草稿要清除。", hook:"我用 Charles 做限速、丢包和断网，重点覆盖三种时机：提交前断、提交中断、服务端其实成功了但响应没回来；这时候用户重试加系统重试最容易出双单，所以我就看幂等键和数据库记录，不看前端提示。"},
+  "c23q6": {kw:["401过期","多端互斥","403越权"], one:"验 token 签发不含敏感信息、过期返 401、刷新后旧 token 失效，再看多端策略、登出后立即失效，以及改 id 越权必须 403。", hook:"我先看 token 里有没有敏感信息、有效期和刷新窗口对不对，过期必须返 401；然后验多端是互斥还是共存、登出和改密后旧 token 是否立刻失效；越权就拿普通账号改 url 里的 userId，必须 403 而不是返回数据。"},
+  "c23q7": {kw:["先止血","链路定位","复盘补用例"], one:"先看监控评估影响面和资损，用限流、降级、切开关或回滚止血，再按 traceId 拉全链路日志定位，修复灰度验证后复盘补用例。", hook:"线上出事我第一步是止血不是查根因，先看错误率和影响单据量，必要时限流降级切开关甚至回滚；然后按时间线拉网关、应用和数据库日志，用 traceId 串一次失败请求，对比发布和配置变更；修复先灰度再全量。"},
+  "c23q8": {kw:["契约diff","风险分级","兼容双读"], one:"先做契约 diff 列出增删改名和类型变化，检索所有引用定影响面，删除和类型变化算高风险，回归覆盖受影响接口和异常兜底。", hook:"我第一步做契约 diff，把新增、删除、改名、类型和枚举变化列出来，再全局搜代码、配置、报表和下游任务里的引用；删除字段和类型变化我一定按高风险处理，回归里再造缺字段、脏值和超长各一条。"},
+  "c23q9": {kw:["P0范围","倒排计划","书面留痕"], one:"先和产品开发确认目标，按资损、权限和主流程划 P0，不测的书面留痕，再倒排三天计划并在最后留半天 buffer。", hook:"三天我一个人测，第一天先跟产品和开发对齐范围，按资损、权限、主流程划 P0，不测的写进邮件留痕；然后倒排：第一天评审加冒烟，第二天主流程和接口并发，第三天回归加上线验证，末尾留半天 buffer。"},
+  "c23q13": {kw:["事务边界","消息重投","对账脚本"], one:"先画链路标清同步异步和事务边界，覆盖正常、下游失败、消息重投和部分成功，再按日汇总单据数、出库数和库存变动对账。", hook:"我会先画链路，标清审批通过后哪些是同步、哪些走消息；然后四种场景各跑一遍：正常、下游失败、消息重投、部分成功，用单据号关联各表比对；再写对账脚本按日汇总，差异定位到单号，失败要有补偿。"},
+  "c23q15": {kw:["五个场景","梯度加压","错误率阈值"], one:"按生产流量选登录、列表、审批、扣减和导出五个场景，20 到 200 梯度加压，错误率超 0.1% 算不达标。", hook:"场景我按生产流量选五个：登录、资产列表、审批提交、领用扣减和报表导出，按比例混合；并发从二十、五十、一百到两百梯度加，数据量要和生产的百万级对齐；错误率超过千分之一我就判不达标。"},
+  "c23q20": {kw:["现场五要素","数据差异","时序并发"], one:"先要 traceId、用户、租户、时间和版本还原现场，再对比测试与生产的配置、数据量和缓存，按时序排查重试、定时任务和重复消费。", hook:"偶现问题我先要现场：traceId、用户 id、租户、时间点和版本，按 traceId 把全链路日志拉出来还原时序；然后对比测试和生产在租户配置、数据量、缓存和上下游版本上的差异，再缩小到固定账号和并发去提复现率。"},
+  "c23q21": {kw:["分流规则","错误率1%","5分钟回滚"], one:"按用户、租户或比例分流，验灰度走新逻辑非灰度走旧逻辑、跨版本不串数据，错误率超 1% 或 P95 翻倍就回滚。", hook:"灰度我先验分流规则，灰度和非灰度用户走各自逻辑、同一单据跨版本流转不报错；观察指标定死阈值，错误率超百分之一或 P95 翻倍就回滚；回滚开关和脚本我会在灰度前演练，确保五分钟内能生效。"},
+  "c23q24": {kw:["风险清单","准出核对","有条件上线"], one:"按模块列风险清单写影响面、概率和回滚方案，核对 P0P1 清零、执行率和性能安全，有条件上线要写清灰度比例、观察时长和回滚阈值。", hook:"我给结论前先出风险清单，按模块写影响面、发生概率、能不能绕过、有没有监控和回滚，每条配措施；然后核对 P0 和 P1、执行率、性能和迁移；有条件上线就写清只灰度一成、观察多久、什么阈值回滚。"}
+};
+
+</script>
+<script>
 (function(){
   var KEY_ANS = 'stqb_answers_v1';
   var KEY_DONE = 'stqb_done_v1';
@@ -1950,6 +2174,606 @@ document.getElementById('stageBody').scrollIntoView({behavior:'smooth', block:'s
     var chip = document.querySelector('.filters [data-f="ask"]');
     if(chip) chip.textContent = '有追问 ' + askTotal;
   })();
+
+  /* ================= 速记卡 / 模拟面试 公共 ================= */
+  var KEY_MEMO = 'stqb_memo_v1';
+  var KEY_MOCK = 'stqb_mock_v1';
+  var memoDone = load(KEY_MEMO, {});
+  if(!memoDone || typeof memoDone !== 'object') memoDone = {};
+  var starQs = all.filter(function(x){ return x.s; });
+  var memoView = document.getElementById('memoView');
+  var mockView = document.getElementById('mockView');
+  var lockCount = 0, prevBodyOverflow = '';
+
+  function lockBody(){
+    if(lockCount === 0){ prevBodyOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; }
+    lockCount++;
+  }
+  function unlockBody(){
+    lockCount = Math.max(0, lockCount - 1);
+    if(lockCount === 0) document.body.style.overflow = prevBodyOverflow || '';
+  }
+  function shuffleArr(a){
+    for(var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1)), t = a[i];
+      a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function memoOf(id){ var m = window.QB_MEMO; return (m && m[id]) || null; }
+  function pad2(n){ return String(n).padStart(2, '0'); }
+  function fmtClock(ms){
+    if(ms < 0) ms = 0;
+    var s = Math.ceil(ms / 1000);
+    return pad2(Math.floor(s / 60)) + ':' + pad2(s % 60);
+  }
+  function firstLine(a){
+    var ls = String(a || '').split('\n').map(function(v){ return v.trim(); }).filter(Boolean);
+    return ls[0] || '';
+  }
+  function nowStr(){
+    var n = new Date();
+    return n.getFullYear() + '-' + pad2(n.getMonth() + 1) + '-' + pad2(n.getDate()) + ' ' + pad2(n.getHours()) + ':' + pad2(n.getMinutes());
+  }
+  function stampStr(){
+    var n = new Date();
+    return '' + n.getFullYear() + pad2(n.getMonth() + 1) + pad2(n.getDate()) + '-' + pad2(n.getHours()) + pad2(n.getMinutes());
+  }
+  function downloadMd(name, text){
+    var blob = new Blob(['\ufeff' + text], {type: 'text/markdown;charset=utf-8'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+
+  /* ================= 速记卡 ================= */
+  var mv = { filter: 'todo', idx: 0, flipped: false, shuffle: false, list: [], round: [], summary: false };
+
+  function memoPool(){
+    var pool = starQs.filter(function(x){ return mv.filter === 'todo' ? !memoDone[x.id] : true; });
+    if(mv.shuffle) shuffleArr(pool);
+    return pool.map(function(x){ return x.id; });
+  }
+  function memoRefresh(){ mv.list = memoPool(); }
+
+  function openMemo(){
+    mv.filter = 'todo'; mv.idx = 0; mv.flipped = false; mv.shuffle = false; mv.summary = false;
+    memoRefresh(); mv.round = mv.list.slice();
+    lockBody(); memoView.hidden = false;
+    renderMemo();
+  }
+  function closeMemo(){
+    if(memoView.hidden) return;
+    memoView.hidden = true; mv.flipped = false;
+    unlockBody();
+  }
+  function memoFlip(){
+    if(!mv.list.length) return;
+    mv.flipped = !mv.flipped;
+    var f = memoView.querySelector('#flashCard');
+    if(f) f.classList.toggle('flipped', mv.flipped);
+  }
+  function memoNav(step){
+    var n = mv.list.length;
+    if(!n) return;
+    if(step > 0 && mv.idx >= n - 1){ mv.summary = true; renderMemo(); return; }
+    mv.idx = (mv.idx + step + n) % n;
+    mv.flipped = false;
+    renderMemo();
+  }
+  function memoMark(id, ok){
+    if(!id) return;
+    if(ok) memoDone[id] = Date.now(); else delete memoDone[id];
+    save(KEY_MEMO, memoDone);
+    var stay = (mv.filter === 'todo' && ok);     // 未记住列表里被记住的卡会立刻移除
+    var next = mv.idx + (stay ? 0 : 1);
+    memoRefresh();
+    mv.flipped = false;
+    if(next >= mv.list.length){
+      if(!mv.list.length){ mv.idx = 0; renderMemo(); return; }   // 全部记住 → 完成态
+      mv.summary = true; renderMemo(); return;
+    }
+    mv.idx = next;
+    renderMemo();
+  }
+  function memoJump(id){
+    mv.summary = false;
+    if(mv.list.indexOf(id) < 0){ mv.filter = 'todo'; memoRefresh(); }
+    var i = mv.list.indexOf(id);
+    if(i < 0){ mv.filter = 'all'; memoRefresh(); i = mv.list.indexOf(id); }
+    mv.idx = i < 0 ? 0 : i;
+    mv.flipped = false;
+    renderMemo();
+  }
+  function memoFilter(f){
+    mv.filter = f; mv.idx = 0; mv.flipped = false; mv.summary = false;
+    memoRefresh(); mv.round = mv.list.slice();
+    renderMemo();
+  }
+  function memoResetRound(){
+    mv.summary = false; mv.idx = 0; mv.flipped = false;
+    memoRefresh(); mv.round = mv.list.slice();
+    renderMemo();
+    toast('本轮已重置');
+  }
+
+  function memoDoneHtml(){
+    return '<div class="card" style="text-align:center">' +
+      '<h2 class="memo-h">' + starQs.length + ' 张全部记住，去模拟面试试试</h2>' +
+      '<p class="mock-sub">速记卡只覆盖 ★ 高频题，模拟面试按真实节奏再走一遍。</p>' +
+      '<div class="actions" style="justify-content:center">' +
+        '<button class="btn primary" id="memoToMock" type="button">开始模拟面试</button>' +
+        '<button class="btn ghost" id="memoAll2" type="button">翻看全部★</button>' +
+      '</div></div>';
+  }
+
+  function memoSummaryHtml(){
+    var total = mv.round.length;
+    var miss = mv.round.filter(function(id){ return !memoDone[id]; });
+    var remembered = total - miss.length;
+    var listHtml = miss.map(function(id){
+      var x = byId[id];
+      if(!x) return '';
+      return '<button class="btn ghost" data-mid="' + id + '" type="button">' + esc(x.q) + '</button>';
+    }).join('');
+    return '<div class="card">' +
+      '<h2 class="memo-h">本轮小结：记住 ' + remembered + ' / ' + total + ' 张</h2>' +
+      '<p class="mock-sub">未记住 ' + miss.length + ' 张，点一下直接回到那张卡。</p>' +
+      '<div class="memo-miss" id="memoMissList">' + (listHtml || '<div class="mhint">本轮没有遗漏，全部记住了。</div>') + '</div>' +
+      '<div class="actions">' +
+        '<button class="btn primary" id="memoAgain" type="button">再来一轮</button>' +
+        '<button class="btn ghost" id="memoToMock2" type="button">去模拟面试</button>' +
+        '<button class="btn ghost" id="memoClose2" type="button">返回刷题</button>' +
+      '</div></div>';
+  }
+
+  function memoCardHtml(x){
+    var m = memoOf(x.id) || {};
+    var kws = (m.kw || []).filter(function(v){ return v; });
+    var one = m.one || firstLine(x.a);
+    var hook = m.hook || '';
+    var fullAns = x.t === 'code' ? '<pre class="code">' + esc(x.a) + '</pre>' : renderAnswer(x.a);
+    var front =
+      '<div class="flash-face front">' +
+        '<div class="qtop"><span class="badge">★ 高频题</span><span>' + esc(x.cat) + '</span>' +
+          (memoDone[x.id] ? '<span class="badge">已记住</span>' : '') + '</div>' +
+        '<h1 class="qtext">' + esc(x.q) + '</h1>' +
+        '<div class="flip-hint">点击卡片，或按 <kbd>空格</kbd> 翻面</div>' +
+      '</div>';
+    var back =
+      '<div class="flash-face back">' +
+        '<div class="qtop"><span class="badge">答案</span><span>' + esc(x.cat) + '</span></div>' +
+        (kws.length ? '<div class="kw">' + kws.slice(0, 6).map(function(k){ return '<span>' + esc(k) + '</span>'; }).join('') + '</div>' : '') +
+        '<div class="memo-one">' + esc(one || '本题暂无参考答案。') + '</div>' +
+        (hook ? '<details class="memo-hook"><summary>口述开头（30 秒）</summary><p>' + esc(hook) + '</p></details>' : '') +
+        '<button class="memo-link" id="memoFullBtn" type="button">看完整答案</button>' +
+        '<div class="answer memo-full" id="memoFull" hidden><h3>参考解析</h3>' + fullAns + '</div>' +
+        '<div class="memo-acts">' +
+          '<button class="btn no" id="memoNo" type="button">还没记住</button>' +
+          '<button class="btn yes" id="memoYes" type="button">记住了</button>' +
+        '</div>' +
+      '</div>';
+    return '<div class="flash' + (mv.flipped ? ' flipped' : '') + '" id="flashCard">' +
+      '<div class="flash-inner">' + front + back + '</div></div>';
+  }
+
+  function renderMemo(){
+    var n = mv.list.length, id = n ? mv.list[mv.idx] : null, x = id ? byId[id] : null;
+    var todoN = starQs.filter(function(q){ return !memoDone[q.id]; }).length;
+    var head = '<div class="ov-head">' +
+      '<button class="btn ghost" id="memoClose" type="button">← 返回</button>' +
+      '<span class="ov-title">速记卡</span>' +
+      '<span class="ov-prog" id="memoProg">' + (n ? ('第 ' + (mv.idx + 1) + ' / ' + n + ' 张') : ('共 ' + starQs.length + ' 张')) + '</span>' +
+      '<span class="grow"></span>' +
+      '<button class="chip' + (mv.filter === 'todo' ? ' on' : '') + '" id="memoFTodo" type="button">未记住 ' + todoN + '</button>' +
+      '<button class="chip' + (mv.filter === 'all' ? ' on' : '') + '" id="memoFAll" type="button">全部★ ' + starQs.length + '</button>' +
+      '<button class="btn ghost' + (mv.shuffle ? ' done' : '') + '" id="memoShuffle" type="button">打乱顺序' + (mv.shuffle ? '：开' : '：关') + '</button>' +
+      '<button class="btn ghost" id="memoReset" type="button">重置本轮</button>' +
+      '</div>';
+    var body;
+    if(mv.summary) body = memoSummaryHtml();
+    else if(!x) body = memoDoneHtml();
+    else body = memoCardHtml(x);
+    memoView.innerHTML = head + '<div class="ov-body"><div class="ov-inner">' + body + '</div></div>';
+    bindMemo(x);
+  }
+
+  function bindMemo(x){
+    var q = function(sel){ return memoView.querySelector(sel); };
+    var el;
+    if((el = q('#memoClose'))) el.addEventListener('click', closeMemo);
+    if((el = q('#memoClose2'))) el.addEventListener('click', closeMemo);
+    if((el = q('#memoFTodo'))) el.addEventListener('click', function(){ memoFilter('todo'); });
+    if((el = q('#memoFAll'))) el.addEventListener('click', function(){ memoFilter('all'); });
+    if((el = q('#memoShuffle'))) el.addEventListener('click', function(){
+      mv.shuffle = !mv.shuffle; mv.idx = 0; mv.flipped = false; mv.summary = false;
+      memoRefresh(); mv.round = mv.list.slice(); renderMemo();
+      toast(mv.shuffle ? '已打乱顺序' : '已恢复原顺序');
+    });
+    if((el = q('#memoReset'))) el.addEventListener('click', memoResetRound);
+    if((el = q('#memoAll2'))) el.addEventListener('click', function(){ memoFilter('all'); });
+    if((el = q('#memoAgain'))) el.addEventListener('click', memoResetRound);
+    var toMock = function(){ closeMemo(); openMock(); };
+    if((el = q('#memoToMock'))) el.addEventListener('click', toMock);
+    if((el = q('#memoToMock2'))) el.addEventListener('click', toMock);
+    if((el = q('#flashCard'))) el.addEventListener('click', function(e){
+      if(e.target.closest('button, a, summary, details, input, select')) return;
+      memoFlip();
+    });
+    if((el = q('#memoYes'))) el.addEventListener('click', function(e){ e.stopPropagation(); memoMark(x.id, true); });
+    if((el = q('#memoNo'))) el.addEventListener('click', function(e){ e.stopPropagation(); memoMark(x.id, false); });
+    if((el = q('#memoFullBtn'))) el.addEventListener('click', function(e){
+      e.stopPropagation();
+      var box = q('#memoFull');
+      if(!box) return;
+      box.hidden = !box.hidden;
+      this.textContent = box.hidden ? '看完整答案' : '收起完整答案';
+    });
+    if((el = q('#memoMissList'))) el.addEventListener('click', function(e){
+      var b = e.target.closest('[data-mid]');
+      if(b) memoJump(b.getAttribute('data-mid'));
+    });
+  }
+
+  /* ================= 模拟面试 ================= */
+  var mk = {
+    page: 'setup', dur: 50, num: 10, scope: 'star',
+    list: [], idx: 0, answers: {}, status: {},
+    perMs: 0, totalMs: 0, startAt: 0, endAt: 0, qEndAt: 0, usedMs: 0,
+    tmr: null, saved: false, rec: null, listening: false, base: ''
+  };
+
+  function openMock(){
+    mk.page = 'setup'; mk.list = []; mk.idx = 0; mk.answers = {}; mk.status = {}; mk.saved = false;
+    lockBody(); mockView.hidden = false;
+    renderMock();
+  }
+  function closeMock(){
+    if(mockView.hidden) return;
+    if(mk.page === 'run' && !window.confirm('模拟面试进行中，退出会丢弃本次记录，确定退出吗？')) return;
+    stopTicker(); mockStopMic();
+    mockView.hidden = true;
+    unlockBody();
+  }
+
+  function mockPool(){
+    if(mk.scope === 'all') return all.slice();
+    if(mk.scope.indexOf('cat:') === 0){
+      var ci = parseInt(mk.scope.slice(4), 10);
+      return all.filter(function(x){ return x.ci === ci; });
+    }
+    return starQs.slice();
+  }
+  function pickSome(pool, need, cap, picked, used){
+    var out = [];
+    for(var i = 0; i < pool.length && out.length < need; i++){
+      var x = pool[i];
+      if(picked.indexOf(x) >= 0) continue;
+      if((used[x.cat] || 0) >= cap) continue;
+      used[x.cat] = (used[x.cat] || 0) + 1;
+      out.push(x);
+    }
+    return out;
+  }
+  // 随机抽题：同分类最多 2 题；未掌握优先，占比 ≥ 70%
+  function mockPick(pool, n){
+    var un = shuffleArr(pool.filter(function(x){ return !done[x.id]; }));
+    var dn = shuffleArr(pool.filter(function(x){ return done[x.id]; }));
+    var target = Math.min(n, pool.length), used = {}, picked = [];
+    var needUn = Math.ceil(target * 0.7);
+    picked = pickSome(un, needUn, 2, picked, used);
+    if(picked.length < needUn) picked = picked.concat(pickSome(un, needUn - picked.length, 99, picked, used));
+    picked = picked.concat(pickSome(dn, target - picked.length, 2, picked, used));
+    if(picked.length < target) picked = picked.concat(pickSome(dn, target - picked.length, 99, picked, used));
+    if(picked.length < target) picked = picked.concat(pickSome(un, target - picked.length, 99, picked, used));
+    return shuffleArr(picked.slice()).slice(0, target);
+  }
+  function mockBegin(){
+    var list = mockPick(mockPool(), mk.num);
+    if(!list.length){ toast('该范围没有可抽的题目'); return; }
+    mk.list = list.map(function(x){ return x.id; });
+    mk.answers = {}; mk.status = {}; mk.idx = 0; mk.saved = false;
+    mk.list.forEach(function(id){ mk.status[id] = 'pending'; });
+    mk.totalMs = mk.dur * 60000;
+    mk.perMs = Math.floor(mk.totalMs / mk.list.length);
+    mk.startAt = Date.now();
+    mk.endAt = mk.startAt + mk.totalMs;
+    mk.qEndAt = mk.startAt + mk.perMs;
+    mk.usedMs = 0;
+    mk.page = 'run';
+    renderMock();
+    startTicker();
+  }
+  function mockStats(){
+    var answered = 0, cats = {};
+    mk.list.forEach(function(id){
+      if(mk.status[id] === 'answered') answered++;
+      cats[byId[id].cat] = 1;
+    });
+    return { total: mk.list.length, answered: answered, skipped: mk.list.length - answered, cats: Object.keys(cats).length };
+  }
+  function mockSkip(){
+    var id = mk.list[mk.idx];
+    if(id) mk.status[id] = 'skipped';
+    mockStopMic();
+    if(mk.idx >= mk.list.length - 1){ finishMock(); return; }
+    mk.idx++; mk.qEndAt = Date.now() + mk.perMs;
+    renderMock();
+  }
+  function mockAdvance(auto){
+    var id = mk.list[mk.idx];
+    if(id){
+      if(auto){
+        mk.status[id] = 'skipped';
+      } else {
+        var ta = document.getElementById('mockAns');
+        var v = ta ? String(ta.value || '').trim() : String(mk.answers[id] || '').trim();
+        if(v){ mk.answers[id] = v; mk.status[id] = 'answered'; }
+        else mk.status[id] = 'skipped';
+      }
+    }
+    mockStopMic();
+    if(mk.idx >= mk.list.length - 1){ finishMock(); return; }
+    mk.idx++; mk.qEndAt = Date.now() + mk.perMs;
+    renderMock();
+  }
+  function finishMock(){
+    if(mk.page !== 'run') return;
+    stopTicker(); mockStopMic();
+    mk.usedMs = Math.max(0, Math.min(mk.totalMs, Date.now() - mk.startAt));
+    mk.page = 'result';
+    if(!mk.saved){
+      var recs = load(KEY_MOCK, []);
+      if(!Array.isArray(recs)) recs = [];
+      recs.push(mockRecord());
+      while(recs.length > 10) recs.shift();
+      save(KEY_MOCK, recs);
+      mk.saved = true;
+    }
+    renderMock();
+  }
+  function mockRecord(){
+    var s = mockStats();
+    var items = mk.list.map(function(id){
+      var x = byId[id];
+      return {
+        id: id, q: x.q, cat: x.cat,
+        ans: String(mk.answers[id] || '').trim(),
+        status: mk.status[id] || 'pending',
+        mastered: !!done[id]
+      };
+    });
+    return {
+      at: Date.now(), atText: nowStr(), dur: mk.dur, total: s.total,
+      usedSec: Math.round((mk.usedMs || 0) / 1000),
+      answered: s.answered, skipped: s.skipped, cats: s.cats, items: items
+    };
+  }
+
+  function startTicker(){
+    stopTicker();
+    mk.tmr = setInterval(function(){
+      if(mockView.hidden || mk.page !== 'run'){ stopTicker(); return; }
+      var now = Date.now();
+      if(now >= mk.endAt){ finishMock(); return; }
+      updateMockTimers();
+      if(now >= mk.qEndAt) mockAdvance(true);
+    }, 250);
+  }
+  function stopTicker(){
+    if(mk.tmr){ clearInterval(mk.tmr); mk.tmr = null; }
+  }
+  function updateMockTimers(){
+    var now = Date.now();
+    var tLeft = Math.max(0, mk.endAt - now);
+    var qLeft = Math.max(0, Math.min(mk.qEndAt - now, tLeft));
+    var tEl = document.getElementById('mockTimer');
+    if(tEl){
+      tEl.textContent = fmtClock(tLeft);
+      tEl.className = 'mock-timer' + (tLeft <= 60000 ? ' danger' : (tLeft <= 300000 ? ' warn' : ''));
+    }
+    var ql = document.getElementById('mockQLabel');
+    if(ql) ql.textContent = fmtClock(qLeft);
+    var bar = document.getElementById('mockQBar');
+    if(bar){
+      bar.style.width = (mk.perMs ? Math.max(0, qLeft / mk.perMs * 100) : 0) + '%';
+      bar.className = qLeft <= 15000 ? 'danger' : (qLeft <= mk.perMs * 0.3 ? 'warn' : '');
+    }
+  }
+  function mockStopMic(){
+    var was = mk.listening;
+    mk.listening = false;
+    if(was && mk.rec){ try{ mk.rec.stop(); }catch(e){} }
+    var b = document.getElementById('mockMic');
+    if(b){ b.classList.remove('rec'); var t = document.getElementById('mockMicText'); if(t) t.textContent = '语音回答'; }
+  }
+  function mockStartMic(){
+    if(!SR){ toast('当前浏览器不支持语音，直接在心里口述，然后点下一题'); return; }
+    var id = mk.list[mk.idx];
+    if(!id) return;
+    if(!mk.rec){
+      mk.rec = new SR();
+      mk.rec.lang = 'zh-CN';
+      mk.rec.continuous = true;
+      mk.rec.interimResults = true;
+      mk.rec.onresult = function(e){
+        var fin = '', itm = '';
+        for(var i = e.resultIndex; i < e.results.length; i++){
+          if(e.results[i].isFinal) fin += e.results[i][0].transcript;
+          else itm += e.results[i][0].transcript;
+        }
+        if(fin) mk.base += fin;
+        var el = document.getElementById('mockAns'), curId = mk.list[mk.idx];
+        if(!el || !curId) return;
+        el.value = (mk.base + itm).trim();
+        mk.answers[curId] = el.value;
+      };
+      mk.rec.onerror = function(e){ toast('语音识别出错：' + e.error); };
+      mk.rec.onend = function(){ mockStopMic(); };
+    }
+    mk.base = String(mk.answers[id] || '').replace(/\s+$/, '');
+    if(mk.base) mk.base += ' ';
+    try{
+      mk.rec.start();
+      mk.listening = true;
+      var b = document.getElementById('mockMic');
+      if(b) b.classList.add('rec');
+      var t = document.getElementById('mockMicText');
+      if(t) t.textContent = '结束录音';
+      toast('开始录音，说完再点一次结束');
+    }catch(err){ toast('无法启动语音识别：' + err.message); }
+  }
+
+  function mockExport(){
+    var s = mockStats(), rec = mockRecord();
+    var lines = [];
+    lines.push('# 模拟面试记录');
+    lines.push('');
+    lines.push('- 时间：' + rec.atText);
+    lines.push('- 配置：' + mk.dur + ' 分钟 / ' + s.total + ' 题');
+    lines.push('- 总用时：' + fmtClock(rec.usedSec * 1000));
+    lines.push('- 完成 ' + s.answered + ' 题 · 跳过 ' + s.skipped + ' 题 · 覆盖 ' + s.cats + ' 个分类');
+    lines.push('');
+    rec.items.forEach(function(it, i){
+      lines.push('## ' + (i + 1) + '. ' + it.q);
+      lines.push(it.cat + ' · ' + (it.status === 'answered' ? '已回答' : '跳过') + ' · ' + (it.mastered ? '已掌握' : '待掌握'));
+      lines.push('');
+      lines.push('**我的口述 / 回答**');
+      lines.push(it.ans ? it.ans : '*(未作答)*');
+      lines.push('');
+    });
+    downloadMd('模拟面试-' + stampStr() + '.md', lines.join('\n'));
+    toast('已导出本次模拟面试记录');
+  }
+
+  function optHtml(v, label, cur){
+    return '<option value="' + v + '"' + (String(v) === String(cur) ? ' selected' : '') + '>' + label + '</option>';
+  }
+  function mockSetupHtml(){
+    var catOpts = parts.map(function(c, ci){ return optHtml('cat:' + ci, '分类：' + esc(c.name), mk.scope); }).join('');
+    return '<div class="ov-head">' +
+        '<button class="btn ghost" id="mockClose" type="button">← 返回</button>' +
+        '<span class="ov-title">模拟面试</span>' +
+      '</div>' +
+      '<div class="ov-body"><div class="ov-inner"><div class="card">' +
+        '<h2 class="mock-h">模拟面试 · 提前适应节奏</h2>' +
+        '<p class="mock-sub">限时抽题、到点自动进入下一题，提前适应面试的压迫感。</p>' +
+        '<div class="exp-form">' +
+          '<label class="exp-row"><span>时长</span><select id="mockDur">' + optHtml(30, '30 分钟', mk.dur) + optHtml(50, '50 分钟', mk.dur) + optHtml(60, '60 分钟', mk.dur) + '</select></label>' +
+          '<label class="exp-row"><span>题量</span><select id="mockNum">' + optHtml(8, '8 题', mk.num) + optHtml(10, '10 题', mk.num) + optHtml(12, '12 题', mk.num) + '</select></label>' +
+          '<label class="exp-row"><span>范围</span><select id="mockScope">' + optHtml('star', '高频★（' + starQs.length + ' 题）', mk.scope) + optHtml('all', '全部（' + all.length + ' 题）', mk.scope) + catOpts + '</select></label>' +
+        '</div>' +
+        '<div class="actions"><button class="btn primary" id="mockStart" type="button">开始</button></div>' +
+        '<p class="mhint">按真实面试节奏：每题限时 = 总时长 / 题量，到点自动跳到下一题。</p>' +
+      '</div></div></div>';
+  }
+  function mockRunHtml(){
+    var id = mk.list[mk.idx], x = byId[id];
+    var dots = mk.list.map(function(qid, i){
+      var st = mk.status[qid] || 'pending';
+      return '<span class="dot-i' + (i === mk.idx ? ' cur' : '') + (st === 'answered' ? ' answered' : (st === 'skipped' ? ' skipped' : '')) +
+        '" title="第 ' + (i + 1) + ' 题 · ' + (st === 'answered' ? '已回答' : (st === 'skipped' ? '跳过' : '未到')) + '"></span>';
+    }).join('');
+    return '<div class="ov-head">' +
+        '<button class="btn ghost" id="mockClose" type="button">← 退出</button>' +
+        '<span class="ov-title">模拟面试</span>' +
+        '<span class="ov-prog" id="mockProg">第 ' + (mk.idx + 1) + ' / ' + mk.list.length + ' 题</span>' +
+        '<span class="grow"></span>' +
+        '<span class="ov-prog">本题剩余 <b id="mockQLabel">' + fmtClock(mk.perMs) + '</b></span>' +
+        '<span class="mock-timer" id="mockTimer">' + fmtClock(mk.endAt - Date.now()) + '</span>' +
+      '</div>' +
+      '<div class="qbar"><i id="mockQBar"></i></div>' +
+      '<div class="ov-body"><div class="ov-inner"><div class="card">' +
+        '<div class="qtop"><span class="badge warn">' + typeNameOf(x.t) + '</span><span>' + esc(x.cat) + '</span>' +
+          (done[x.id] ? '<span class="badge">已掌握</span>' : '<span class="badge warn">待掌握</span>') + '</div>' +
+        '<h1 class="qtext">' + esc(x.q) + '</h1>' +
+        '<div class="voicebar">' +
+          '<button class="btn mic" id="mockMic" type="button"><span class="dot"></span><span id="mockMicText">语音回答</span></button>' +
+          '<span class="vhint" id="mockMicHint">' + (SR ? '点一下开始说，说完再点结束，转写会实时出现在下面' : '当前浏览器不支持语音，直接在心里口述，然后点下一题') + '</span>' +
+        '</div>' +
+        '<textarea class="mock-ans" id="mockAns" readonly placeholder="口述的转写会实时出现在这里">' + esc(mk.answers[id] || '') + '</textarea>' +
+        '<div class="actions"><button class="btn ghost" id="mockSkip" type="button">跳过</button><button class="btn primary" id="mockNext" type="button">下一题</button></div>' +
+      '</div><div class="dots" id="mockDots">' + dots + '</div></div></div>';
+  }
+  function mockResultHtml(){
+    var s = mockStats();
+    var usedS = Math.round((mk.usedMs || 0) / 1000);
+    var items = mk.list.map(function(id){
+      var x = byId[id], st = mk.status[id] || 'pending';
+      var txt = String(mk.answers[id] || '').trim();
+      return '<div class="res-item">' +
+        '<div class="rq">' + esc(x.q) + '</div>' +
+        '<div class="ra">' + (txt ? esc(txt) : '（未口述 / 跳过）') + '</div>' +
+        '<div><span class="badge warn">' + esc(x.cat) + '</span> ' +
+          (st === 'answered' ? '<span class="badge">已回答</span>' : '<span class="badge warn">跳过</span>') +
+          (done[id] ? '<span class="rm"> 已掌握</span>' : '<span class="rm no"> 待掌握</span>') +
+        '</div></div>';
+    }).join('');
+    return '<div class="ov-head">' +
+        '<button class="btn ghost" id="mockClose" type="button">← 返回刷题</button>' +
+        '<span class="ov-title">模拟面试 · 复盘</span>' +
+      '</div>' +
+      '<div class="ov-body"><div class="ov-inner"><div class="card">' +
+        '<h2 class="mock-h">本场结束</h2>' +
+        '<div class="stat-row" id="mockStat" data-total="' + s.total + '" data-answered="' + s.answered +
+          '" data-skipped="' + s.skipped + '" data-cats="' + s.cats + '" data-used="' + usedS + '">' +
+          '<div class="stat"><b>' + fmtClock(usedS * 1000) + '</b><span>总用时</span></div>' +
+          '<div class="stat"><b>' + s.answered + '</b><span>完成题数</span></div>' +
+          '<div class="stat"><b>' + s.skipped + '</b><span>跳过题数</span></div>' +
+          '<div class="stat"><b>' + s.cats + '</b><span>覆盖分类</span></div>' +
+        '</div>' +
+        '<div class="actions">' +
+          '<button class="btn primary" id="mockExport" type="button">导出本次记录（Markdown）</button>' +
+          '<button class="btn ghost" id="mockAgain" type="button">再来一场</button>' +
+          '<button class="btn ghost" id="mockBack" type="button">返回刷题</button>' +
+        '</div>' +
+        '<div style="margin-top:16px">' + items + '</div>' +
+      '</div></div></div>';
+  }
+
+  function renderMock(){
+    if(mk.page === 'setup') mockView.innerHTML = mockSetupHtml();
+    else if(mk.page === 'run') mockView.innerHTML = mockRunHtml();
+    else mockView.innerHTML = mockResultHtml();
+    bindMock();
+    if(mk.page === 'run') updateMockTimers();
+  }
+  function bindMock(){
+    var q = function(sel){ return mockView.querySelector(sel); };
+    var el;
+    if((el = q('#mockClose'))) el.addEventListener('click', closeMock);
+    if((el = q('#mockBack'))) el.addEventListener('click', closeMock);
+    if((el = q('#mockStart'))) el.addEventListener('click', mockBegin);
+    if((el = q('#mockDur'))) el.addEventListener('change', function(){ mk.dur = parseInt(this.value, 10) || 50; });
+    if((el = q('#mockNum'))) el.addEventListener('change', function(){ mk.num = parseInt(this.value, 10) || 10; });
+    if((el = q('#mockScope'))) el.addEventListener('change', function(){ mk.scope = this.value; });
+    if((el = q('#mockNext'))) el.addEventListener('click', function(){ mockAdvance(false); });
+    if((el = q('#mockSkip'))) el.addEventListener('click', mockSkip);
+    if((el = q('#mockMic'))) el.addEventListener('click', function(){ if(mk.listening) mockStopMic(); else mockStartMic(); });
+    if((el = q('#mockExport'))) el.addEventListener('click', mockExport);
+    if((el = q('#mockAgain'))) el.addEventListener('click', function(){ mk.page = 'setup'; renderMock(); });
+  }
+
+  document.getElementById('memoBtn').addEventListener('click', openMemo);
+  document.getElementById('mockBtn').addEventListener('click', openMock);
+
+  document.addEventListener('keydown', function(e){
+    if(e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    if(!memoView.hidden){
+      if(e.key === 'Escape'){ e.preventDefault(); closeMemo(); return; }
+      if(mv.summary || !mv.list.length) return;
+      if(e.key === ' ' || e.key === 'Spacebar'){ e.preventDefault(); memoFlip(); }
+      else if(e.key === 'ArrowRight'){ e.preventDefault(); memoNav(1); }
+      else if(e.key === 'ArrowLeft'){ e.preventDefault(); memoNav(-1); }
+      else if(e.key === '1'){ e.preventDefault(); memoMark(mv.list[mv.idx], true); }
+      else if(e.key === '2'){ e.preventDefault(); memoMark(mv.list[mv.idx], false); }
+      return;
+    }
+    if(!mockView.hidden && mk.page === 'run' && e.key === 'Escape'){ e.preventDefault(); closeMock(); }
+  });
 
   render();
 })();
