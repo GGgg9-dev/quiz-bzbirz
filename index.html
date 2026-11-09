@@ -1038,7 +1038,17 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
   var answers = load(KEY_ANS, {});
   var done = load(KEY_DONE, {});
   var picks = load(KEY_PICK, {});
+  var fillDraft = {};   // 填空题本次作答的临时值，只在内存里，用来给「标记已掌握」保存
   var state = { cat: -1, filter: 'all', type: 'all', q: '', idx: 0 };
+
+  // 填空题的输入只有点过「标记已掌握」才保留，这里清掉旧版本遗留的提交记录
+  (function(){
+    var changed = false;
+    all.forEach(function(x){
+      if(x.t === 'fill' && !done[x.id] && answers[x.id]){ delete answers[x.id]; changed = true; }
+    });
+    if(changed) save(KEY_ANS, answers);
+  })();
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
   var listening = false, rec = null, recBase = '', autoMatchOnEnd = false;
 
@@ -1342,7 +1352,18 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
 
   function bindCommon(x){
     document.getElementById('master').addEventListener('click', function(){
+      var fillInput = document.getElementById('fillAns');
+      var fillVal = fillInput ? fillInput.value.trim() : null;
       if(done[x.id]) delete done[x.id]; else done[x.id] = 1;
+      if(fillInput){   // 填空题：只有已掌握时才把输入框里的内容保存下来
+        if(done[x.id]){
+          var keep = fillVal || fillDraft[x.id] || '';
+          if(keep) answers[x.id] = keep; else delete answers[x.id];
+        } else {
+          delete answers[x.id];
+        }
+        save(KEY_ANS, answers);
+      }
       save(KEY_DONE, done); toast(done[x.id] ? '已标记掌握' : '已取消掌握'); render();
     });
     document.getElementById('prev').addEventListener('click', function(){ go(-1); });
@@ -1391,12 +1412,12 @@ window.QB_PARTS.push({name:"二十三、代码题专项",items:[
       var submitFill = function(){
         var input = document.getElementById('fillAns');
         var val = input.value.trim();
-        answers[x.id] = val;
+        if(!val) return;
+        fillDraft[x.id] = val;   // 只留在内存里，不写草稿；点「标记已掌握」才会持久保存
         var nv = normalize(val), ok = false;
         (x.k || []).forEach(function(k){ if(normalize(k) === nv) ok = true; });
         picks[x.id] = { ok: ok };
-        if(ok) done[x.id] = 1;
-        save(KEY_ANS, answers); save(KEY_PICK, picks); save(KEY_DONE, done);
+        save(KEY_PICK, picks);
         toast(ok ? '回答正确' : '回答错误，看看参考答案'); render();
       };
       fs.addEventListener('click', submitFill);
